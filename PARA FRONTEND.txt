@@ -1,0 +1,21 @@
+📁 ENDPOINTS PARA FRONTEND
+
+🌐 PÚBLICOS (sin auth)
+GET  apicatalogoproductos
+GET  apicatalogoproductoscategoria{categoria}
+GET  apicatalogocategorias
+POST apiauthregister-cliente
+POST apiauthlogin
+
+🔐 CLIENTE AUTENTICADO
+GET  apiclientes-onlineperfil
+PUT  apiclientes-onlineperfil
+POST apipedidos
+GET  apipedidosmis-pedidos
+GET  apipedidos{id}
+
+👨‍💼 ADMIN
+GET  apipedidostodos
+GET  apipedidosestado{estadoId}
+GET  apipedidosdetalle{id}
+PUT  apipedidos{id}estado
