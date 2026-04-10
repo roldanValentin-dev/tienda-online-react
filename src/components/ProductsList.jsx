@@ -2,11 +2,27 @@ import { useContext } from "react";
 import { CarritoContext } from "../context/CarritoContext";
 
 function ProductsList() {
-    const { products, loading, agregarAlCarrito } = useContext(CarritoContext);
+    const { products, loading, agregarAlCarrito ,category,selectCategory,setSelectCategory} = useContext(CarritoContext);
 
     return (
      <div className="container mt-4">
             <h1 className="mb-4 text-center">Nuestros Productos</h1>
+
+            <div className="row mb-4">
+                <div className="col-12">
+                    <div className="d-flex justify-content-center flex-wrap gap-2">
+                        {category.map((cat, index) => (
+                            <button
+                                key={index}
+                                className={`btn ${selectCategory === cat ? 'btn-primary' : 'btn-outline-primary'}`}
+                                onClick={() => setSelectCategory(cat)}
+                            >
+                                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            </div>
             {loading && (
                 <div className="alert alert-info text-center">
                     <div className="spinner-border" role="status">
@@ -45,6 +61,12 @@ function ProductsList() {
                     </div>
                 ))}
             </div>
+             {/* Mensaje si no hay productos */}
+            {!loading && products.filter(p => p.activo).length === 0 && (
+                <div className="alert alert-warning text-center">
+                    No hay productos disponibles en esta categoría
+                </div>
+            )}
         </div>
     );
 }
