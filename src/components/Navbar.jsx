@@ -47,10 +47,10 @@ useEffect(() => {
     return (
         <>
             {/* Navbar para mobile con offcanvas */}
-            <nav className="navbar navbar-dark bg-dark d-lg-none">
+            <nav className="navbar d-lg-none">
                 <div className="container-fluid">
                     <button 
-                        className="navbar-toggler border-0" 
+                        className="navbar-toggler" 
                         type="button" 
                         data-bs-toggle="offcanvas" 
                         data-bs-target="#offcanvasNavbar"
@@ -60,14 +60,12 @@ useEffect(() => {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     
-                    <Link className="navbar-brand mx-auto" to="/">Mi Tienda</Link>
+                    <Link className="navbar-brand mx-auto" to="/">🥐 Panadería</Link>
                     
-                    <Link to="/cart" className="text-white text-decoration-none position-relative">
-                        <i className="bi bi-cart3 fs-5"></i>
+                    <Link to="/cart" className="cart-icon-mobile">
+                        <i className="bi bi-cart3"></i>
                         {totalItems > 0 && (
-                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
-                                {totalItems}
-                            </span>
+                            <span className="cart-badge">{totalItems}</span>
                         )}
                     </Link>
                 </div>
@@ -75,16 +73,16 @@ useEffect(() => {
 
             {/* Offcanvas para mobile */}
             <div 
-                className="offcanvas offcanvas-start text-bg-dark" 
+                className="offcanvas offcanvas-start" 
                 tabIndex="-1" 
                 id="offcanvasNavbar"
                 aria-labelledby="offcanvasNavbarLabel"
             >
-                <div className="offcanvas-header border-bottom border-secondary">
+                <div className="offcanvas-header">
                     <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
                     <button 
                         type="button" 
-                        className="btn-close btn-close-white" 
+                        className="btn-close" 
                         data-bs-dismiss="offcanvas"
                         aria-label="Close"
                     ></button>
@@ -92,20 +90,20 @@ useEffect(() => {
                 <div className="offcanvas-body p-0">
                     <ul className="nav flex-column">
                         <li className="nav-item">
-                            <Link className="nav-link text-white px-4 py-3" to="/">
+                            <Link className="nav-link" to="/">
                                 <i className="bi bi-house-door me-3"></i>Home
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link text-white px-4 py-3" to="/products">
-                                <i className="bi bi-bag me-3"></i>Products
+                            <Link className="nav-link" to="/products">
+                                <i className="bi bi-bag me-3"></i>Productos
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link text-white px-4 py-3" to="/cart">
-                                <i className="bi bi-cart3 me-3"></i>Cart 
+                            <Link className="nav-link" to="/cart">
+                                <i className="bi bi-cart3 me-3"></i>Carrito
                                 {totalItems > 0 && (
-                                    <span className="badge bg-primary ms-2">{totalItems}</span>
+                                    <span className="badge-custom ms-2">{totalItems}</span>
                                 )}
                             </Link>
                         </li>
@@ -114,25 +112,25 @@ useEffect(() => {
             </div>
 
             {/* Navbar fijo para desktop (sin desplegable) */}
-            <nav className="navbar navbar-expand navbar-dark bg-dark d-none d-lg-block">
+            <nav className="navbar navbar-expand d-none d-lg-block">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">Mi Tienda</Link>
+                    <Link className="navbar-brand" to="/">🥐 Panadería</Link>
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/">
+                            <Link className="nav-link" to="/">
                                 <i className="bi bi-house-door me-2"></i>Home
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link text-white" to="/products">
-                                <i className="bi bi-bag me-2"></i>Products
+                            <Link className="nav-link" to="/products">
+                                <i className="bi bi-bag me-2"></i>Productos
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link text-white position-relative" to="/cart">
-                                <i className="bi bi-cart3 me-2"></i>Cart
+                            <Link className="nav-link" to="/cart">
+                                <i className="bi bi-cart3 me-2"></i>Carrito
                                 {totalItems > 0 && (
-                                    <span className="badge bg-primary ms-2">{totalItems}</span>
+                                    <span className="badge-custom ms-2">{totalItems}</span>
                                 )}
                             </Link>
                         </li>
