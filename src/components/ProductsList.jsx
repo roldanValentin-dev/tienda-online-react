@@ -9,8 +9,8 @@ function ProductsList() {
 
     const getSortedProducts = () => {
         let sorted = [...products.filter(p => p.activo)];
-        
-        switch(sortBy) {
+
+        switch (sortBy) {
             case 'price-asc':
                 return sorted.sort((a, b) => a.precioBase - b.precioBase);
             case 'price-desc':
@@ -32,7 +32,7 @@ function ProductsList() {
                 <div className="page-header">
                     <h1 className="page-title">Nuestros Productos</h1>
                 </div>
-                
+
                 <div className="filters-container">
                     <div className="row g-3">
                         <div className="col-md-6">
@@ -40,7 +40,7 @@ function ProductsList() {
                                 <label className="filter-label">
                                     <i className="bi bi-sort-down me-2"></i>Ordenar
                                 </label>
-                                <select 
+                                <select
                                     className="filter-select"
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
@@ -59,7 +59,7 @@ function ProductsList() {
                                 <label className="filter-label">
                                     <i className="bi bi-funnel me-2"></i>Categoría
                                 </label>
-                                <select 
+                                <select
                                     className="filter-select"
                                     value={selectCategory}
                                     onChange={(e) => setSelectCategory(e.target.value)}
@@ -89,15 +89,15 @@ function ProductsList() {
                 ) : (
                     <div className="products-grid">
                         {sortedProducts.map(p => (
-                            <div 
-                                key={p.id} 
+                            <div
+                                key={p.id}
                                 className="product-card"
                                 onClick={() => navigate(`/products/${p.id}`)}
                             >
                                 <div className="product-image-container">
-                                    <img 
-                                        src={p.imagenUrl || 'https://via.placeholder.com/300x200'} 
-                                        className="product-image" 
+                                    <img
+                                        src={p.imagenUrl || 'https://via.placeholder.com/300x200'}
+                                        className="product-image"
                                         alt={p.nombre}
                                     />
                                 </div>
