@@ -8,41 +8,35 @@ function Navbar() {
     
     const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
 
-
-// Cerrar el offcanvas cuando cambia la ruta
-useEffect(() => {
-    const offcanvasElement = document.getElementById('offcanvasNavbar');
-    const backdrop = document.querySelector('.offcanvas-backdrop');
-    
-    if (offcanvasElement?.classList.contains('show')) {
-        // Quitar el foco
-        if (document.activeElement) {
-            document.activeElement.blur();
-        }
+    // Cerrar el offcanvas cuando cambia la ruta
+    useEffect(() => {
+        const offcanvasElement = document.getElementById('offcanvasNavbar');
+        const backdrop = document.querySelector('.offcanvas-backdrop');
         
-        // Agregar clase hiding para transición
-        offcanvasElement.classList.add('hiding');
-        
-        // Esperar la transición antes de remover
-        setTimeout(() => {
-            offcanvasElement.classList.remove('show', 'hiding');
-            offcanvasElement.removeAttribute('aria-modal');
-            offcanvasElement.removeAttribute('role');
-            // NO ponemos aria-hidden aquí para evitar el warning
-            
-            document.body.classList.remove('offcanvas-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            
-            if (backdrop) {
-                backdrop.classList.add('fade');
-                backdrop.classList.remove('show');
-                setTimeout(() => backdrop.remove(), 150);
+        if (offcanvasElement?.classList.contains('show')) {
+            if (document.activeElement) {
+                document.activeElement.blur();
             }
-        }, 300);
-    }
-}, [location]);
-
+            
+            offcanvasElement.classList.add('hiding');
+            
+            setTimeout(() => {
+                offcanvasElement.classList.remove('show', 'hiding');
+                offcanvasElement.removeAttribute('aria-modal');
+                offcanvasElement.removeAttribute('role');
+                
+                document.body.classList.remove('offcanvas-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                
+                if (backdrop) {
+                    backdrop.classList.add('fade');
+                    backdrop.classList.remove('show');
+                    setTimeout(() => backdrop.remove(), 150);
+                }
+            }, 300);
+        }
+    }, [location]);
 
     return (
         <>
