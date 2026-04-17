@@ -68,7 +68,7 @@ function Cart() {
                         <p className="text-muted">¡Agrega productos para comenzar tu compra!</p>
                         <button 
                             className="btn-primary btn-large"
-                            onClick={() => navigate('/products')}
+                            onClick={() => navigate('/')}
                         >
                             <i className="bi bi-bag-fill me-2"></i>
                             Ver Productos
@@ -145,7 +145,7 @@ function Cart() {
 
                             <button 
                                 className="btn-secondary btn-block"
-                                onClick={() => navigate('/products')}
+                                onClick={() => navigate('/')}
                             >
                                 <i className="bi bi-arrow-left me-2"></i>
                                 Seguir Comprando

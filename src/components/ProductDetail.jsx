@@ -24,7 +24,7 @@ function ProductDetail() {
     }
 
     if (!product) {
-        navigate('/products');
+        navigate('/');
         return null;
     }
 
@@ -58,7 +58,7 @@ function ProductDetail() {
         <div className="detail-page">
             <div className="container-custom">
                 <div className="breadcrumb-custom detail-fade-in">
-                    <a href="/products">← Volver a productos</a>
+                    <a href="/">← Volver a productos</a>
                 </div>
 
                 <div className="detail-container detail-fade-in">
@@ -119,7 +119,7 @@ function ProductDetail() {
                                 </button>
                                 <button 
                                     className="btn-back"
-                                    onClick={() => navigate('/products')}
+                                    onClick={() => navigate('/')}
                                 >
                                     Seguir comprando
                                 </button>

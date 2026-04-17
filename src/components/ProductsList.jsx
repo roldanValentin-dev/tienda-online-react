@@ -39,52 +39,42 @@ function ProductsList() {
 
     return (
         <div className="products-page">
-            <div className="container-custom">
-                <div className="page-header">
-                    <h1 className="page-title">Nuestros Productos</h1>
-                    <p className="page-subtitle">Descubre nuestra selección de productos frescos</p>
+            {/* Hero Banner */}
+            <section className="hero-banner-products">
+                <div className="container-custom">
+                    <h1 className="hero-title-products">Nuestra Repostería Artesanal</h1>
+                    <p className="hero-subtitle-products">
+                        Elaborados diariamente con ingredientes orgánicos, técnicas tradicionales y mucho amor para endulzar tu día.
+                    </p>
                 </div>
-                
-                <div className="filters-container">
-                    <div className="row g-3">
-                        <div className="col-md-6">
-                            <div className="filter-group">
-                                <label className="filter-label">
-                                    <i className="bi bi-sort-down me-2"></i>Ordenar
-                                </label>
-                                <select 
-                                    className="filter-select"
-                                    value={sortBy}
-                                    onChange={(e) => setSortBy(e.target.value)}
-                                >
-                                    <option value="default">Más relevantes</option>
-                                    <option value="price-asc">Menor precio</option>
-                                    <option value="price-desc">Mayor precio</option>
-                                    <option value="name-asc">A-Z</option>
-                                    <option value="name-desc">Z-A</option>
-                                </select>
-                            </div>
-                        </div>
+            </section>
 
-                        <div className="col-md-6">
-                            <div className="filter-group">
-                                <label className="filter-label">
-                                    <i className="bi bi-funnel me-2"></i>Categoría
-                                </label>
-                                <select 
-                                    className="filter-select"
-                                    value={selectCategory}
-                                    onChange={(e) => setSelectCategory(e.target.value)}
-                                >
-                                    {category.map((cat, index) => (
-                                        <option key={index} value={cat}>
-                                            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                                        </option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
+            <div className="container-custom">
+                {/* Filtros: Categorías a la izquierda, Ordenar a la derecha */}
+                <div className="filters-bar">
+                    <div className="category-filters">
+                        {category.map((cat, index) => (
+                            <button
+                                key={index}
+                                className={`category-pill ${selectCategory === cat ? 'active' : ''}`}
+                                onClick={() => setSelectCategory(cat)}
+                            >
+                                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                            </button>
+                        ))}
                     </div>
+                    
+                    <select 
+                        className="sort-select"
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value)}
+                    >
+                        <option value="default">Ordenar por</option>
+                        <option value="price-asc">Menor precio</option>
+                        <option value="price-desc">Mayor precio</option>
+                        <option value="name-asc">A-Z</option>
+                        <option value="name-desc">Z-A</option>
+                    </select>
                 </div>
 
                 {loading ? (
@@ -102,12 +92,11 @@ function ProductsList() {
                         </button>
                     </div>
                 ) : (
-                    <div className="products-grid products-fade-in">
+                    <div className="products-grid">
                         {sortedProducts.map((p, index) => (
                             <div 
                                 key={p.id} 
                                 className="product-card"
-                                style={{ animationDelay: `${index * 0.05}s` }}
                                 onClick={() => navigate(`/products/${p.id}`)}
                             >
                                 <div className="product-image-container">
@@ -122,8 +111,7 @@ function ProductsList() {
                                     <h3 className="product-name">{p.nombre}</h3>
                                     <p className="product-price">${p.precioBase.toLocaleString()}</p>
                                     <button className="product-btn">
-                                        <i className="bi bi-eye me-2"></i>
-                                        Ver detalle
+                                        Comprar
                                     </button>
                                 </div>
                             </div>

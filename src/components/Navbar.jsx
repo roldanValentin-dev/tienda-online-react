@@ -85,12 +85,7 @@ function Navbar() {
                     <ul className="nav flex-column">
                         <li className="nav-item">
                             <Link className="nav-link" to="/">
-                                <i className="bi bi-house-door me-3"></i>Home
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/products">
-                                <i className="bi bi-bag me-3"></i>Productos
+                                <i className="bi bi-bag me-3"></i>Catálogo
                             </Link>
                         </li>
                         <li className="nav-item">
@@ -108,23 +103,18 @@ function Navbar() {
             {/* Navbar fijo para desktop (sin desplegable) */}
             <nav className="navbar navbar-expand d-none d-lg-block">
                 <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">🥐 Panadería</Link>
-                    <ul className="navbar-nav ms-auto">
+                    <Link className="navbar-brand" to="/">🥐 DulceMiga</Link>
+                    <ul className="navbar-nav ms-auto align-items-center">
                         <li className="nav-item">
                             <Link className="nav-link" to="/">
-                                <i className="bi bi-house-door me-2"></i>Home
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/products">
-                                <i className="bi bi-bag me-2"></i>Productos
+                                Catálogo
                             </Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link" to="/cart">
-                                <i className="bi bi-cart3 me-2"></i>Carrito
+                                <i className="bi bi-cart3 me-1"></i>
                                 {totalItems > 0 && (
-                                    <span className="badge-custom ms-2">{totalItems}</span>
+                                    <span className="cart-badge">{totalItems}</span>
                                 )}
                             </Link>
                         </li>
