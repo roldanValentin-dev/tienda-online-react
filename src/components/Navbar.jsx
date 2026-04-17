@@ -1,12 +1,20 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
+import { AuthContext } from '../context/AuthContext';
 
 function Navbar() {
     const { cart } = useContext(CarritoContext);
+    const { user, logout } = useContext(AuthContext);
     const location = useLocation();
+    const navigate = useNavigate();
     
     const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     // Cerrar el offcanvas cuando cambia la ruta
     useEffect(() => {
@@ -54,7 +62,7 @@ function Navbar() {
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     
-                    <Link className="navbar-brand mx-auto" to="/">🥐 Panadería</Link>
+                    <Link className="navbar-brand" to="/">🥐 Panadería</Link>
                     
                     <Link to="/cart" className="cart-icon-mobile">
                         <i className="bi bi-cart3"></i>
@@ -96,6 +104,26 @@ function Navbar() {
                                 )}
                             </Link>
                         </li>
+                        {user ? (
+                            <>
+                                <li className="nav-item">
+                                    <span className="nav-link">
+                                        <i className="bi bi-person me-3"></i>{user.nombre}
+                                    </span>
+                                </li>
+                                <li className="nav-item">
+                                    <button className="nav-link" onClick={handleLogout}>
+                                        <i className="bi bi-box-arrow-right me-3"></i>Cerrar Sesión
+                                    </button>
+                                </li>
+                            </>
+                        ) : (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/auth">
+                                    <i className="bi bi-person me-3"></i>Ingresar
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>
@@ -118,6 +146,26 @@ function Navbar() {
                                 )}
                             </Link>
                         </li>
+                        {user ? (
+                            <>
+                                <li className="nav-item">
+                                    <span className="nav-link">
+                                        <i className="bi bi-person me-1"></i>{user.nombre}
+                                    </span>
+                                </li>
+                                <li className="nav-item">
+                                    <button className="btn-logout" onClick={handleLogout}>
+                                        Cerrar Sesión
+                                    </button>
+                                </li>
+                            </>
+                        ) : (
+                            <li className="nav-item">
+                                <Link className="btn-login" to="/auth">
+                                    Ingresar
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </nav>
