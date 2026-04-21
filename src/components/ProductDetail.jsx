@@ -41,9 +41,7 @@ function ProductDetail() {
     };
 
     const handleAddToCart = () => {
-        for (let i = 0; i < cantidad; i++) {
-            agregarAlCarrito(product);
-        }
+        agregarAlCarrito(product, cantidad);
         const btn = document.getElementById('add-to-cart-btn');
         btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>¡Agregado!';
         btn.style.background = '#7cb342';

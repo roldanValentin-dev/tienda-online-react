@@ -1,9 +1,21 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import API_BASE_URL from "../config/api";
 import { sanitizeErrorMessage } from '../security';
 
 export const AuthContext = createContext();
+
+/**
+ * Hook personalizado para usar el contexto de autenticación
+ * @returns {Object} Contexto de autenticación con user, loading, register, login, logout, isAuthenticated
+ */
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth debe ser usado dentro de un AuthProvider');
+    }
+    return context;
+};
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);

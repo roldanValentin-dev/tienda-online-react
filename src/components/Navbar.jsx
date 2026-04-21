@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
 import { AuthContext } from '../context/AuthContext';
+import Swal from 'sweetalert2';
 
 function Navbar() {
     const { cart } = useContext(CarritoContext);
@@ -11,9 +12,32 @@ function Navbar() {
     
     const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
 
+    /**
+     * Maneja el cierre de sesión con confirmación
+     */
     const handleLogout = () => {
-        logout();
-        navigate('/');
+        Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: '¿Estás seguro que deseas cerrar sesión?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#ff6b35',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, cerrar sesión',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout();
+                navigate('/');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sesión cerrada',
+                    text: '¡Hasta pronto!',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
     };
 
     // Cerrar el offcanvas cuando cambia la ruta
@@ -117,9 +141,9 @@ function Navbar() {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <span className="nav-link">
-                                        <i className="bi bi-person me-3"></i>{user.nombre}
-                                    </span>
+                                    <Link className="nav-link" to="/perfil">
+                                        <i className="bi bi-person-circle me-3"></i>Mi Perfil
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
                                     <button className="nav-link" onClick={handleLogout}>
@@ -169,9 +193,9 @@ function Navbar() {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <span className="nav-link">
-                                        <i className="bi bi-person me-2"></i>{user.nombre}
-                                    </span>
+                                    <Link className="nav-link" to="/perfil">
+                                        <i className="bi bi-person-circle me-2"></i>Mi Perfil
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
                                     <button className="btn-logout-nav" onClick={handleLogout}>
