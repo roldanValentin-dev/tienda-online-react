@@ -16,6 +16,7 @@ function Checkout() {
     const { cart, calcularTotal, vaciarCarrito } = useContext(CarritoContext);
     const { user, isAuthenticated } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
+    const [pedidoConfirmado, setPedidoConfirmado] = useState(false);
     
     const [formData, setFormData] = useState({
         fechaEntrega: '',
@@ -24,6 +25,9 @@ function Checkout() {
 
     // Validar autenticación y carrito al montar el componente
     useEffect(() => {
+        // No validar si ya se confirmó el pedido
+        if (pedidoConfirmado) return;
+        
         if (!isAuthenticated()) {
             Swal.fire({
                 icon: 'warning',
@@ -47,7 +51,7 @@ function Checkout() {
             });
             return;
         }
-    }, [isAuthenticated, cart, navigate]);
+    }, [isAuthenticated, navigate, pedidoConfirmado]);
 
     // Manejar cambios en el formulario
     const handleChange = (e) => {
@@ -95,8 +99,8 @@ function Checkout() {
         setLoading(false);
 
         if (result.success) {
-            // Vaciar carrito después de crear el pedido
-            vaciarCarrito();
+            // Marcar pedido como confirmado ANTES de vaciar el carrito
+            setPedidoConfirmado(true);
             
             Swal.fire({
                 icon: 'success',
@@ -105,9 +109,15 @@ function Checkout() {
                     <p>Tu pedido <strong>#${result.data.id}</strong> ha sido creado exitosamente</p>
                     <p>Total: <strong>$${result.data.total?.toFixed(2) || calcularTotal().toFixed(2)}</strong></p>
                 `,
+                confirmButtonText: 'Ver mis pedidos',
                 confirmButtonColor: '#ff6b35'
             }).then(() => {
+                // Vaciar carrito después de que el usuario cierre el alert
+                vaciarCarrito();
+                // Navegar y hacer scroll al inicio
                 navigate('/mis-pedidos');
+                // Forzar scroll al inicio después de navegar
+                setTimeout(() => window.scrollTo(0, 0), 100);
             });
         } else {
             Swal.fire({

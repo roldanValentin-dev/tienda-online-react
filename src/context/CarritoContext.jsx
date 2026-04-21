@@ -31,27 +31,40 @@ export function CarritoProvider({ children }) {
         }, 2000);
     }, []);
 
-    // funciones para agregar, eliminar y calcular total
-    const agregarAlCarrito = (producto) => {
+    /**
+     * Agrega un producto al carrito
+     * @param {Object} producto - Producto a agregar
+     * @param {number} cantidad - Cantidad a agregar (por defecto 1)
+     */
+    const agregarAlCarrito = (producto, cantidad = 1) => {
         const existe = cart.find(p => p.id === producto.id);
         if (existe) {
-            setCart(cart.map(c => c.id === producto.id ? { ...c, cantidad: c.cantidad + 1 } : c));
+            setCart(cart.map(c => c.id === producto.id ? { ...c, cantidad: c.cantidad + cantidad } : c));
         } else {
-            setCart([...cart, { ...producto, cantidad: 1 }]);
+            setCart([...cart, { ...producto, cantidad: cantidad }]);
         }
     };
+    /**
+     * Elimina un producto del carrito
+     * @param {number} id - ID del producto a eliminar
+     */
     const eliminarDelCarrito = (id) => {
         setCart(cart.filter(c => c.id !== id));
     }
     
-    // Vaciar todo el carrito (usado después de confirmar pedido)
+    /**
+     * Vaciar todo el carrito (usado después de confirmar pedido)
+     */
     const vaciarCarrito = () => {
         setCart([]);
         localStorage.removeItem('cart');
     }
     
+    /**
+     * Calcula el total del carrito
+     * @returns {number} Total del carrito
+     */
     const calcularTotal = () => {
-        //multiplica el precio por la cantidad y lo acumula
         return cart.reduce((sum, i) => sum + i.precioBase * i.cantidad, 0);
     }
     return (
