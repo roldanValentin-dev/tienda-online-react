@@ -33,16 +33,8 @@ function Cart() {
     };
 
     const handleCheckout = () => {
-        Swal.fire({
-            title: '¡Gracias por tu compra!',
-            html: `
-                <p>Total a pagar: <strong>$${calcularTotal().toLocaleString()}</strong></p>
-                <p>Esta es una demo. La funcionalidad de pago se implementará próximamente.</p>
-            `,
-            icon: 'success',
-            confirmButtonColor: '#ff6b35',
-            confirmButtonText: 'Entendido'
-        });
+        // Navegar a la página de checkout
+        navigate('/checkout');
     };
 
     return (
