@@ -1,48 +1,50 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
+import { AuthContext } from '../context/AuthContext';
 
 function Navbar() {
     const { cart } = useContext(CarritoContext);
+    const { user, logout } = useContext(AuthContext);
     const location = useLocation();
+    const navigate = useNavigate();
     
     const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
 
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
-// Cerrar el offcanvas cuando cambia la ruta
-useEffect(() => {
-    const offcanvasElement = document.getElementById('offcanvasNavbar');
-    const backdrop = document.querySelector('.offcanvas-backdrop');
-    
-    if (offcanvasElement?.classList.contains('show')) {
-        // Quitar el foco
-        if (document.activeElement) {
-            document.activeElement.blur();
-        }
+    // Cerrar el offcanvas cuando cambia la ruta
+    useEffect(() => {
+        const offcanvasElement = document.getElementById('offcanvasNavbar');
+        const backdrop = document.querySelector('.offcanvas-backdrop');
         
-        // Agregar clase hiding para transición
-        offcanvasElement.classList.add('hiding');
-        
-        // Esperar la transición antes de remover
-        setTimeout(() => {
-            offcanvasElement.classList.remove('show', 'hiding');
-            offcanvasElement.removeAttribute('aria-modal');
-            offcanvasElement.removeAttribute('role');
-            // NO ponemos aria-hidden aquí para evitar el warning
-            
-            document.body.classList.remove('offcanvas-open');
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
-            
-            if (backdrop) {
-                backdrop.classList.add('fade');
-                backdrop.classList.remove('show');
-                setTimeout(() => backdrop.remove(), 150);
+        if (offcanvasElement?.classList.contains('show')) {
+            if (document.activeElement) {
+                document.activeElement.blur();
             }
-        }, 300);
-    }
-}, [location]);
-
+            
+            offcanvasElement.classList.add('hiding');
+            
+            setTimeout(() => {
+                offcanvasElement.classList.remove('show', 'hiding');
+                offcanvasElement.removeAttribute('aria-modal');
+                offcanvasElement.removeAttribute('role');
+                
+                document.body.classList.remove('offcanvas-open');
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                
+                if (backdrop) {
+                    backdrop.classList.add('fade');
+                    backdrop.classList.remove('show');
+                    setTimeout(() => backdrop.remove(), 150);
+                }
+            }, 300);
+        }
+    }, [location]);
 
     return (
         <>
@@ -107,6 +109,26 @@ useEffect(() => {
                                 )}
                             </Link>
                         </li>
+                        {user ? (
+                            <>
+                                <li className="nav-item">
+                                    <span className="nav-link">
+                                        <i className="bi bi-person me-3"></i>{user.nombre}
+                                    </span>
+                                </li>
+                                <li className="nav-item">
+                                    <button className="nav-link" onClick={handleLogout}>
+                                        <i className="bi bi-box-arrow-right me-3"></i>Cerrar Sesión
+                                    </button>
+                                </li>
+                            </>
+                        ) : (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/auth">
+                                    <i className="bi bi-person me-3"></i>Ingresar
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </div>
@@ -134,6 +156,26 @@ useEffect(() => {
                                 )}
                             </Link>
                         </li>
+                        {user ? (
+                            <>
+                                <li className="nav-item">
+                                    <span className="nav-link">
+                                        <i className="bi bi-person me-2"></i>{user.nombre}
+                                    </span>
+                                </li>
+                                <li className="nav-item">
+                                    <button className="btn-logout-nav" onClick={handleLogout}>
+                                        Cerrar Sesión
+                                    </button>
+                                </li>
+                            </>
+                        ) : (
+                            <li className="nav-item">
+                                <Link className="btn-login-nav" to="/auth">
+                                    Ingresar
+                                </Link>
+                            </li>
+                        )}
                     </ul>
                 </div>
             </nav>

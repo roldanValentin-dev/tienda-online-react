@@ -1,7 +1,8 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CarritoContext } from '../context/CarritoContext';
 import { useProducts } from '../hooks/useProducts';
+import { SkeletonProductDetail } from './Skeleton';
 
 function ProductDetail() {
     const { id } = useParams();
@@ -12,15 +13,14 @@ function ProductDetail() {
     const [cantidad, setCantidad] = useState(1);
     const [selectedImage, setSelectedImage] = useState(0);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [id]);
+
     const product = getProductById(id);
 
     if (loading) {
-        return (
-            <div className="loading-container">
-                <div className="spinner mx-auto"></div>
-                <p className="text-muted-custom mt-3">Cargando...</p>
-            </div>
-        );
+        return <SkeletonProductDetail />;
     }
 
     if (!product) {
@@ -57,13 +57,13 @@ function ProductDetail() {
     return (
         <div className="detail-page">
             <div className="container-custom">
-                <div className="breadcrumb-custom">
+                <div className="breadcrumb-custom detail-fade-in">
                     <a href="/products">← Volver a productos</a>
                 </div>
 
-                <div className="detail-container">
+                <div className="detail-container detail-fade-in">
                     <div className="detail-grid">
-                        <div>
+                        <div className="detail-gallery-section">
                             <div className="gallery-main">
                                 <img src={images[selectedImage]} alt={product.nombre} />
                             </div>
@@ -80,7 +80,7 @@ function ProductDetail() {
                             </div>
                         </div>
 
-                        <div className="detail-info">
+                        <div className="detail-info detail-info-fade-in">
                             <span className="product-category">{product.categoria}</span>
                             <h1 className="detail-title">{product.nombre}</h1>
                             <p className="detail-price">${product.precioBase.toLocaleString()}</p>

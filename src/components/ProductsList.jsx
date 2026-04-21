@@ -1,26 +1,37 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CarritoContext } from "../context/CarritoContext";
+import { useProducts } from "../hooks/useProducts";
+import { SkeletonGrid } from "./Skeleton";
 
 function ProductsList() {
     const navigate = useNavigate();
-    const { products, loading, category, selectCategory, setSelectCategory } = useContext(CarritoContext);
+    const { category, selectCategory, setSelectCategory } = useContext(CarritoContext);
+    const { products, loading } = useProducts();
     const [sortBy, setSortBy] = useState('default');
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const getSortedProducts = () => {
-        let sorted = [...products.filter(p => p.activo)];
+        let filtered = products.filter(p => p.activo);
+        
+        if (selectCategory !== 'todas') {
+            filtered = filtered.filter(p => p.categoria === selectCategory);
+        }
         
         switch(sortBy) {
             case 'price-asc':
-                return sorted.sort((a, b) => a.precioBase - b.precioBase);
+                return filtered.sort((a, b) => a.precioBase - b.precioBase);
             case 'price-desc':
-                return sorted.sort((a, b) => b.precioBase - a.precioBase);
+                return filtered.sort((a, b) => b.precioBase - a.precioBase);
             case 'name-asc':
-                return sorted.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                return filtered.sort((a, b) => a.nombre.localeCompare(b.nombre));
             case 'name-desc':
-                return sorted.sort((a, b) => b.nombre.localeCompare(a.nombre));
+                return filtered.sort((a, b) => b.nombre.localeCompare(a.nombre));
             default:
-                return sorted;
+                return filtered;
         }
     };
 
@@ -31,6 +42,7 @@ function ProductsList() {
             <div className="container-custom">
                 <div className="page-header">
                     <h1 className="page-title">Nuestros Productos</h1>
+                    <p className="page-subtitle">Descubre nuestra selección de productos frescos</p>
                 </div>
                 
                 <div className="filters-container">
@@ -76,22 +88,26 @@ function ProductsList() {
                 </div>
 
                 {loading ? (
-                    <div className="loading-container">
-                        <div className="spinner mx-auto"></div>
-                        <p className="text-muted-custom mt-3">Cargando productos...</p>
-                    </div>
+                    <SkeletonGrid count={8} />
                 ) : sortedProducts.length === 0 ? (
                     <div className="empty-state">
-                        <i className="bi bi-inbox"></i>
+                        <div className="empty-icon">🍞</div>
                         <h3>No hay productos disponibles</h3>
-                        <p className="text-muted-custom">Intenta con otra categoría</p>
+                        <p className="text-muted">Intenta con otra categoría</p>
+                        <button 
+                            className="btn-primary"
+                            onClick={() => setSelectCategory('todas')}
+                        >
+                            Ver Todos
+                        </button>
                     </div>
                 ) : (
-                    <div className="products-grid">
-                        {sortedProducts.map(p => (
+                    <div className="products-grid products-fade-in">
+                        {sortedProducts.map((p, index) => (
                             <div 
                                 key={p.id} 
                                 className="product-card"
+                                style={{ animationDelay: `${index * 0.05}s` }}
                                 onClick={() => navigate(`/products/${p.id}`)}
                             >
                                 <div className="product-image-container">
@@ -100,12 +116,13 @@ function ProductsList() {
                                         className="product-image" 
                                         alt={p.nombre}
                                     />
+                                    <span className="product-category-badge">{p.categoria}</span>
                                 </div>
                                 <div className="product-body">
-                                    <span className="product-category">{p.categoria}</span>
                                     <h3 className="product-name">{p.nombre}</h3>
                                     <p className="product-price">${p.precioBase.toLocaleString()}</p>
                                     <button className="product-btn">
+                                        <i className="bi bi-eye me-2"></i>
                                         Ver detalle
                                     </button>
                                 </div>

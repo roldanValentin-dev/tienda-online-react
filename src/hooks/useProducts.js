@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import API_BASE_URL from '../config/api';
+import axios from 'axios';
 
 export const useProducts = () => {
     const [products, setProducts] = useState([]);
@@ -7,19 +8,19 @@ export const useProducts = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/api/catalogo/productos`)
-            .then(res => res.json())
-            .then(data => {
-                setProducts(data);
+        // Delay artificial de 2 segundos para ver el skeleton
+        setTimeout(() => {
+            axios.get(`${API_BASE_URL}/api/catalogo/productos`).then(res => {
+                setProducts(res.data);
                 setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error al cargar productos:', err);
+            }).catch(err => {
+                console.error(`error al cargar productos ${err}`);
                 setError(err);
                 setLoading(false);
             });
-    }, []);
-
+        }, 2000);
+    },[]);
+    
     const getProductById = (id) => {
         return products.find(p => p.id === parseInt(id));
     };
