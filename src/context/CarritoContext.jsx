@@ -5,10 +5,18 @@ import axios from "axios";
 export const CarritoContext = createContext();
 
 export function CarritoProvider({ children }) {
-    //inicializamos el estado del carrito y los productos
-    const [cart, setCart] = useState([]);
+    // Inicializar carrito desde localStorage si existe
+    const [cart, setCart] = useState(() => {
+        const savedCart = localStorage.getItem('cart');
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
     const [category, setCategory] = useState([]);
     const [selectCategory, setSelectCategory] = useState('todas');
+
+    // Persistir carrito en localStorage cuando cambie
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
 
     //fetch categorias
     useEffect(() => {
@@ -35,6 +43,13 @@ export function CarritoProvider({ children }) {
     const eliminarDelCarrito = (id) => {
         setCart(cart.filter(c => c.id !== id));
     }
+    
+    // Vaciar todo el carrito (usado después de confirmar pedido)
+    const vaciarCarrito = () => {
+        setCart([]);
+        localStorage.removeItem('cart');
+    }
+    
     const calcularTotal = () => {
         //multiplica el precio por la cantidad y lo acumula
         return cart.reduce((sum, i) => sum + i.precioBase * i.cantidad, 0);
@@ -44,6 +59,7 @@ export function CarritoProvider({ children }) {
             cart,
             agregarAlCarrito,
             eliminarDelCarrito,
+            vaciarCarrito,
             calcularTotal,
             category,
             selectCategory,

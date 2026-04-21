@@ -112,6 +112,11 @@ function Navbar() {
                         {user ? (
                             <>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to="/mis-pedidos">
+                                        <i className="bi bi-box-seam me-3"></i>Mis Pedidos
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
                                     <span className="nav-link">
                                         <i className="bi bi-person me-3"></i>{user.nombre}
                                     </span>
@@ -158,6 +163,11 @@ function Navbar() {
                         </li>
                         {user ? (
                             <>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/mis-pedidos">
+                                        <i className="bi bi-receipt me-2"></i>Mis Pedidos
+                                    </Link>
+                                </li>
                                 <li className="nav-item">
                                     <span className="nav-link">
                                         <i className="bi bi-person me-2"></i>{user.nombre}
