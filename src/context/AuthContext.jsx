@@ -64,6 +64,10 @@ export const AuthProvider = ({ children }) => {
                 }
                 
                 localStorage.setItem('token', token);
+                // Normalizar el campo del nombre si viene como firstName
+                if (userInfo.firstName && !userInfo.nombre) {
+                    userInfo.nombre = userInfo.firstName;
+                }
                 localStorage.setItem('user', JSON.stringify(userInfo));
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setUser(userInfo);
@@ -105,6 +109,10 @@ export const AuthProvider = ({ children }) => {
                 }
                 
                 localStorage.setItem('token', token);
+                // Normalizar el campo del nombre si viene como firstName
+                if (userInfo.firstName && !userInfo.nombre) {
+                    userInfo.nombre = userInfo.firstName;
+                }
                 localStorage.setItem('user', JSON.stringify(userInfo));
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setUser(userInfo);

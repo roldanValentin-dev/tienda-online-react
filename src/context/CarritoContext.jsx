@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import API_BASE_URL from "../config/api";
 import axios from "axios";
+import { toast } from 'react-toastify'; // Asumiendo que ya lo tienes instalado
 
 export const CarritoContext = createContext();
 
@@ -20,15 +21,12 @@ export function CarritoProvider({ children }) {
 
     //fetch categorias
     useEffect(() => {
-        // Delay artificial de 2 segundos para ver el skeleton
-        setTimeout(() => {
-            axios.get(`${API_BASE_URL}/api/catalogo/categorias`)
+        axios.get(`${API_BASE_URL}/api/catalogo/categorias`)
             .then(res => {
                 setCategory(['todas', ...res.data]);
             }).catch(err => {
-                console.error(`Error al cargar Categorias ${err}`);
+                toast.error('Error al cargar las categorías. Intenta de nuevo más tarde.');
             });
-        }, 2000);
     }, []);
 
     /**

@@ -1,6 +1,7 @@
 import { CarritoProvider } from './context/CarritoContext';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
@@ -35,6 +36,17 @@ function App() {
       <CarritoProvider>
         <BrowserRouter>
           <ScrollToTop />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <div className="app-wrapper">
             <Navbar />
             <main className="main-content">

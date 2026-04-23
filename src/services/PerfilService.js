@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API_BASE_URL from '../config/api';
 
 /**
  * Servicio singleton para gestionar el perfil del cliente online
@@ -6,7 +7,7 @@ import axios from 'axios';
  */
 class PerfilService {
   constructor() {
-    this.baseURL = 'http://localhost:7097/api/clientes-online';
+    this.baseURL = `${API_BASE_URL}/api/clientes-online`;
     this.timeout = 10000;
   }
 
