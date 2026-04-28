@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CarritoContext } from "../context/CarritoContext";
 import { useProducts } from "../hooks/useProducts";
 import { SkeletonGrid } from "./Skeleton";
+import API_BASE_URL from '../config/api';
 
 function ProductsList() {
     const navigate = useNavigate();
@@ -36,6 +37,19 @@ function ProductsList() {
     };
 
     const sortedProducts = getSortedProducts();
+
+    const getProductImage = (producto) => {
+        // Si tiene imágenes en el array
+        if (producto.imagenes && producto.imagenes.length > 0) {
+            // Buscar la imagen principal
+            const imagenPrincipal = producto.imagenes.find(img => img.esPrincipal);
+            // Si existe imagen principal, usarla; si no, usar la primera
+            const imagen = imagenPrincipal || producto.imagenes[0];
+            return `${API_BASE_URL}${imagen.url}`;
+        }
+        // Fallback al campo antiguo imagenUrl o placeholder
+        return producto.imagenUrl || 'https://via.placeholder.com/300x200';
+    };
 
     return (
         <div className="products-page">
@@ -112,7 +126,7 @@ function ProductsList() {
                             >
                                 <div className="product-image-container">
                                     <img 
-                                        src={p.imagenUrl || 'https://via.placeholder.com/300x200'} 
+                                        src={getProductImage(p)} 
                                         className="product-image" 
                                         alt={p.nombre}
                                     />

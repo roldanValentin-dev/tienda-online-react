@@ -3,6 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { CarritoContext } from '../context/CarritoContext';
 import { useProducts } from '../hooks/useProducts';
 import { SkeletonProductDetail } from './Skeleton';
+import ProductoImagenService from '../services/ProductoImagenService';
+import API_BASE_URL from '../config/api';
 
 function ProductDetail() {
     const { id } = useParams();
@@ -12,14 +14,40 @@ function ProductDetail() {
     
     const [cantidad, setCantidad] = useState(1);
     const [selectedImage, setSelectedImage] = useState(0);
+    const [imagenes, setImagenes] = useState([]);
+    const [loadingImages, setLoadingImages] = useState(true);
 
     useEffect(() => {
         window.scrollTo(0, 0);
+
+        const cargarImagenes = async () => {
+            setLoadingImages(true);
+            try {
+                const result = await ProductoImagenService.getImagenesByProductoId(id);
+                if (result.success) {
+                    // Ordenar imágenes: primero la principal, luego por el campo orden
+                    const imagenesOrdenadas = [...result.data].sort((a, b) => {
+                        if (a.esPrincipal) return -1;
+                        if (b.esPrincipal) return 1;
+                        return a.orden - b.orden;
+                    });
+                    setImagenes(imagenesOrdenadas);
+                }
+            } catch (error) {
+                console.error('Error al cargar imágenes del producto:', error);
+            } finally {
+                setLoadingImages(false);
+            }
+        };
+
+        if (id) {
+            cargarImagenes();
+        }
     }, [id]);
 
     const product = getProductById(id);
 
-    if (loading) {
+    if (loading || loadingImages) {
         return <SkeletonProductDetail />;
     }
 
@@ -28,12 +56,10 @@ function ProductDetail() {
         return null;
     }
 
-    const images = [
-        product.imagenUrl || 'https://via.placeholder.com/600x400',
-        'https://picsum.photos/seed/' + product.id + 'a/600/400',
-        'https://picsum.photos/seed/' + product.id + 'b/600/400',
-        'https://picsum.photos/seed/' + product.id + 'c/600/400'
-    ];
+    // Construir array de URLs de imágenes
+    const images = imagenes.length > 0
+        ? imagenes.map(img => `${API_BASE_URL}${img.url}`)
+        : [product.imagenUrl || 'https://via.placeholder.com/600x400'];
 
     const handleIncrement = () => setCantidad(prev => prev + 1);
     const handleDecrement = () => {

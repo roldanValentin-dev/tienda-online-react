@@ -159,7 +159,14 @@ function Auth() {
                 timer: 2000,
                 timerProgressBar: true
             });
-            navigate('/');
+            
+            // Redirigir según el rol del usuario
+            const userRole = result.user?.role || result.user?.roles?.[0];
+            if (userRole === 'Admin') {
+                navigate('/admin/productos');
+            } else {
+                navigate('/');
+            }
         } else {
             // Registrar intento fallido
             recordFailedAttempt(loginData.email);

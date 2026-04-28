@@ -28,6 +28,10 @@ export const AuthProvider = ({ children }) => {
         if (token && userData) {
             try {
                 const parsedUser = JSON.parse(userData);
+                // Normalizar role: si viene roles array, tomar el primero
+                if (parsedUser.roles && Array.isArray(parsedUser.roles) && !parsedUser.role) {
+                    parsedUser.role = parsedUser.roles[0];
+                }
                 setUser(parsedUser);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             } catch (error) {
@@ -63,11 +67,17 @@ export const AuthProvider = ({ children }) => {
                     throw new Error('Token inválido recibido del servidor');
                 }
                 
-                localStorage.setItem('token', token);
                 // Normalizar el campo del nombre si viene como firstName
                 if (userInfo.firstName && !userInfo.nombre) {
                     userInfo.nombre = userInfo.firstName;
                 }
+                
+                // Normalizar role: si viene roles array, tomar el primero
+                if (userInfo.roles && Array.isArray(userInfo.roles) && !userInfo.role) {
+                    userInfo.role = userInfo.roles[0];
+                }
+                
+                localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(userInfo));
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setUser(userInfo);
@@ -108,14 +118,22 @@ export const AuthProvider = ({ children }) => {
                     throw new Error('Token inválido recibido del servidor');
                 }
                 
-                localStorage.setItem('token', token);
                 // Normalizar el campo del nombre si viene como firstName
                 if (userInfo.firstName && !userInfo.nombre) {
                     userInfo.nombre = userInfo.firstName;
                 }
+                
+                // Normalizar role: si viene roles array, tomar el primero
+                if (userInfo.roles && Array.isArray(userInfo.roles) && !userInfo.role) {
+                    userInfo.role = userInfo.roles[0];
+                }
+                
+                localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(userInfo));
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setUser(userInfo);
+                
+                return { success: true, data: response.data, user: userInfo };
             }
 
             return { success: true, data: response.data };
