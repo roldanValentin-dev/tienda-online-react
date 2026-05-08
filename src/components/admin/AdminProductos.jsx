@@ -57,23 +57,35 @@ const AdminProductos = () => {
     const filteredProducts = productos.filter(p => {
         const matchesSearch = p.nombre.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = categoriaFilter === 'todas' || p.categoria === categoriaFilter;
-        const matchesStatus = estadoFilter === 'todos' || 
-                            (estadoFilter === 'activos' && p.activo) || 
-                            (estadoFilter === 'inactivos' && !p.activo);
+        const matchesStatus = estadoFilter === 'todos' ||
+            (estadoFilter === 'activos' && p.activo) ||
+            (estadoFilter === 'inactivos' && !p.activo);
         return matchesSearch && matchesCategory && matchesStatus;
     });
 
     const getProductImage = (p) => {
-        // Si tiene imagenUrl y no es cadena vacía
-        if (p.imagenUrl && p.imagenUrl.trim() !== '') {
-            // Si ya es una URL completa, devolverla tal cual
-            if (p.imagenUrl.startsWith('http')) {
-                return p.imagenUrl;
+        // 1️⃣ Primero: Verificar si tiene array imagenes
+        if (p.imagenes && p.imagenes.length > 0) {
+            // Buscar imagen principal
+            const imagenPrincipal = p.imagenes.find(img => img.esPrincipal);
+            const imagen = imagenPrincipal || p.imagenes[0];
+
+            if (imagen && imagen.url) {
+                // Si es URL completa, usarla; si no, agregar API_BASE_URL
+                return imagen.url.startsWith('http')
+                    ? imagen.url
+                    : `${API_BASE_URL}${imagen.url}`;
             }
-            // Si es una ruta relativa, agregar API_BASE_URL
-            return `${API_BASE_URL}${p.imagenUrl}`;
         }
-        // Fallback a imagen base64 inline (1x1 pixel gris)
+
+        // 2️⃣ Segundo: Fallback a imagenUrl antiguo
+        if (p.imagenUrl && p.imagenUrl.trim() !== '') {
+            return p.imagenUrl.startsWith('http')
+                ? p.imagenUrl
+                : `${API_BASE_URL}${p.imagenUrl}`;
+        }
+
+        // 3️⃣ Tercero: Fallback SVG
         return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect width="50" height="50" fill="%23ddd"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="10" fill="%23999"%3ESin Imagen%3C/text%3E%3C/svg%3E';
     };
 
@@ -95,7 +107,7 @@ const AdminProductos = () => {
                     <h2 className="page-title-admin">Gestión de Productos</h2>
                     <p className="page-subtitle-admin">Administra tu catálogo de productos</p>
                 </div>
-                <button 
+                <button
                     className="btn-nuevo-producto"
                     onClick={() => navigate('/admin/productos/nuevo')}
                 >
@@ -112,10 +124,10 @@ const AdminProductos = () => {
                             <i className="bi bi-search"></i>
                             Buscar
                         </label>
-                        <input 
-                            type="text" 
-                            className="filtro-input" 
-                            placeholder="Buscar por nombre..." 
+                        <input
+                            type="text"
+                            className="filtro-input"
+                            placeholder="Buscar por nombre..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -125,7 +137,7 @@ const AdminProductos = () => {
                             <i className="bi bi-tag"></i>
                             Categoría
                         </label>
-                        <select 
+                        <select
                             className="filtro-select"
                             value={categoriaFilter}
                             onChange={(e) => setCategoriaFilter(e.target.value)}
@@ -142,7 +154,7 @@ const AdminProductos = () => {
                             <i className="bi bi-toggle-on"></i>
                             Estado
                         </label>
-                        <select 
+                        <select
                             className="filtro-select"
                             value={estadoFilter}
                             onChange={(e) => setEstadoFilter(e.target.value)}
@@ -178,8 +190,8 @@ const AdminProductos = () => {
                             {filteredProducts.map(p => (
                                 <tr key={p.id}>
                                     <td>
-                                        <img 
-                                            src={getProductImage(p)} 
+                                        <img
+                                            src={getProductImage(p)}
                                             alt={p.nombre}
                                             className="table-img"
                                         />
@@ -206,21 +218,21 @@ const AdminProductos = () => {
                                     </td>
                                     <td>
                                         <div className="table-acciones">
-                                            <button 
+                                            <button
                                                 className="btn-table editar"
                                                 onClick={() => navigate(`/admin/productos/editar/${p.id}`)}
                                                 title="Editar"
                                             >
                                                 <i className="bi bi-pencil"></i>
                                             </button>
-                                            <button 
+                                            <button
                                                 className="btn-table imagenes"
                                                 onClick={() => navigate(`/admin/productos/imagenes/${p.id}`)}
                                                 title="Imágenes"
                                             >
                                                 <i className="bi bi-images"></i>
                                             </button>
-                                            <button 
+                                            <button
                                                 className="btn-table eliminar"
                                                 onClick={() => handleDelete(p.id, p.nombre)}
                                                 title="Eliminar"
@@ -241,8 +253,8 @@ const AdminProductos = () => {
                 {filteredProducts.map(p => (
                     <div key={p.id} className="producto-card-mobile">
                         <div className="mobile-imagen-wrapper">
-                            <img 
-                                src={getProductImage(p)} 
+                            <img
+                                src={getProductImage(p)}
                                 alt={p.nombre}
                                 className="mobile-imagen"
                             />
@@ -267,19 +279,19 @@ const AdminProductos = () => {
                                 </span>
                             </div>
                             <div className="mobile-acciones">
-                                <button 
+                                <button
                                     className="btn-mobile editar"
                                     onClick={() => navigate(`/admin/productos/editar/${p.id}`)}
                                 >
                                     <i className="bi bi-pencil"></i>
                                 </button>
-                                <button 
+                                <button
                                     className="btn-mobile imagenes"
                                     onClick={() => navigate(`/admin/productos/imagenes/${p.id}`)}
                                 >
                                     <i className="bi bi-images"></i>
                                 </button>
-                                <button 
+                                <button
                                     className="btn-mobile eliminar"
                                     onClick={() => handleDelete(p.id, p.nombre)}
                                 >
@@ -298,7 +310,7 @@ const AdminProductos = () => {
                     <h3>No se encontraron productos</h3>
                     <p>No hay productos que coincidan con los filtros seleccionados.</p>
                     {searchTerm || categoriaFilter !== 'todas' || estadoFilter !== 'todos' ? (
-                        <button 
+                        <button
                             className="btn-limpiar-filtros"
                             onClick={() => {
                                 setSearchTerm('');

@@ -35,13 +35,15 @@ const ProductoForm = () => {
         const result = await ProductoService.getProductoById(id);
         if (result.success) {
             setFormData({
+                
                 nombre: result.data.nombre,
                 descripcion: result.data.descripcion,
                 precio: result.data.precioBase,
                 stock: result.data.stock,
                 stockMinimo: result.data.stockMinimo,
                 categoria: result.data.categoria,
-                activo: result.data.activo
+                activo: result.data.activo,
+                id: parseInt(id)
             });
         } else {
             Swal.fire('Error', result.message, 'error');
@@ -115,20 +117,32 @@ const ProductoForm = () => {
 
         setSaving(true);
 
-        const dataToSend = {
-            nombre: formData.nombre.trim(),
-            descripcion: formData.descripcion.trim(),
-            precioBase: parseFloat(formData.precio),
-            stock: parseInt(formData.stock),
-            stockMinimo: parseInt(formData.stockMinimo),
-            categoria: formData.categoria.trim(),
-            activo: formData.activo
-        };
-
+        let dataToSend;
         let result;
+        
         if (isEditMode) {
+            // Para actualizar: enviar todos los campos que acepta UpdateProductoDto
+            dataToSend = {
+                id: parseInt(id),
+                nombre: formData.nombre.trim(),
+                descripcion: formData.descripcion.trim(),
+                precioBase: parseFloat(formData.precio),
+                stock: parseInt(formData.stock) || 0,
+                stockMinimo: parseInt(formData.stockMinimo) || 0,
+                categoria: formData.categoria.trim(),
+                activo: formData.activo
+            };
             result = await ProductoService.updateProducto(id, dataToSend);
         } else {
+            // Para crear: enviar todos los campos
+            dataToSend = {
+                nombre: formData.nombre.trim(),
+                descripcion: formData.descripcion.trim(),
+                precioBase: parseFloat(formData.precio),
+                stock: parseInt(formData.stock),
+                stockMinimo: parseInt(formData.stockMinimo),
+                categoria: formData.categoria.trim()
+            };
             result = await ProductoService.createProducto(dataToSend);
         }
 

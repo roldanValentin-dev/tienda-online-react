@@ -46,8 +46,8 @@ function Cart() {
                         Mi Carrito
                     </h1>
                     <p className="page-subtitle">
-                        {cart.length === 0 
-                            ? 'Tu carrito está vacío' 
+                        {cart.length === 0
+                            ? 'Tu carrito está vacío'
                             : `Tienes ${cart.length} producto${cart.length > 1 ? 's' : ''} en tu carrito`
                         }
                     </p>
@@ -58,7 +58,7 @@ function Cart() {
                         <div className="empty-icon">🛒</div>
                         <h3>Tu carrito está vacío</h3>
                         <p className="text-muted">¡Agrega productos para comenzar tu compra!</p>
-                        <button 
+                        <button
                             className="btn-primary btn-large"
                             onClick={() => navigate('/products')}
                         >
@@ -71,15 +71,19 @@ function Cart() {
                         {/* Lista de productos */}
                         <div className="cart-items">
                             {cart.map((product, index) => (
-                                <div 
-                                    key={product.id} 
+                                <div
+                                    key={product.id}
                                     className="cart-item animate-slide-in"
                                     style={{ animationDelay: `${index * 0.1}s` }}
                                 >
                                     <div className="cart-item-image">
-                                        <img 
-                                            src={product.imagenUrl || 'https://via.placeholder.com/150'} 
+                                        <img
+                                            src={product.imagenUrl || 'https://via.placeholder.com/150'}
                                             alt={product.nombre}
+                                            onError={(e) => {
+                                                e.target.onerror = null;
+                                                e.target.src = '/img/panaderia-placeholder.png';
+                                            }}
                                         />
                                     </div>
                                     <div className="cart-item-info">
@@ -94,7 +98,7 @@ function Cart() {
                                         <p className="cart-item-total">
                                             ${(product.precioBase * product.cantidad).toLocaleString()}
                                         </p>
-                                        <button 
+                                        <button
                                             className="btn-remove"
                                             onClick={() => handleRemoveItem(product)}
                                         >
@@ -109,25 +113,25 @@ function Cart() {
                         {/* Resumen */}
                         <div className="cart-summary animate-fade-in-up">
                             <h2 className="summary-title">Resumen de compra</h2>
-                            
+
                             <div className="summary-row">
                                 <span>Productos ({cart.length})</span>
                                 <span>${calcularTotal().toLocaleString()}</span>
                             </div>
-                            
+
                             <div className="summary-row">
                                 <span>Envío</span>
                                 <span className="text-success">Gratis</span>
                             </div>
-                            
+
                             <div className="summary-divider"></div>
-                            
+
                             <div className="summary-total">
                                 <span>Total</span>
                                 <span className="total-amount">${calcularTotal().toLocaleString()}</span>
                             </div>
 
-                            <button 
+                            <button
                                 className="btn-primary btn-large btn-block"
                                 onClick={handleCheckout}
                             >
@@ -135,7 +139,7 @@ function Cart() {
                                 Finalizar Compra
                             </button>
 
-                            <button 
+                            <button
                                 className="btn-secondary btn-block"
                                 onClick={() => navigate('/products')}
                             >

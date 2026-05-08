@@ -11,6 +11,7 @@ export const useProducts = () => {
         // Delay artificial de 2 segundos para ver el skeleton
         setTimeout(() => {
             axios.get(`${API_BASE_URL}/api/catalogo/productos`).then(res => {
+                console.log(res.data);
                 setProducts(res.data);
                 setLoading(false);
             }).catch(err => {

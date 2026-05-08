@@ -85,6 +85,62 @@ function MisPedidos() {
     };
 
     /**
+     * Cancelar un pedido pendiente
+     * @param {Object} pedido - Pedido a cancelar
+     */
+    const cancelarPedido = async (pedido) => {
+        // Confirmación
+        const confirm = await Swal.fire({
+            title: '¿Cancelar pedido?',
+            html: `¿Estás seguro de cancelar el <strong>Pedido #${pedido.id}</strong>?<br><br>
+                   <small>Esta acción no se puede deshacer.</small>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, cancelar',
+            cancelButtonText: 'No, mantener'
+        });
+
+        if (!confirm.isConfirmed) return;
+
+        // Llamar al servicio
+        const result = await PedidoService.cancelarPedido(pedido.id);
+
+        if (result.success) {
+            // Actualizar la lista de pedidos
+            setPedidos(pedidos.map(p => 
+                p.id === pedido.id 
+                    ? { ...p, estado: 'Cancelado' } 
+                    : p
+            ));
+
+            // Si el modal está abierto con este pedido, actualizarlo
+            if (selectedPedido?.id === pedido.id) {
+                setSelectedPedido({ ...selectedPedido, estado: 'Cancelado' });
+            }
+
+            // Mensaje de éxito
+            Swal.fire({
+                icon: 'success',
+                title: 'Pedido cancelado',
+                text: 'Tu pedido ha sido cancelado exitosamente',
+                confirmButtonColor: '#ff6b35',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        } else {
+            // Mensaje de error
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: result.message,
+                confirmButtonColor: '#ff6b35'
+            });
+        }
+    };
+
+    /**
      * Obtener clase CSS según el estado del pedido
      * @param {string} estado - Estado del pedido
      * @returns {string} - Clase CSS
@@ -213,6 +269,20 @@ function MisPedidos() {
                                             </>
                                         )}
                                     </button>
+
+                                    {/* Botón cancelar (solo si está pendiente) */}
+                                    {pedido.estado === 'Pendiente' && (
+                                        <button
+                                            className="btn-cancelar"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                cancelarPedido(pedido);
+                                            }}
+                                        >
+                                            <i className="bi bi-x-circle me-2"></i>
+                                            Cancelar Pedido
+                                        </button>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -287,6 +357,19 @@ function MisPedidos() {
                                 <div className="detalle-total">
                                     <h3>Total: ${selectedPedido.total.toFixed(2)}</h3>
                                 </div>
+
+                                {/* Botón cancelar en modal (solo si está pendiente) */}
+                                {selectedPedido.estado === 'Pendiente' && (
+                                    <div className="modal-actions">
+                                        <button
+                                            className="btn-cancelar-modal"
+                                            onClick={() => cancelarPedido(selectedPedido)}
+                                        >
+                                            <i className="bi bi-x-circle me-2"></i>
+                                            Cancelar este pedido
+                                        </button>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

@@ -18,16 +18,10 @@ import AdminLayout from './components/admin/AdminLayout';
 import AdminProductos from './components/admin/AdminProductos';
 import ProductoForm from './components/admin/ProductoForm';
 import AdminProductoImagenes from './components/admin/AdminProductoImagenes';
+import AdminPedidos from './components/admin/AdminPedidos';
 import './App.css';
 import './pedidos.css';
 import './perfil.css';
-
-const AdminPedidos = () => (
-  <div>
-    <h2>Gestión de Pedidos</h2>
-    <p>Aquí irá el listado de pedidos</p>
-  </div>
-);
 
 /**
  * Componente que hace scroll al inicio cuando cambia la ruta

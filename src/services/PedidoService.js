@@ -100,6 +100,45 @@ class PedidoService {
             };
         }
     }
+
+    /**
+     * Cancelar un pedido pendiente
+     * @param {number} id - ID del pedido a cancelar
+     * @returns {Promise<Object>} - { success: boolean, data?: Object, message?: string }
+     */
+    async cancelarPedido(id) {
+        try {
+            const response = await axios.put(
+                `${API_BASE_URL}/api/pedidos/${id}/cancelar`,
+                {},
+                { timeout: 10000 }
+            );
+            return { success: true, data: response.data };
+        } catch (error) {
+            console.error('Error al cancelar pedido:', error);
+            
+            if (error.response?.status === 404) {
+                return { success: false, message: 'Pedido no encontrado' };
+            }
+            if (error.response?.status === 400) {
+                return { 
+                    success: false, 
+                    message: error.response.data?.message || 'Solo se pueden cancelar pedidos pendientes' 
+                };
+            }
+            if (error.response?.status === 403) {
+                return { 
+                    success: false, 
+                    message: 'No tienes permiso para cancelar este pedido' 
+                };
+            }
+            
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al cancelar pedido'
+            };
+        }
+    }
 }
 
 // Exportar instancia única (Singleton)

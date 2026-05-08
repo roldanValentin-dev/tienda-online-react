@@ -348,6 +348,34 @@
     cursor: not-allowed;
 }
 
+/* Botón cancelar pedido */
+.btn-cancelar {
+    width: 100%;
+    padding: 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.btn-cancelar:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-cancelar:active {
+    transform: translateY(0);
+}
+
 /* Modal de detalle */
 .modal-overlay {
     position: fixed;
@@ -519,6 +547,40 @@
     color: var(--primary);
     font-size: 2rem;
     margin: 0;
+}
+
+/* Acciones del modal (botón cancelar) */
+.modal-actions {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-cancelar-modal {
+    width: 100%;
+    padding: 14px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.btn-cancelar-modal:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.btn-cancelar-modal:active {
+    transform: translateY(0);
 }
 
 /* Estado vacío */

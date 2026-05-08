@@ -17,7 +17,7 @@ function Checkout() {
     const { user, isAuthenticated } = useContext(AuthContext);
     const [loading, setLoading] = useState(false);
     const [pedidoConfirmado, setPedidoConfirmado] = useState(false);
-    
+
     const [formData, setFormData] = useState({
         fechaEntrega: '',
         observaciones: ''
@@ -27,7 +27,7 @@ function Checkout() {
     useEffect(() => {
         // No validar si ya se confirmó el pedido
         if (pedidoConfirmado) return;
-        
+
         if (!isAuthenticated()) {
             Swal.fire({
                 icon: 'warning',
@@ -84,7 +84,7 @@ function Checkout() {
         // IMPORTANTE: El backend espera DateTime en formato ISO 8601
         const fechaEntrega = new Date(formData.fechaEntrega);
         fechaEntrega.setHours(12, 0, 0, 0); // Establecer mediodía para evitar problemas de zona horaria
-        
+
         const pedidoData = {
             fechaEntrega: fechaEntrega.toISOString(), // Formato: "2024-01-15T12:00:00.000Z"
             observaciones: formData.observaciones.trim() || null,
@@ -101,7 +101,7 @@ function Checkout() {
         if (result.success) {
             // Marcar pedido como confirmado ANTES de vaciar el carrito
             setPedidoConfirmado(true);
-            
+
             Swal.fire({
                 icon: 'success',
                 title: '¡Pedido realizado!',
@@ -151,10 +151,13 @@ function Checkout() {
                         <div className="summary-items">
                             {cart.map(item => (
                                 <div key={item.id} className="summary-item">
-                                    <img 
-                                        src={item.imagenUrl || 'https://via.placeholder.com/80'} 
+                                    <img
+                                        src={item.imagenUrl || 'https://via.placeholder.com/150'}
                                         alt={item.nombre}
-                                        onError={(e) => e.target.src = 'https://via.placeholder.com/80'}
+                                        onError={(e) => {
+                                            e.target.onerror = null;
+                                            e.target.src = '/img/panaderia-placeholder.png';
+                                        }}
                                     />
                                     <div className="summary-item-info">
                                         <h4>{item.nombre}</h4>

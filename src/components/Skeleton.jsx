@@ -109,4 +109,23 @@ function SkeletonHome() {
     );
 }
 
-export { SkeletonCard, SkeletonGrid, SkeletonProductDetail, SkeletonHome };
+// Skeleton para tabla de pedidos
+function SkeletonTable({ rows = 5 }) {
+    return (
+        <div className="table-skeleton">
+            {Array.from({ length: rows }).map((_, index) => (
+                <div key={index} className="skeleton-row">
+                    <div className="skeleton skeleton-cell-sm"></div>
+                    <div className="skeleton skeleton-cell-md"></div>
+                    <div className="skeleton skeleton-cell-md"></div>
+                    <div className="skeleton skeleton-cell-md"></div>
+                    <div className="skeleton skeleton-cell-sm"></div>
+                    <div className="skeleton skeleton-cell-sm"></div>
+                    <div className="skeleton skeleton-cell-sm"></div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+export { SkeletonCard, SkeletonGrid, SkeletonProductDetail, SkeletonHome, SkeletonTable };
