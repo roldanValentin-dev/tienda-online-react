@@ -10,6 +10,7 @@ import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Auth from './components/Auth';
 import Checkout from './components/Checkout';
+import PagoPage from './components/PagoPage';
 import MisPedidos from './components/MisPedidos';
 import Perfil from './components/Perfil';
 import Footer from './components/Footer';
@@ -19,6 +20,9 @@ import AdminProductos from './components/admin/AdminProductos';
 import ProductoForm from './components/admin/ProductoForm';
 import AdminProductoImagenes from './components/admin/AdminProductoImagenes';
 import AdminPedidos from './components/admin/AdminPedidos';
+import AdminPendientesPago from './components/admin/AdminPendientesPago';
+import AdminConfigPago from './components/admin/AdminConfigPago';
+import AdminReportes from './components/admin/AdminReportes';
 import './App.css';
 import './pedidos.css';
 import './perfil.css';
@@ -55,6 +59,10 @@ function AppContent() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/pago/:id" element={<PagoPage />} />
+          <Route path="/pago-exitoso" element={<PagoPage />} />
+          <Route path="/pago-fallido" element={<PagoPage />} />
+          <Route path="/pago-pendiente" element={<PagoPage />} />
           <Route path="/mis-pedidos" element={<MisPedidos />} />
           <Route path="/perfil" element={<Perfil />} />
 
@@ -68,6 +76,9 @@ function AppContent() {
                   <Route path="productos/editar/:id" element={<ProductoForm />} />
                   <Route path="productos/imagenes/:id" element={<AdminProductoImagenes />} />
                   <Route path="pedidos" element={<AdminPedidos />} />
+                  <Route path="pendientes-pago" element={<AdminPendientesPago />} />
+                  <Route path="config-pago" element={<AdminConfigPago />} />
+                  <Route path="reportes" element={<AdminReportes />} />
                   <Route path="/" element={<Navigate to="/admin/productos" replace />} />
                 </Routes>
               </AdminLayout>

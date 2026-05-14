@@ -5,6 +5,7 @@ import { useProducts } from '../hooks/useProducts';
 import { SkeletonProductDetail } from './Skeleton';
 import ProductoImagenService from '../services/ProductoImagenService';
 import API_BASE_URL from '../config/api';
+import { PLACEHOLDER_PRODUCT } from '../config/placeholders';
 
 function ProductDetail() {
     const { id } = useParams();
@@ -59,7 +60,7 @@ function ProductDetail() {
     // Construir array de URLs de imágenes
     const images = imagenes.length > 0
         ? imagenes.map(img => `${API_BASE_URL}${img.url}`)
-        : [product.imagenUrl || 'https://via.placeholder.com/600x400'];
+        : [product.imagenUrl || PLACEHOLDER_PRODUCT];
 
     const handleIncrement = () => setCantidad(prev => prev + 1);
     const handleDecrement = () => {

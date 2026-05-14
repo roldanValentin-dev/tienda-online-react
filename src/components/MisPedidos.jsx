@@ -8,6 +8,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import PedidoService from '../services/PedidoService';
+import { PLACEHOLDER_THUMB } from '../config/placeholders';
 import Swal from 'sweetalert2';
 
 function MisPedidos() {
@@ -243,7 +244,7 @@ function MisPedidos() {
                                         </p>
                                         <p>
                                             <i className="bi bi-cash me-2"></i>
-                                            <strong>Total:</strong> ${pedido.total.toFixed(2)}
+                                            <strong>Total:</strong> ${(pedido.montoConDescuento || pedido.total).toFixed(2)}
                                         </p>
                                         <p>
                                             <i className="bi bi-box-seam me-2"></i>
@@ -337,7 +338,7 @@ function MisPedidos() {
                                                 <img 
                                                     src={detalle.productoImagen} 
                                                     alt={detalle.productoNombre}
-                                                    onError={(e) => e.target.src = 'https://via.placeholder.com/80'}
+                                                    onError={(e) => { e.target.onerror = null; e.target.src = PLACEHOLDER_THUMB; }}
                                                 />
                                             )}
                                             <div className="detalle-producto-info">
@@ -355,12 +356,29 @@ function MisPedidos() {
 
                                 {/* Total */}
                                 <div className="detalle-total">
-                                    <h3>Total: ${selectedPedido.total.toFixed(2)}</h3>
+                                    <h3>Total: ${(selectedPedido.montoConDescuento || selectedPedido.total).toFixed(2)}</h3>
+                                    {selectedPedido.montoConDescuento && selectedPedido.montoConDescuento < selectedPedido.total && (
+                                        <p className="text-muted" style={{ fontSize: 14 }}>Precio original: ${selectedPedido.total.toFixed(2)}</p>
+                                    )}
                                 </div>
+
+                                {/* Botón ver datos de pago (si tiene tipoPago y está pendiente o no pagado) */}
+                                {selectedPedido.estadoPago !== 'Pagado' && selectedPedido.tipoPago && (
+                                    <div className="modal-actions">
+                                        <button
+                                            className="btn-primary"
+                                            style={{ width: '100%', justifyContent: 'center' }}
+                                            onClick={() => navigate(`/pago/${selectedPedido.id}`)}
+                                        >
+                                            <i className="bi bi-credit-card me-2"></i>
+                                            Ver datos de pago
+                                        </button>
+                                    </div>
+                                )}
 
                                 {/* Botón cancelar en modal (solo si está pendiente) */}
                                 {selectedPedido.estado === 'Pendiente' && (
-                                    <div className="modal-actions">
+                                    <div className="modal-actions" style={{ marginTop: 8 }}>
                                         <button
                                             className="btn-cancelar-modal"
                                             onClick={() => cancelarPedido(selectedPedido)}

@@ -16,8 +16,23 @@ const ESTADOS = [
     { id: 6, nombre: 'Cancelado', clase: 'cancelado' }
 ];
 
+const ESTADO_MAP = {
+    Pendiente: 1,
+    Confirmado: 2,
+    EnPreparacion: 3,
+    Listo: 4,
+    Entregado: 5,
+    Cancelado: 6,
+    Carrito: 7,
+};
+
+const TIPO_PAGO_MAP = {
+    Efectivo: 'Efectivo',
+    Transferencia: 'Transferencia',
+    MercadoPago: 'Mercado Pago',
+};
+
 const NUEVO_ESTADO = [
-    { id: 2, nombre: 'Confirmar' },
     { id: 3, nombre: 'En Preparación' },
     { id: 4, nombre: 'Marcar Listo' },
     { id: 5, nombre: 'Entregado' },
@@ -31,20 +46,19 @@ function AdminPedidos() {
     const [busqueda, setBusqueda] = useState('');
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [loadingDetalle, setLoadingDetalle] = useState(false);
     const [actualizando, setActualizando] = useState(null);
 
     const cargarPedidos = async () => {
         setLoading(true);
-        let result;
-        
-        if (filtroEstado === 0) {
-            result = await AdminPedidoService.getTodosLosPedidos();
-        } else {
-            result = await AdminPedidoService.getPedidosPorEstado(filtroEstado);
-        }
-        
+        const result = await AdminPedidoService.getTodosLosPedidos();
         if (result.success) {
-            setPedidos(result.data);
+            const mapped = (result.data || []).map(p => ({
+                ...p,
+                estadoId: ESTADO_MAP[p.estado] || 0,
+                estadoNombre: p.estado || 'Desconocido'
+            }));
+            setPedidos(mapped);
         } else {
             toast.error(result.message || 'Error al cargar pedidos');
         }
@@ -52,11 +66,11 @@ function AdminPedidos() {
     };
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         cargarPedidos();
-    }, [filtroEstado]);
+    }, []);
 
     const pedidosFiltrados = pedidos.filter(pedido => {
+        if (filtroEstado !== 0 && pedido.estadoId !== filtroEstado) return false;
         const textoBusqueda = busqueda.toLowerCase();
         return (
             pedido.id.toString().includes(textoBusqueda) ||
@@ -71,14 +85,20 @@ function AdminPedidos() {
         return estado ? estado.clase : 'todos';
     };
 
-    const obtenerNombreEstado = (estadoId) => {
-        const estado = ESTADOS.find(e => e.id === estadoId);
-        return estado ? estado.nombre : 'Desconocido';
-    };
-
-    const abrirDetalle = (pedido) => {
-        setPedidoSeleccionado(pedido);
+    const abrirDetalle = async (pedido) => {
         setMostrarModal(true);
+        setLoadingDetalle(true);
+        setPedidoSeleccionado({ ...pedido });
+        const result = await AdminPedidoService.getDetalle(pedido.id);
+        if (result.success) {
+            setPedidoSeleccionado(prev => ({
+                ...prev,
+                ...result.data,
+                estadoId: ESTADO_MAP[result.data.estado] || prev.estadoId,
+                estadoNombre: result.data.estado || prev.estadoNombre,
+            }));
+        }
+        setLoadingDetalle(false);
     };
 
     const cerrarModal = () => {
@@ -88,15 +108,16 @@ function AdminPedidos() {
 
     const cambiarEstado = async (pedidoId, nuevoEstadoId) => {
         const estadoActual = pedidos.find(p => p.id === pedidoId)?.estadoId;
-        
+
         if (nuevoEstadoId === 6 && estadoActual !== 1) {
             toast.error('Solo se pueden cancelar pedidos pendientes');
             return;
         }
 
+        const nombreEstado = nuevoEstadoId === 6 ? 'Cancelado' : ESTADOS.find(e => e.id === nuevoEstadoId)?.nombre;
         const result = await Swal.fire({
             title: '¿Confirmar cambio de estado?',
-            text: `El pedido #${pedidoId} cambiará a "${NUEVO_ESTADO.find(e => e.id === nuevoEstadoId)?.nombre}"`,
+            text: `El pedido #${pedidoId} cambiará a "${nombreEstado}"`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Sí, cambiar',
@@ -108,7 +129,7 @@ function AdminPedidos() {
         if (result.isConfirmed) {
             setActualizando(pedidoId);
             const response = await AdminPedidoService.cambiarEstado(pedidoId, nuevoEstadoId);
-            
+
             if (response.success) {
                 toast.success(`Pedido #${pedidoId} actualizado correctamente`);
                 cargarPedidos();
@@ -122,32 +143,62 @@ function AdminPedidos() {
         }
     };
 
+    const confirmarPagoAdmin = async (pedidoId) => {
+        const confirm = await Swal.fire({
+            title: '¿Confirmar pago?',
+            text: 'Se confirmará el pago y se descontará el stock automáticamente.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#28a745',
+            confirmButtonText: 'Sí, confirmar pago',
+            cancelButtonText: 'Cancelar',
+        });
+
+        if (confirm.isConfirmed) {
+            setActualizando(pedidoId);
+            const response = await AdminPedidoService.confirmarPago(pedidoId);
+            setActualizando(null);
+
+            if (response.success) {
+                toast.success(`Pago del pedido #${pedidoId} confirmado. Stock descontado.`);
+                cargarPedidos();
+            } else {
+                toast.error(response.message || 'Error al confirmar pago');
+            }
+        }
+    };
+
     const formatearFecha = (fecha) => {
         if (!fecha) return '-';
         return new Date(fecha).toLocaleDateString('es-AR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+            day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
         });
     };
 
     const formatearPrecio = (precio) => {
-        return new Intl.NumberFormat('es-AR', {
-            style: 'currency',
-            currency: 'ARS'
-        }).format(precio);
+        return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(precio);
     };
 
-    const obtenerSiguienteEstados = (estadoActualId) => {
+    const obtenerSiguienteEstados = (estadoActualId, tipoPago) => {
         if (estadoActualId === 1) {
-            return [{ id: 2, nombre: 'Confirmar' }, { id: 6, nombre: 'Cancelar' }];
+            if (tipoPago === 'Efectivo' || tipoPago === 'Transferencia' || tipoPago === 'MercadoPago') {
+                return [{ id: 0, nombre: 'Confirmar pago', accion: 'confirmarPago' }];
+            }
+            return [{ id: 2, nombre: 'Confirmar', accion: 'cambiarEstado' }, { id: 6, nombre: 'Cancelar', accion: 'cambiarEstado' }];
         }
+        if (estadoActualId === 6) return [];
         if (estadoActualId >= 2 && estadoActualId <= 4) {
-            return NUEVO_ESTADO.filter(e => e.id > estadoActualId && e.id <= 5);
+            return [
+                ...NUEVO_ESTADO.filter(e => e.id > estadoActualId && e.id <= 5).map(e => ({ ...e, accion: 'cambiarEstado' })),
+                ...(estadoActualId !== 2 ? [] : []),
+                ...(estadoActualId === 2 ? [{ id: 6, nombre: 'Cancelar', accion: 'cambiarEstado' }] : [])
+            ];
         }
         return [];
+    };
+
+    const mostrarTipoPago = (tipoPago) => {
+        return TIPO_PAGO_MAP[tipoPago] || tipoPago || '-';
     };
 
     return (
@@ -179,8 +230,8 @@ function AdminPedidos() {
                         >
                             {estado.nombre}
                             <span className="contador">
-                                {estado.id === 0 
-                                    ? pedidos.length 
+                                {estado.id === 0
+                                    ? pedidos.length
                                     : pedidos.filter(p => p.estadoId === estado.id).length}
                             </span>
                         </button>
@@ -208,6 +259,7 @@ function AdminPedidos() {
                                 <th>Fecha Pedido</th>
                                 <th>Fecha Entrega</th>
                                 <th>Total</th>
+                                <th>Tipo Pago</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -215,21 +267,22 @@ function AdminPedidos() {
                         <tbody>
                             {pedidosFiltrados.map(pedido => (
                                 <tr key={pedido.id}>
-                                    <td className="pedido-id">#{pedido.id}</td>
-                                    <td className="cliente-info">
+                                    <td className="pedido-id" data-label="ID">#{pedido.id}</td>
+                                    <td className="cliente-info" data-label="Cliente">
                                         <strong>{pedido.clienteNombre}</strong>
                                         <span>{pedido.clienteEmail}</span>
                                         <span>{pedido.clienteTelefono}</span>
                                     </td>
-                                    <td>{formatearFecha(pedido.fechaPedido)}</td>
-                                    <td>{formatearFecha(pedido.fechaEntrega)}</td>
-                                    <td className="total">{formatearPrecio(pedido.total)}</td>
-                                    <td>
+                                    <td data-label="Fecha Pedido">{formatearFecha(pedido.fechaPedido)}</td>
+                                    <td data-label="Fecha Entrega">{formatearFecha(pedido.fechaEntrega)}</td>
+                                    <td className="total" data-label="Total">{formatearPrecio(pedido.total)}</td>
+                                    <td data-label="Tipo Pago">{mostrarTipoPago(pedido.tipoPago)}</td>
+                                    <td data-label="Estado">
                                         <span className={`badge-estado ${obtenerClaseEstado(pedido.estadoId)}`}>
-                                            {obtenerNombreEstado(pedido.estadoId)}
+                                            {pedido.estadoNombre}
                                         </span>
                                     </td>
-                                    <td className="acciones">
+                                    <td className="acciones" data-label="Acciones">
                                         <button
                                             className="btn-ver"
                                             onClick={() => abrirDetalle(pedido)}
@@ -256,6 +309,15 @@ function AdminPedidos() {
                         </div>
 
                         <div className="modal-body">
+                            {loadingDetalle ? (
+                                <div style={{ textAlign: 'center', padding: '40px' }}>
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Cargando...</span>
+                                    </div>
+                                    <p style={{ marginTop: 16, color: '#6c757d' }}>Cargando detalle del pedido...</p>
+                                </div>
+                            ) : (
+                            <>
                             <div className="info-cliente">
                                 <h4>Información del Cliente</h4>
                                 <p><strong>Nombre:</strong> {pedidoSeleccionado.clienteNombre}</p>
@@ -275,13 +337,47 @@ function AdminPedidos() {
                                 <div className="info-row">
                                     <span>Estado actual:</span>
                                     <span className={`badge-estado ${obtenerClaseEstado(pedidoSeleccionado.estadoId)}`}>
-                                        {obtenerNombreEstado(pedidoSeleccionado.estadoId)}
+                                        {pedidoSeleccionado.estadoNombre}
                                     </span>
                                 </div>
                                 {pedidoSeleccionado.observaciones && (
                                     <div className="observaciones">
                                         <strong>Observaciones:</strong>
                                         <p>{pedidoSeleccionado.observaciones}</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="info-pago-detalle">
+                                <h4>Información de Pago</h4>
+                                <div className="info-row">
+                                    <span>Tipo de pago:</span>
+                                    <strong>{mostrarTipoPago(pedidoSeleccionado.tipoPago)}</strong>
+                                </div>
+                                <div className="info-row">
+                                    <span>Estado del pago:</span>
+                                    <strong>{pedidoSeleccionado.estadoPago || 'Pendiente'}</strong>
+                                </div>
+                                <div className="info-row">
+                                    <span>Total:</span>
+                                    <strong>{formatearPrecio(pedidoSeleccionado.total)}</strong>
+                                </div>
+                                {pedidoSeleccionado.montoConDescuento && (
+                                    <div className="info-row">
+                                        <span>Total con descuento:</span>
+                                        <strong className="text-success">{formatearPrecio(pedidoSeleccionado.montoConDescuento)}</strong>
+                                    </div>
+                                )}
+                                {pedidoSeleccionado.referenciaTransaccion && (
+                                    <div className="info-row">
+                                        <span>Referencia:</span>
+                                        <strong>{pedidoSeleccionado.referenciaTransaccion}</strong>
+                                    </div>
+                                )}
+                                {pedidoSeleccionado.fechaPago && (
+                                    <div className="info-row">
+                                        <span>Fecha de pago:</span>
+                                        <strong>{formatearFecha(pedidoSeleccionado.fechaPago)}</strong>
                                     </div>
                                 )}
                             </div>
@@ -317,21 +413,24 @@ function AdminPedidos() {
                                     <tfoot>
                                         <tr>
                                             <td colSpan="3"><strong>Total</strong></td>
-                                            <td><strong>{formatearPrecio(pedidoSeleccionado.total)}</strong></td>
+                                            <td><strong>{formatearPrecio(pedidoSeleccionado.montoConDescuento || pedidoSeleccionado.total)}</strong></td>
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
 
-                            {obtenerSiguienteEstados(pedidoSeleccionado.estadoId).length > 0 && (
+                            {obtenerSiguienteEstados(pedidoSeleccionado.estadoId, pedidoSeleccionado.tipoPago).length > 0 && (
                                 <div className="cambiar-estado">
                                     <h4>Cambiar Estado</h4>
                                     <div className="estado-botones">
-                                        {obtenerSiguienteEstados(pedidoSeleccionado.estadoId).map(estado => (
+                                        {obtenerSiguienteEstados(pedidoSeleccionado.estadoId, pedidoSeleccionado.tipoPago).map(estado => (
                                             <button
-                                                key={estado.id}
-                                                className={`btn-estado ${estado.id === 6 ? 'btn-cancelar' : 'btn-confirmar'}`}
-                                                onClick={() => cambiarEstado(pedidoSeleccionado.id, estado.id)}
+                                                key={estado.id + estado.accion}
+                                                className={`btn-estado ${estado.id === 6 ? 'btn-cancelar' : 'btn-confirmar'} ${estado.accion === 'confirmarPago' ? 'btn-confirmar-pago' : ''}`}
+                                                onClick={() => estado.accion === 'confirmarPago'
+                                                    ? confirmarPagoAdmin(pedidoSeleccionado.id)
+                                                    : cambiarEstado(pedidoSeleccionado.id, estado.id)
+                                                }
                                                 disabled={actualizando === pedidoSeleccionado.id}
                                             >
                                                 {actualizando === pedidoSeleccionado.id ? 'Actualizando...' : estado.nombre}
@@ -339,6 +438,8 @@ function AdminPedidos() {
                                         ))}
                                     </div>
                                 </div>
+                            )}
+                            </>
                             )}
                         </div>
                     </div>

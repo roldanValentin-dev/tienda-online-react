@@ -53,6 +53,18 @@ const AdminLayout = ({ children }) => {
             icon: 'bi-graph-up',
             label: 'Reportes',
             roles: ['Admin']
+        },
+        {
+            path: '/admin/pendientes-pago',
+            icon: 'bi-credit-card-2-front',
+            label: 'Pendientes Pago',
+            roles: ['Admin']
+        },
+        {
+            path: '/admin/config-pago',
+            icon: 'bi-gear',
+            label: 'Config. Pago',
+            roles: ['Admin']
         }
     ];
     
@@ -109,7 +121,7 @@ const AdminLayout = ({ children }) => {
                 {/* Header */}
                 <header className="admin-header">
                     <button className="btn-toggle" onClick={toggleSidebar}>
-                        <i className={`bi ${sidebarOpen ? 'bi-list' : 'bi-list'}`}></i>
+                        <i className={`bi ${sidebarOpen ? 'bi-x' : 'bi-list'}`}></i>
                     </button>
                     <h1 className="page-title">Panel de Administración</h1>
                     <div className="header-actions">
@@ -120,6 +132,10 @@ const AdminLayout = ({ children }) => {
                 {/* Content */}
                 <main className="admin-content">
                     {children}
+                    <div className="admin-disclaimer">
+                        <i className="bi bi-info-circle"></i>
+                        Este sistema gestiona pedidos y cobros internos. No reemplaza la facturación electrónica obligatoria ni las obligaciones fiscales del negocio. Consulte con su contador.
+                    </div>
                 </main>
             </div>
             

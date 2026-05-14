@@ -2,9 +2,10 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { CarritoContext } from "../context/CarritoContext";
+import { PLACEHOLDER_CART } from '../config/placeholders';
 
 function Cart() {
-    const { cart, eliminarDelCarrito, calcularTotal } = useContext(CarritoContext);
+    const { cart, eliminarDelCarrito, actualizarCantidad, calcularTotal, syncing } = useContext(CarritoContext);
     const navigate = useNavigate();
 
     const handleRemoveItem = (product) => {
@@ -33,9 +34,30 @@ function Cart() {
     };
 
     const handleCheckout = () => {
-        // Navegar a la página de checkout
         navigate('/checkout');
     };
+
+    if (syncing) {
+        return (
+            <div className="cart-page">
+                <div className="container-custom">
+                    <div className="page-header animate-fade-in">
+                        <h1 className="page-title">
+                            <i className="bi bi-cart3 me-2"></i>
+                            Mi Carrito
+                        </h1>
+                    </div>
+                    <div className="empty-state animate-fade-in-up">
+                        <div className="spinner-border text-primary mb-3" role="status">
+                            <span className="visually-hidden">Sincronizando...</span>
+                        </div>
+                        <h3>Sincronizando carrito...</h3>
+                        <p className="text-muted">Estamos actualizando tu carrito con el servidor</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="cart-page">
@@ -78,18 +100,33 @@ function Cart() {
                                 >
                                     <div className="cart-item-image">
                                         <img
-                                            src={product.imagenUrl || 'https://via.placeholder.com/150'}
+                                            src={product.imagenUrl || PLACEHOLDER_CART}
                                             alt={product.nombre}
                                             onError={(e) => {
                                                 e.target.onerror = null;
-                                                e.target.src = '/img/panaderia-placeholder.png';
+                                                e.target.src = PLACEHOLDER_CART;
                                             }}
                                         />
                                     </div>
                                     <div className="cart-item-info">
                                         <span className="product-category-badge">{product.categoria}</span>
                                         <h3 className="cart-item-name">{product.nombre}</h3>
-                                        <p className="cart-item-quantity">Cantidad: {product.cantidad}</p>
+                                        <div className="cart-item-quantity-controls">
+                                            <button
+                                                className="qty-btn"
+                                                onClick={() => actualizarCantidad(product.id, product.cantidad - 1)}
+                                                disabled={product.cantidad <= 1}
+                                            >
+                                                <i className="bi bi-dash"></i>
+                                            </button>
+                                            <span className="qty-value">{product.cantidad}</span>
+                                            <button
+                                                className="qty-btn"
+                                                onClick={() => actualizarCantidad(product.id, product.cantidad + 1)}
+                                            >
+                                                <i className="bi bi-plus"></i>
+                                            </button>
+                                        </div>
                                         <p className="cart-item-unit-price">
                                             ${product.precioBase.toLocaleString()} c/u
                                         </p>
@@ -118,12 +155,6 @@ function Cart() {
                                 <span>Productos ({cart.length})</span>
                                 <span>${calcularTotal().toLocaleString()}</span>
                             </div>
-
-                            <div className="summary-row">
-                                <span>Envío</span>
-                                <span className="text-success">Gratis</span>
-                            </div>
-
                             <div className="summary-divider"></div>
 
                             <div className="summary-total">
@@ -151,10 +182,6 @@ function Cart() {
                                 <div className="feature-item">
                                     <i className="bi bi-shield-check"></i>
                                     <span>Compra protegida</span>
-                                </div>
-                                <div className="feature-item">
-                                    <i className="bi bi-truck"></i>
-                                    <span>Envío gratis</span>
                                 </div>
                             </div>
                         </div>

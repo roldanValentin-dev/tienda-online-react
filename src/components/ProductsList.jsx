@@ -1,54 +1,76 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { CarritoContext } from "../context/CarritoContext";
 import { useProducts } from "../hooks/useProducts";
 import { SkeletonGrid } from "./Skeleton";
 import API_BASE_URL from '../config/api';
+import { PLACEHOLDER_PRODUCT } from '../config/placeholders';
+
+function useDebounce(value, delay) {
+    const [debounced, setDebounced] = useState(value);
+    useEffect(() => {
+        const timer = setTimeout(() => setDebounced(value), delay);
+        return () => clearTimeout(timer);
+    }, [value, delay]);
+    return debounced;
+}
 
 function ProductsList() {
     const navigate = useNavigate();
     const { category, selectCategory, setSelectCategory } = useContext(CarritoContext);
     const { products, loading } = useProducts();
     const [sortBy, setSortBy] = useState('default');
+    const [searchQuery, setSearchQuery] = useState('');
+    const debouncedSearch = useDebounce(searchQuery, 300);
+    const searchRef = useRef(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    const getSortedProducts = () => {
-        let filtered = products.filter(p => p.activo);
-        
-        if (selectCategory !== 'todas') {
-            filtered = filtered.filter(p => p.categoria === selectCategory);
+    useEffect(() => {
+        if (searchRef.current) searchRef.current.focus();
+    }, []);
+
+    const filteredProducts = () => {
+        let result = products.filter(p => p.activo);
+
+        if (debouncedSearch.trim()) {
+            const q = debouncedSearch.trim().toLowerCase();
+            result = result.filter(p =>
+                p.nombre.toLowerCase().includes(q) ||
+                (p.descripcion && p.descripcion.toLowerCase().includes(q))
+            );
         }
-        
+
+        if (selectCategory !== 'todas') {
+            result = result.filter(p => p.categoria === selectCategory);
+        }
+
         switch(sortBy) {
             case 'price-asc':
-                return filtered.sort((a, b) => a.precioBase - b.precioBase);
+                return result.sort((a, b) => a.precioBase - b.precioBase);
             case 'price-desc':
-                return filtered.sort((a, b) => b.precioBase - a.precioBase);
+                return result.sort((a, b) => b.precioBase - a.precioBase);
             case 'name-asc':
-                return filtered.sort((a, b) => a.nombre.localeCompare(b.nombre));
+                return result.sort((a, b) => a.nombre.localeCompare(b.nombre));
             case 'name-desc':
-                return filtered.sort((a, b) => b.nombre.localeCompare(a.nombre));
+                return result.sort((a, b) => b.nombre.localeCompare(a.nombre));
             default:
-                return filtered;
+                return result;
         }
     };
 
-    const sortedProducts = getSortedProducts();
+    const displayProducts = filteredProducts();
+    const hasActiveFilters = debouncedSearch.trim() || selectCategory !== 'todas' || sortBy !== 'default';
 
     const getProductImage = (producto) => {
-        // Si tiene imágenes en el array
         if (producto.imagenes && producto.imagenes.length > 0) {
-            // Buscar la imagen principal
             const imagenPrincipal = producto.imagenes.find(img => img.esPrincipal);
-            // Si existe imagen principal, usarla; si no, usar la primera
             const imagen = imagenPrincipal || producto.imagenes[0];
             return `${API_BASE_URL}${imagen.url}`;
         }
-        // Fallback al campo antiguo imagenUrl o placeholder
-        return producto.imagenUrl || 'https://via.placeholder.com/300x200';
+        return producto.imagenUrl || PLACEHOLDER_PRODUCT;
     };
 
     return (
@@ -58,15 +80,38 @@ function ProductsList() {
                     <h1 className="page-title">Nuestros Productos</h1>
                     <p className="page-subtitle">Descubre nuestra selección de productos frescos</p>
                 </div>
-                
+
                 <div className="filters-container">
+                    {/* Search bar */}
+                    <div className="search-bar-container">
+                        <div className="search-bar-wrapper">
+                            <i className="bi bi-search search-icon"></i>
+                            <input
+                                ref={searchRef}
+                                type="text"
+                                className="search-input"
+                                placeholder="Buscar productos por nombre o descripción..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                            {searchQuery && (
+                                <button
+                                    className="search-clear"
+                                    onClick={() => setSearchQuery('')}
+                                >
+                                    <i className="bi bi-x-lg"></i>
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
                     <div className="row g-3">
                         <div className="col-md-6">
                             <div className="filter-group">
                                 <label className="filter-label">
                                     <i className="bi bi-sort-down me-2"></i>Ordenar
                                 </label>
-                                <select 
+                                <select
                                     className="filter-select"
                                     value={sortBy}
                                     onChange={(e) => setSortBy(e.target.value)}
@@ -85,7 +130,7 @@ function ProductsList() {
                                 <label className="filter-label">
                                     <i className="bi bi-funnel me-2"></i>Categoría
                                 </label>
-                                <select 
+                                <select
                                     className="filter-select"
                                     value={selectCategory}
                                     onChange={(e) => setSelectCategory(e.target.value)}
@@ -103,46 +148,77 @@ function ProductsList() {
 
                 {loading ? (
                     <SkeletonGrid count={8} />
-                ) : sortedProducts.length === 0 ? (
+                ) : displayProducts.length === 0 ? (
                     <div className="empty-state">
-                        <div className="empty-icon">🍞</div>
-                        <h3>No hay productos disponibles</h3>
-                        <p className="text-muted">Intenta con otra categoría</p>
-                        <button 
-                            className="btn-primary"
-                            onClick={() => setSelectCategory('todas')}
-                        >
-                            Ver Todos
-                        </button>
+                        {debouncedSearch.trim() ? (
+                            <>
+                                <div className="empty-icon">🔍</div>
+                                <h3>Sin resultados</h3>
+                                <p className="text-muted">
+                                    No encontramos productos que coincidan con <strong>"{debouncedSearch}"</strong>
+                                </p>
+                                <button
+                                    className="btn-primary"
+                                    onClick={() => { setSearchQuery(''); setSelectCategory('todas'); setSortBy('default'); }}
+                                >
+                                    Limpiar filtros
+                                </button>
+                            </>
+                        ) : hasActiveFilters ? (
+                            <>
+                                <div className="empty-icon">🍞</div>
+                                <h3>No hay productos en esta categoría</h3>
+                                <p className="text-muted">Intenta con otra categoría</p>
+                                <button
+                                    className="btn-primary"
+                                    onClick={() => { setSelectCategory('todas'); setSortBy('default'); }}
+                                >
+                                    Ver Todos
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <div className="empty-icon">🍞</div>
+                                <h3>No hay productos disponibles</h3>
+                                <p className="text-muted">Vuelve más tarde</p>
+                            </>
+                        )}
                     </div>
                 ) : (
-                    <div className="products-grid products-fade-in">
-                        {sortedProducts.map((p, index) => (
-                            <div 
-                                key={p.id} 
-                                className="product-card"
-                                style={{ animationDelay: `${index * 0.05}s` }}
-                                onClick={() => navigate(`/products/${p.id}`)}
-                            >
-                                <div className="product-image-container">
-                                    <img 
-                                        src={getProductImage(p)} 
-                                        className="product-image" 
-                                        alt={p.nombre}
-                                    />
-                                    <span className="product-category-badge">{p.categoria}</span>
+                    <>
+                        {debouncedSearch.trim() && (
+                            <p className="search-results-info">
+                                {displayProducts.length} resultado{displayProducts.length !== 1 ? 's' : ''} para <strong>"{debouncedSearch}"</strong>
+                            </p>
+                        )}
+                        <div className="products-grid products-fade-in">
+                            {displayProducts.map((p, index) => (
+                                <div
+                                    key={p.id}
+                                    className="product-card"
+                                    style={{ animationDelay: `${index * 0.05}s` }}
+                                    onClick={() => navigate(`/products/${p.id}`)}
+                                >
+                                    <div className="product-image-container">
+                                        <img
+                                            src={getProductImage(p)}
+                                            className="product-image"
+                                            alt={p.nombre}
+                                        />
+                                        <span className="product-category-badge">{p.categoria}</span>
+                                    </div>
+                                    <div className="product-body">
+                                        <h3 className="product-name">{p.nombre}</h3>
+                                        <p className="product-price">${p.precioBase.toLocaleString()}</p>
+                                        <button className="product-btn">
+                                            <i className="bi bi-eye me-2"></i>
+                                            Ver detalle
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="product-body">
-                                    <h3 className="product-name">{p.nombre}</h3>
-                                    <p className="product-price">${p.precioBase.toLocaleString()}</p>
-                                    <button className="product-btn">
-                                        <i className="bi bi-eye me-2"></i>
-                                        Ver detalle
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                            ))}
+                        </div>
+                    </>
                 )}
             </div>
         </div>

@@ -464,6 +464,32 @@
 .admin-content {
     padding: 28px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-content > :last-child {
+    margin-top: auto;
+}
+
+.admin-disclaimer {
+    margin-top: 40px;
+    padding: 12px 16px;
+    background: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #856404;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.admin-disclaimer i {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 2px;
 }
 
 /* ========== RESPONSIVE ========== */
@@ -2315,6 +2341,94 @@
         flex-shrink: 0;
     }
     
+    /* Card-based table on mobile */
+    .tabla-pedidos table,
+    .tabla-pedidos thead,
+    .tabla-pedidos tbody,
+    .tabla-pedidos th,
+    .tabla-pedidos td,
+    .tabla-pedidos tr {
+        display: block;
+    }
+    
+    .tabla-pedidos {
+        overflow: visible;
+    }
+    
+    .tabla-pedidos thead {
+        display: none;
+    }
+    
+    .tabla-pedidos table {
+        min-width: unset;
+    }
+    
+    .tabla-pedidos tbody tr {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        margin-bottom: 12px;
+        padding: 0;
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .tabla-pedidos tbody tr:hover {
+        transform: none;
+    }
+    
+    .tabla-pedidos td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 16px;
+        border: none;
+        border-bottom: 1px solid var(--border);
+        text-align: right;
+    }
+    
+    .tabla-pedidos td:last-child {
+        border-bottom: none;
+    }
+    
+    .tabla-pedidos td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.85rem;
+        text-align: left;
+    }
+    
+    .tabla-pedidos td.pedido-id {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        color: white;
+        border-radius: 10px 10px 0 0;
+        border-bottom: none;
+        justify-content: space-between;
+        padding: 12px 16px;
+    }
+    
+    .tabla-pedidos td.pedido-id::before {
+        color: rgba(255,255,255,0.8);
+    }
+    
+    .tabla-pedidos td.cliente-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+    
+    .tabla-pedidos td.cliente-info::before {
+        margin-bottom: 4px;
+    }
+    
+    .tabla-pedidos td.cliente-info span {
+        font-size: 0.85rem;
+    }
+    
+    .acciones {
+        justify-content: flex-end;
+    }
+    
     .modal-pedido {
         max-height: 95vh;
     }
@@ -2340,5 +2454,683 @@
     .info-cliente,
     .info-pedido {
         padding: 16px;
+    }
+}
+
+/* ========== ADMIN CONFIG PAGO ========== */
+.admin-config-pago {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.config-header {
+    margin-bottom: 28px;
+}
+
+.config-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.config-header h2 i {
+    color: var(--primary);
+}
+
+.config-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.config-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.config-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.config-tab.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-color: transparent;
+    color: white;
+}
+
+.config-card {
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.config-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.config-card-header i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.config-card-header h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.config-desc {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+}
+
+.config-loading {
+    text-align: center;
+    padding: 60px;
+}
+
+.config-field {
+    margin-bottom: 20px;
+}
+
+.config-field label {
+    display: block;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.input-group-config {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-input-config {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.form-input-config:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.input-suffix {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.btn-save-config {
+    padding: 12px 32px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.btn-save-config:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
+}
+
+.btn-save-config:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Bancos */
+.empty-bancos {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.banco-card {
+    background: var(--bg-cream);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+}
+
+.banco-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.banco-grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.banco-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.banco-grid span:last-child {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.banco-grid .mono {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    background: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.banco-acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit-banco,
+.btn-delete-banco {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 2px solid;
+}
+
+.btn-edit-banco {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: white;
+}
+
+.btn-edit-banco:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-delete-banco {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: white;
+}
+
+.btn-delete-banco:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-add-banco {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border: 2px dashed var(--primary);
+    border-radius: 10px;
+    background: white;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-add-banco:hover {
+    background: rgba(255, 107, 53, 0.05);
+    border-style: solid;
+}
+
+/* Banco form */
+.banco-form {
+    background: var(--bg-cream);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 2px solid var(--primary);
+}
+
+.banco-form h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 20px 0;
+}
+
+.banco-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.form-group-config {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group-config label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-group-config select.form-input-config {
+    cursor: pointer;
+}
+
+.banco-form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-cancel-config {
+    padding: 12px 24px;
+    background: white;
+    color: var(--dark);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-cancel-config:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+/* Direccion form */
+.direccion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.form-row-config {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+/* Badges Pago */
+.badge-pago {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-pago.pago-pendiente {
+    background: rgba(255, 193, 7, 0.15);
+    color: #856404;
+}
+
+.badge-pago.pago-pagado {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.badge-pago.pago-fallido {
+    background: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+}
+
+.badge-pago.pago-reembolsado {
+    background: rgba(108, 117, 125, 0.15);
+    color: #6c757d;
+}
+
+/* Confirm payment button */
+.btn-confirmar-pago {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border: 2px solid #28a745;
+    border-radius: 8px;
+    background: white;
+    color: #28a745;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-confirmar-pago:hover:not(:disabled) {
+    background: #28a745;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.btn-confirmar-pago:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-confirmar-pago-full {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #28a745 0%, #5cb85c 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-confirmar-pago-full:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.btn-confirmar-pago-full:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.info-pago-detalle {
+    background: var(--bg-cream);
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.info-pago-detalle h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 12px 0;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.mt-2 {
+    margin-top: 12px;
+}
+
+.contador-info {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+@media (max-width: 768px) {
+    .banco-grid {
+        grid-template-columns: 1fr;
+    }
+    .banco-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .form-row-config {
+        grid-template-columns: 1fr;
+    }
+    .banco-form-actions {
+        flex-direction: column;
+    }
+    .config-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+    .config-tab {
+        flex-shrink: 0;
+    }
+}
+
+/* ========== REPORTES ========== */
+.admin-reportes {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.reportes-filtros {
+    display: flex;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.reportes-filtro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.reportes-filtro-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.reportes-filtro-group input {
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.reportes-filtro-group input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.reportes-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.reporte-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.reporte-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.reporte-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.reporte-card.total-ventas .reporte-card-icon {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.reporte-card.descuentos .reporte-card-icon {
+    background: rgba(255, 193, 7, 0.1);
+    color: #856404;
+}
+
+.reporte-card.pedidos-totales .reporte-card-icon {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.reporte-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.reporte-card-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.reporte-card-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--dark);
+}
+
+.reporte-card-sub {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.reportes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.reportes-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.reportes-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.reportes-card h3 i {
+    color: var(--primary);
+}
+
+.reportes-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reportes-table thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6c757d;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--border);
+}
+
+.reportes-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+}
+
+.reportes-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.reportes-table tbody tr:hover {
+    background: rgba(255, 107, 53, 0.03);
+}
+
+.reportes-pos {
+    font-weight: 700;
+    color: var(--primary);
+    width: 32px;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.reportes-empty {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+@media (max-width: 992px) {
+    .reportes-cards {
+        grid-template-columns: 1fr;
+    }
+    .reportes-grid {
+        grid-template-columns: 1fr;
     }
 }

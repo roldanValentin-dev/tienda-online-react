@@ -1,15 +1,18 @@
-/**
- * COMPONENTE CHECKOUT
- * Página para finalizar la compra y crear el pedido
- * Validaciones: usuario autenticado, carrito no vacío, fecha válida
- */
-
 import { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CarritoContext } from '../context/CarritoContext';
 import { AuthContext } from '../context/AuthContext';
-import PedidoService from '../services/PedidoService';
+import CarritoService from '../services/CarritoService';
+import { PLACEHOLDER_CART } from '../config/placeholders';
 import Swal from 'sweetalert2';
+
+const DEBUG = true;
+
+function debugLog(type, data) {
+    if (!DEBUG) return;
+    console.log(`%c[Checkout] ${type}`, 'color: orange');
+    console.log('  ', data);
+}
 
 function Checkout() {
     const navigate = useNavigate();
@@ -20,12 +23,11 @@ function Checkout() {
 
     const [formData, setFormData] = useState({
         fechaEntrega: '',
-        observaciones: ''
+        observaciones: '',
+        tipoPago: 'Efectivo'
     });
 
-    // Validar autenticación y carrito al montar el componente
     useEffect(() => {
-        // No validar si ya se confirmó el pedido
         if (pedidoConfirmado) return;
 
         if (!isAuthenticated()) {
@@ -51,9 +53,9 @@ function Checkout() {
             });
             return;
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthenticated, navigate, pedidoConfirmado]);
 
-    // Manejar cambios en el formulario
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -61,11 +63,9 @@ function Checkout() {
         });
     };
 
-    // Validar y enviar el pedido
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validar fecha de entrega (debe ser hoy o posterior)
         const fechaEntregaInput = new Date(formData.fechaEntrega);
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
@@ -80,26 +80,30 @@ function Checkout() {
             return;
         }
 
-        // Preparar datos del pedido según el DTO del backend
-        // IMPORTANTE: El backend espera DateTime en formato ISO 8601
         const fechaEntrega = new Date(formData.fechaEntrega);
-        fechaEntrega.setHours(12, 0, 0, 0); // Establecer mediodía para evitar problemas de zona horaria
+        fechaEntrega.setHours(12, 0, 0, 0);
 
-        const pedidoData = {
-            fechaEntrega: fechaEntrega.toISOString(), // Formato: "2024-01-15T12:00:00.000Z"
-            observaciones: formData.observaciones.trim() || null,
-            detalles: cart.map(item => ({
-                productoId: item.id,
-                cantidad: item.cantidad
-            }))
+        const tipoPagoMap = {
+            Efectivo: 1,
+            Transferencia: 2,
+            MercadoPago: 3,
         };
 
+        const checkoutData = {
+            fechaEntrega: fechaEntrega.toISOString(),
+            observaciones: formData.observaciones.trim() || null,
+            tipoPago: tipoPagoMap[formData.tipoPago] || null,
+        };
+
+        debugLog('CHECKOUT_DATA', checkoutData);
+
         setLoading(true);
-        const result = await PedidoService.createPedido(pedidoData);
+        const result = await CarritoService.checkout(checkoutData);
         setLoading(false);
 
+        debugLog('CHECKOUT_RESULT', result);
+
         if (result.success) {
-            // Marcar pedido como confirmado ANTES de vaciar el carrito
             setPedidoConfirmado(true);
 
             Swal.fire({
@@ -108,15 +112,13 @@ function Checkout() {
                 html: `
                     <p>Tu pedido <strong>#${result.data.id}</strong> ha sido creado exitosamente</p>
                     <p>Total: <strong>$${result.data.total?.toFixed(2) || calcularTotal().toFixed(2)}</strong></p>
+                    ${result.data.montoConDescuento ? `<p>Monto con descuento: <strong>$${result.data.montoConDescuento.toFixed(2)}</strong></p>` : ''}
                 `,
-                confirmButtonText: 'Ver mis pedidos',
+                confirmButtonText: 'Ir a pagar',
                 confirmButtonColor: '#ff6b35'
             }).then(() => {
-                // Vaciar carrito después de que el usuario cierre el alert
                 vaciarCarrito();
-                // Navegar y hacer scroll al inicio
-                navigate('/mis-pedidos');
-                // Forzar scroll al inicio después de navegar
+                navigate(`/pago/${result.data.id}`);
                 setTimeout(() => window.scrollTo(0, 0), 100);
             });
         } else {
@@ -129,12 +131,10 @@ function Checkout() {
         }
     };
 
-    // Calcular fecha mínima (mañana)
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const minDate = tomorrow.toISOString().split('T')[0];
 
-    // No renderizar si no está autenticado o carrito vacío
     if (!isAuthenticated() || cart.length === 0) {
         return null;
     }
@@ -152,11 +152,11 @@ function Checkout() {
                             {cart.map(item => (
                                 <div key={item.id} className="summary-item">
                                     <img
-                                        src={item.imagenUrl || 'https://via.placeholder.com/150'}
+                                        src={item.imagenUrl || PLACEHOLDER_CART}
                                         alt={item.nombre}
                                         onError={(e) => {
                                             e.target.onerror = null;
-                                            e.target.src = '/img/panaderia-placeholder.png';
+                                            e.target.src = PLACEHOLDER_CART;
                                         }}
                                     />
                                     <div className="summary-item-info">
@@ -178,7 +178,6 @@ function Checkout() {
                     <div className="checkout-form-container">
                         <h2>Datos de Entrega</h2>
                         <form onSubmit={handleSubmit} className="checkout-form">
-                            {/* Nombre del usuario (solo lectura) */}
                             <div className="form-group">
                                 <label>Nombre</label>
                                 <input
@@ -189,7 +188,6 @@ function Checkout() {
                                 />
                             </div>
 
-                            {/* Email del usuario (solo lectura) */}
                             <div className="form-group">
                                 <label>Email</label>
                                 <input
@@ -200,7 +198,6 @@ function Checkout() {
                                 />
                             </div>
 
-                            {/* Fecha de entrega (requerido) */}
                             <div className="form-group">
                                 <label>Fecha de Entrega *</label>
                                 <input
@@ -215,7 +212,50 @@ function Checkout() {
                                 <small>Selecciona cuándo deseas recibir tu pedido (mínimo mañana)</small>
                             </div>
 
-                            {/* Observaciones (opcional) */}
+                            <div className="form-group">
+                                <label>Método de Pago *</label>
+                                <div className="payment-options">
+                                    <label className={`payment-option ${formData.tipoPago === 'Efectivo' ? 'active' : ''}`}>
+                                        <input
+                                            type="radio"
+                                            name="tipoPago"
+                                            value="Efectivo"
+                                            checked={formData.tipoPago === 'Efectivo'}
+                                            onChange={handleChange}
+                                        />
+                                        <i className="bi bi-cash"></i>
+                                        <span> Efectivo</span>
+                                        <small>10% de descuento*</small>
+                                        <small>Paga al retirar</small>
+                                    </label>
+                                    <label className={`payment-option ${formData.tipoPago === 'Transferencia' ? 'active' : ''}`}>
+                                        <input
+                                            type="radio"
+                                            name="tipoPago"
+                                            value="Transferencia"
+                                            checked={formData.tipoPago === 'Transferencia'}
+                                            onChange={handleChange}
+                                        />
+                                        <i className="bi bi-bank"></i>
+                                        <span> Transferencia</span>
+                                        <small>10% de descuento*</small>
+                                    </label>
+                                    <label className={`payment-option ${formData.tipoPago === 'MercadoPago' ? 'active' : ''}`}>
+                                        <input
+                                            type="radio"
+                                            name="tipoPago"
+                                            value="MercadoPago"
+                                            checked={formData.tipoPago === 'MercadoPago'}
+                                            onChange={handleChange}
+                                        />
+                                        <i className="bi bi-credit-card-2-front"></i>
+                                        <span> Mercado Pago</span>
+                                        <small>Débito/Crédito</small>
+                                    </label>
+                                </div>
+                                <small>Los descuentos se aplican al finalizar el pedido según configuración del local</small>
+                            </div>
+
                             <div className="form-group">
                                 <label>Observaciones</label>
                                 <textarea
@@ -230,7 +270,6 @@ function Checkout() {
                                 <small>{formData.observaciones.length}/500 caracteres</small>
                             </div>
 
-                            {/* Botón confirmar pedido */}
                             <button
                                 type="submit"
                                 className="btn-checkout"
@@ -249,7 +288,6 @@ function Checkout() {
                                 )}
                             </button>
 
-                            {/* Botón volver al carrito */}
                             <button
                                 type="button"
                                 className="btn-back"
