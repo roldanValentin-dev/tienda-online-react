@@ -1,0 +1,432 @@
+.pago-page {
+    padding: 40px 20px;
+    min-height: calc(100vh - 200px);
+    background: var(--light);
+}
+
+.pago-page .page-title {
+    color: var(--primary);
+}
+
+.pago-loading,
+.pago-error {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.pago-error-icon {
+    font-size: 64px;
+    margin-bottom: 16px;
+}
+
+.pago-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.pago-header h1 {
+    font-size: 2rem;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.pago-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--bg-cream);
+    color: var(--primary);
+    border: 2px solid var(--primary);
+}
+
+.pago-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pago-card h2 {
+    font-size: 1.4rem;
+    color: var(--text-dark);
+    margin-bottom: 16px;
+}
+
+.pago-card p {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.pago-card-success {
+    text-align: center;
+    border-color: #28a745;
+}
+
+.pago-success-icon {
+    font-size: 64px;
+    color: #28a745;
+    margin-bottom: 16px;
+}
+
+.pago-section-icon {
+    font-size: 48px;
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.pago-monto-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 16px;
+    color: var(--text-dark);
+}
+
+.pago-monto-row.descuento {
+    color: #28a745;
+    font-weight: 600;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 4px;
+}
+
+.pago-monto-descuento {
+    font-size: 18px;
+}
+
+.pago-datos-bancarios {
+    background: var(--bg-cream);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.pago-dato-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.pago-dato-row:last-child {
+    border-bottom: none;
+}
+
+.pago-dato-label {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.pago-dato-value {
+    font-size: 14px;
+    color: var(--text-dark);
+    font-weight: 600;
+    text-align: right;
+}
+
+.pago-dato-value.cvu,
+.pago-dato-value.alias {
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    background: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    word-break: break-all;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.pago-copy-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.btn-copy {
+    flex: 1;
+    padding: 10px;
+    background: white;
+    color: var(--primary);
+    border: 2px solid var(--primary);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.btn-copy:hover {
+    background: var(--bg-cream);
+}
+
+.btn-pago-transferencia {
+    width: 100%;
+    padding: 14px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-pago-transferencia:hover:not(:disabled) {
+    background: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-pago-transferencia:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-pago-mercadopago {
+    width: 100%;
+    padding: 14px;
+    background: #009ee3;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-pago-mercadopago:hover:not(:disabled) {
+    background: #0084c7;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 158, 227, 0.3);
+}
+
+.btn-pago-mercadopago:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.pago-retiro-info {
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--bg-cream);
+    border-radius: 10px;
+}
+
+.pago-retiro-info h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pago-direccion {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark) !important;
+    margin-bottom: 4px !important;
+}
+
+.pago-horario,
+.pago-telefono {
+    font-size: 14px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pago-status-banner {
+    max-width: 600px;
+    margin: 0 auto 20px;
+    padding: 14px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pago-status-banner.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.pago-status-banner.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.pago-status-banner.warning {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.pago-status-banner i {
+    font-size: 20px;
+}
+
+.btn-primary {
+    padding: 12px 30px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.mt-2 {
+    margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+    .pago-page {
+        padding: 24px 16px;
+    }
+
+    .pago-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .pago-card {
+        padding: 24px;
+    }
+
+    .pago-card h2 {
+        font-size: 1.2rem;
+    }
+
+    .pago-card p {
+        font-size: 0.9rem;
+    }
+
+    .pago-datos-bancarios {
+        padding: 16px;
+    }
+
+    .pago-dato-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .pago-dato-value {
+        text-align: left;
+        width: 100%;
+    }
+
+    .pago-status-banner {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pago-page {
+        padding: 16px 12px;
+    }
+
+    .pago-header h1 {
+        font-size: 1.25rem;
+    }
+
+    .pago-card {
+        padding: 20px 16px;
+    }
+
+    .pago-card h2 {
+        font-size: 1.1rem;
+    }
+
+    .pago-datos-bancarios {
+        padding: 12px;
+    }
+
+    .pago-copy-row {
+        flex-direction: column;
+    }
+
+    .pago-status-banner {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+    }
+
+    .pago-loading,
+    .pago-error {
+        padding: 40px 16px;
+    }
+
+    .pago-success-icon,
+    .pago-error-icon {
+        font-size: 48px;
+    }
+
+    .pago-monto-row {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 360px) {
+    .pago-page {
+        padding: 12px 8px;
+    }
+
+    .pago-header h1 {
+        font-size: 1.1rem;
+    }
+
+    .pago-card {
+        padding: 16px 12px;
+    }
+
+    .pago-card h2 {
+        font-size: 1rem;
+    }
+
+    .pago-datos-bancarios {
+        padding: 10px;
+    }
+
+    .pago-dato-row {
+        font-size: 0.85rem;
+    }
+}

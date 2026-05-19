@@ -5,6 +5,7 @@ import { useProducts } from "../hooks/useProducts";
 import { SkeletonGrid } from "./Skeleton";
 import API_BASE_URL from '../config/api';
 import { PLACEHOLDER_PRODUCT } from '../config/placeholders';
+import '../style/products.css';
 
 function useDebounce(value, delay) {
     const [debounced, setDebounced] = useState(value);

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import API_BASE_URL from '../../config/api';
 import Swal from 'sweetalert2';
+import '../../style/admin/productos.css';
 
 const AdminProductos = () => {
     const navigate = useNavigate();

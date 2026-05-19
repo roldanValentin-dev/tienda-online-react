@@ -4,6 +4,7 @@ import { CarritoContext } from '../context/CarritoContext';
 import { AuthContext } from '../context/AuthContext';
 import CarritoService from '../services/CarritoService';
 import { PLACEHOLDER_CART } from '../config/placeholders';
+import '../style/checkout.css';
 import Swal from 'sweetalert2';
 
 const DEBUG = true;

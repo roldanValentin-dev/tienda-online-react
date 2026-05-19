@@ -4,7 +4,7 @@ import { FaEye, FaCheck, FaTimes, FaSearch, FaShoppingBag } from 'react-icons/fa
 import Swal from 'sweetalert2';
 import AdminPedidoService from '../../services/AdminPedidoService';
 import { SkeletonTable } from '../Skeleton';
-import '../../admin.css';
+import '../../style/admin/pedidos.css';
 
 const ESTADOS = [
     { id: 0, nombre: 'Todos', clase: 'todos' },

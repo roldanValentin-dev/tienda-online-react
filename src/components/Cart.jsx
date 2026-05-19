@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { CarritoContext } from "../context/CarritoContext";
 import { PLACEHOLDER_CART } from '../config/placeholders';
+import '../style/cart.css';
 
 function Cart() {
     const { cart, eliminarDelCarrito, actualizarCantidad, calcularTotal, syncing } = useContext(CarritoContext);

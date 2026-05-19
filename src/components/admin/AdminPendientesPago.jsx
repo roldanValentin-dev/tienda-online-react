@@ -4,7 +4,8 @@ import { FaCheck, FaTimes, FaEye, FaShoppingBag } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 import AdminPedidoService from '../../services/AdminPedidoService';
 import { SkeletonTable } from '../Skeleton';
-import '../../admin.css';
+import '../../style/admin/pedidos.css';
+import '../../style/admin/pendientes-pago.css';
 
 function AdminPendientesPago() {
     const [pedidos, setPedidos] = useState([]);

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import AdminPedidoService from '../../services/AdminPedidoService';
 import { SkeletonTable } from '../Skeleton';
-import '../../admin.css';
+import '../../style/admin/reportes.css';
+import '../../style/admin/pedidos.css';
 
 const TIPO_PAGO_MAP = {
     Efectivo: 'Efectivo',

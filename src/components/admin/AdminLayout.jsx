@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
+import '../../style/admin/layout.css';
 
 /**
  * Componente de diseño para el panel administrativo.
  * Provee sidebar de navegación, header con información de usuario y área de contenido.
  */
 const AdminLayout = ({ children }) => {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 992);
     const { user, logout } = useAuth();
     const location = useLocation();
     const navigate = useNavigate();

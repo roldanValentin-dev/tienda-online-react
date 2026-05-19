@@ -12,6 +12,7 @@ import {
     resetAttempts,
     detectSuspiciousPattern
 } from '../security';
+import '../style/auth.css';
 
 // Textos de la interfaz (preparado para i18n futuro)
 const TEXTS = {

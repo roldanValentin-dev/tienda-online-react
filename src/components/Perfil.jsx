@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PerfilService from '../services/PerfilService';
 import { validatePasswordStrength, validatePhone } from '../security';
 import Swal from 'sweetalert2';
-import '../perfil.css';
+import '../style/perfil.css';
 
 /**
  * Componente de perfil de usuario

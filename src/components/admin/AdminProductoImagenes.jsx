@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import ImageUploader from './ImageUploader';
 import Swal from 'sweetalert2';
+import '../../style/admin/imagenes.css';
 
 const AdminProductoImagenes = () => {
     const navigate = useNavigate();
