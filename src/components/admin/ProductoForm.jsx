@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import Swal from 'sweetalert2';
+import '../../style/admin/producto-form.css';
 
 const ProductoForm = () => {
     const navigate = useNavigate();

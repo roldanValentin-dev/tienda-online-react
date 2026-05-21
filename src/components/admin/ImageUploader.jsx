@@ -3,7 +3,7 @@ import ProductoImagenService from '../../services/ProductoImagenService';
 import API_BASE_URL from '../../config/api';
 import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
-import '../../admin.css';
+import '../../style/admin/imagenes.css';
 
 /**
  * Componente para gestionar las imágenes múltiples de un producto.

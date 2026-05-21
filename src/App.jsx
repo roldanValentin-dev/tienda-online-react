@@ -23,9 +23,7 @@ import AdminPedidos from './components/admin/AdminPedidos';
 import AdminPendientesPago from './components/admin/AdminPendientesPago';
 import AdminConfigPago from './components/admin/AdminConfigPago';
 import AdminReportes from './components/admin/AdminReportes';
-import './App.css';
-import './pedidos.css';
-import './perfil.css';
+import './style/skeleton.css';
 
 /**
  * Componente que hace scroll al inicio cuando cambia la ruta

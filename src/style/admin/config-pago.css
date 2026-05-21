@@ -1,0 +1,410 @@
+.admin-config-pago {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.config-header {
+    margin-bottom: 28px;
+}
+
+.config-header h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.config-header h2 i {
+    color: var(--primary);
+}
+
+.config-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.config-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    background: white;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.config-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.config-tab.active {
+    background: var(--primary);
+    border-color: transparent;
+    color: white;
+}
+
+.config-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.config-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.config-card-header i {
+    font-size: 1.5rem;
+    color: var(--primary);
+}
+
+.config-card-header h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0;
+}
+
+.config-desc {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+}
+
+.config-loading {
+    text-align: center;
+    padding: 60px;
+}
+
+.config-field {
+    margin-bottom: 20px;
+}
+
+.config-field label {
+    display: block;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.input-group-config {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-input-config {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 1rem;
+    transition: var(--transition-base);
+    background: white;
+}
+
+.form-input-config:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+.input-suffix {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.btn-save-config {
+    padding: 12px 32px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition-base);
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.25);
+}
+
+.btn-save-config:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.35);
+}
+
+.btn-save-config:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.empty-bancos {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.banco-card {
+    background: var(--bg-cream);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid var(--border);
+}
+
+.banco-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.banco-grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.banco-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.banco-grid span:last-child {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.banco-grid .mono {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    background: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.banco-acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit-banco,
+.btn-delete-banco {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border: 2px solid;
+}
+
+.btn-edit-banco {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: white;
+}
+
+.btn-edit-banco:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.btn-delete-banco {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: white;
+}
+
+.btn-delete-banco:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-add-banco {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px;
+    border: 2px dashed var(--primary);
+    border-radius: 10px;
+    background: white;
+    color: var(--primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-add-banco:hover {
+    background: rgba(255, 107, 53, 0.05);
+    border-style: solid;
+}
+
+.banco-form {
+    background: var(--bg-cream);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 2px solid var(--primary);
+}
+
+.banco-form h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin: 0 0 20px 0;
+}
+
+.banco-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.form-group-config {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group-config label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.form-group-config select.form-input-config {
+    cursor: pointer;
+}
+
+.banco-form-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-cancel-config {
+    padding: 12px 24px;
+    background: white;
+    color: var(--dark);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.btn-cancel-config:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+}
+
+.direccion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.form-row-config {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 768px) {
+    .banco-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .banco-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row-config {
+        grid-template-columns: 1fr;
+    }
+
+    .banco-form-actions {
+        flex-direction: column;
+    }
+
+    .config-tabs {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .config-tab {
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .config-header h2 {
+        font-size: 1.4rem;
+    }
+
+    .config-card {
+        padding: 20px 16px;
+    }
+
+    .config-card-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .btn-save-config {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .banco-card {
+        padding: 16px;
+    }
+
+    .banco-form {
+        padding: 20px 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    .config-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .config-card {
+        padding: 16px 12px;
+    }
+
+    .banco-card {
+        padding: 12px;
+    }
+
+    .banco-grid .mono {
+        word-break: break-all;
+        font-size: 0.8rem;
+    }
+}

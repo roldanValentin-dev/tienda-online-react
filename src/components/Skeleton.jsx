@@ -1,3 +1,4 @@
+import '../style/skeleton.css';
 // Skeleton para tarjeta de producto
 function SkeletonCard() {
     return (
@@ -66,37 +67,49 @@ function SkeletonProductDetail() {
 function SkeletonHome() {
     return (
         <div className="home-page">
-            {/* Hero Skeleton */}
             <section className="skeleton-hero">
                 <div className="hero-content">
+                    <div className="skeleton skeleton-hero-badge"></div>
                     <div className="skeleton skeleton-hero-title"></div>
                     <div className="skeleton skeleton-hero-subtitle"></div>
                     <div className="skeleton skeleton-hero-button"></div>
+                    <div className="skeleton skeleton-hero-rating"></div>
                 </div>
             </section>
-            
-            {/* Categories Skeleton */}
-            <section className="categories-section">
+
+            <section className="stats-section">
                 <div className="container-custom">
-                    <div className="skeleton skeleton-section-title"></div>
-                    <div className="skeleton skeleton-section-subtitle"></div>
-                    <div className="categories-grid">
-                        {Array.from({ length: 4 }).map((_, index) => (
-                            <div key={index} className="skeleton-category-btn">
-                                <div className="skeleton skeleton-category-icon"></div>
-                                <div className="skeleton skeleton-category-name"></div>
+                    <div className="stats-grid">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="stat-card">
+                                <div className="skeleton skeleton-stat-number"></div>
+                                <div className="skeleton skeleton-stat-label"></div>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
-            
-            {/* Features Skeleton */}
+
+            <section className="categories-section">
+                <div className="container-custom">
+                    <div className="section-header">
+                        <div className="skeleton skeleton-section-tag" style={{ margin: '0 auto 12px' }}></div>
+                        <div className="skeleton skeleton-section-title"></div>
+                        <div className="skeleton skeleton-section-subtitle"></div>
+                    </div>
+                    <div className="categories-grid">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="skeleton skeleton-category-image"></div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             <section className="features-section">
                 <div className="container-custom">
                     <div className="features-grid">
-                        {Array.from({ length: 4 }).map((_, index) => (
-                            <div key={index} className="skeleton-feature-card">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="skeleton-feature-card">
                                 <div className="skeleton skeleton-feature-icon"></div>
                                 <div className="skeleton skeleton-feature-title"></div>
                                 <div className="skeleton skeleton-feature-description"></div>

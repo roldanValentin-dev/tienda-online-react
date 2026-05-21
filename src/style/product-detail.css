@@ -1,0 +1,262 @@
+.detail-page {
+    background: var(--light);
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+.detail-container {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    box-shadow: var(--shadow-sm);
+}
+
+.detail-fade-in {
+    animation: fadeInDetail 0.6s ease-out forwards;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.detail-gallery-section {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.detail-info-fade-in {
+    animation: slideInRight 0.6s ease-out;
+}
+
+.gallery-main {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: white;
+    margin-bottom: 12px;
+}
+
+.gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 16px;
+}
+
+.gallery-thumbs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color var(--transition-fast);
+}
+
+.thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.quantity-input {
+    width: 60px;
+    height: 40px;
+    border: none;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-add-cart {
+    padding: 16px;
+    background: var(--cta);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.btn-add-cart:hover {
+    background: var(--cta-hover);
+}
+
+.btn-add-cart.btn-added {
+    background: #7cb342 !important;
+}
+
+.btn-back {
+    padding: 12px;
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-back:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.shipping-info {
+    padding: 12px 16px;
+    background: var(--light);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+}
+
+.shipping-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.shipping-item:last-child {
+    margin-bottom: 0;
+}
+
+.detail-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detail-description {
+    padding: 16px;
+    background: var(--light);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.quantity-label {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.quantity-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: white;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--primary);
+    transition: background var(--transition-fast);
+}
+
+.quantity-btn:hover {
+    background: var(--bg-cream);
+}
+
+.breadcrumb-custom {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.breadcrumb-custom a {
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.breadcrumb-custom a:hover {
+    text-decoration: underline;
+}
+
+.product-category {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 400;
+    margin-bottom: 8px;
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery-main {
+        aspect-ratio: 1 / 1;
+    }
+
+    .thumb {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .gallery-main {
+        aspect-ratio: 1 / 1;
+    }
+
+    .thumb {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@media (max-width: 360px) {
+    .detail-page {
+        padding: 12px 0;
+    }
+
+    .detail-container {
+        padding: 16px;
+    }
+
+    .detail-title {
+        font-size: 18px;
+    }
+
+    .detail-price {
+        font-size: 28px;
+    }
+
+    .thumb {
+        width: 40px;
+        height: 40px;
+    }
+}

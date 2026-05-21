@@ -8,6 +8,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import PedidoService from '../services/PedidoService';
+import '../style/mis-pedidos.css';
 import { PLACEHOLDER_THUMB } from '../config/placeholders';
 import Swal from 'sweetalert2';
 

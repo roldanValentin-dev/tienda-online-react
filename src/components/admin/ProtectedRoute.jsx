@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import '../../admin.css';
+import '../../style/admin/layout.css';
 
 /**
  * Componente de orden superior para proteger rutas según autenticación y roles.

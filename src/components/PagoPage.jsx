@@ -3,6 +3,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import PagoService from '../services/PagoService';
 import Swal from 'sweetalert2';
+import '../style/pago.css';
 
 const TIPO_PAGO = {
     1: 'Efectivo',

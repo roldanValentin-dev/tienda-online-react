@@ -3,6 +3,7 @@ import { useContext, useEffect } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
 import { AuthContext } from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import '../style/navbar.css';
 
 function Navbar() {
     const { cart } = useContext(CarritoContext);

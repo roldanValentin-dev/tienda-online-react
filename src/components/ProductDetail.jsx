@@ -6,6 +6,7 @@ import { SkeletonProductDetail } from './Skeleton';
 import ProductoImagenService from '../services/ProductoImagenService';
 import API_BASE_URL from '../config/api';
 import { PLACEHOLDER_PRODUCT } from '../config/placeholders';
+import '../style/product-detail.css';
 
 function ProductDetail() {
     const { id } = useParams();

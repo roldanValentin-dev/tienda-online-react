@@ -1,0 +1,447 @@
+.mis-pedidos-page {
+    padding: 32px 20px;
+    min-height: calc(100vh - 200px);
+    background: var(--light);
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.pedidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 20px;
+    max-width: var(--container-max);
+    margin: 0 auto;
+}
+
+.pedido-card {
+    background: white;
+    padding: 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-base);
+}
+
+.pedido-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.pedido-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.pedido-header h3 {
+    color: var(--text-dark);
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.estado-badge {
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.estado-pendiente {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.estado-confirmado {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.estado-preparacion {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+}
+
+.estado-listo {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.estado-entregado {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.estado-cancelado {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+.estado-default {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+.pedido-info {
+    margin-bottom: 16px;
+}
+
+.pedido-info p {
+    margin: 8px 0;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+}
+
+.pedido-info strong {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.btn-detalle {
+    width: 100%;
+    padding: 12px;
+    background: var(--cta);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.btn-detalle:hover:not(:disabled) {
+    background: var(--cta-hover);
+}
+
+.btn-detalle:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-cancelar {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 0.9rem;
+}
+
+.btn-cancelar:hover {
+    background: var(--danger);
+    color: white;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    max-width: 640px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1;
+}
+
+.modal-header h2 {
+    color: var(--text-dark);
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-circle);
+    transition: var(--transition-fast);
+}
+
+.modal-close:hover {
+    background: var(--light);
+    color: var(--text-dark);
+}
+
+.modal-body {
+    padding: 24px;
+}
+
+.detalle-info {
+    background: var(--light);
+    padding: 16px;
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.detalle-info p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.detalle-info strong {
+    color: var(--text-dark);
+    display: block;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.modal-body h3 {
+    color: var(--text-dark);
+    margin: 20px 0 12px 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.detalle-productos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detalle-producto {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: var(--light);
+    border-radius: var(--radius-md);
+}
+
+.detalle-producto img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+    background: white;
+    padding: 4px;
+}
+
+.detalle-producto-info {
+    flex: 1;
+}
+
+.detalle-producto-info h4 {
+    margin: 0 0 6px 0;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.detalle-producto-info p {
+    margin: 2px 0;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.detalle-producto-info .subtotal {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    margin-top: 6px;
+}
+
+.detalle-total {
+    text-align: right;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 16px;
+}
+
+.detalle-total h3 {
+    color: var(--text-dark);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.categoria-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--light);
+    color: var(--text-muted);
+    border-radius: var(--radius-pill);
+    font-size: 0.7rem;
+    margin-bottom: 6px;
+}
+
+.modal-actions {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+}
+
+.btn-cancelar-modal {
+    width: 100%;
+    padding: 12px;
+    background: var(--danger);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.95rem;
+}
+
+.btn-cancelar-modal:hover {
+    opacity: 0.9;
+}
+
+.loading-container {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.loading-container p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-top: 16px;
+}
+
+.spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: var(--radius-circle);
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .mis-pedidos-page {
+        padding: 24px 16px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+
+    .pedidos-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .detalle-info {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .detalle-producto {
+        flex-direction: column;
+    }
+
+    .detalle-producto img {
+        width: 100%;
+        height: 160px;
+        object-fit: contain;
+    }
+}
+
+@media (max-width: 480px) {
+    .mis-pedidos-page {
+        padding: 16px 12px;
+    }
+
+    .pedido-card {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 360px) {
+    .mis-pedidos-page {
+        padding: 12px 8px;
+    }
+
+    .page-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .pedido-card {
+        padding: 14px;
+    }
+
+    .pedido-header h3 {
+        font-size: 1rem;
+    }
+
+    .modal-content {
+        border-radius: var(--radius-lg);
+        max-height: 90vh;
+    }
+
+    .modal-header {
+        padding: 16px;
+    }
+
+    .modal-body {
+        padding: 16px;
+    }
+}

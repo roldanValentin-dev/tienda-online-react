@@ -1,0 +1,81 @@
+.admin-pendientes-pago {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.badge-pago {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: var(--radius-lg);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.badge-pago.pago-pendiente {
+    background: rgba(255, 193, 7, 0.15);
+    color: #856404;
+}
+
+.badge-pago.pago-pagado {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.badge-pago.pago-fallido {
+    background: rgba(220, 53, 69, 0.15);
+    color: #dc3545;
+}
+
+.badge-pago.pago-reembolsado {
+    background: rgba(108, 117, 125, 0.15);
+    color: #6c757d;
+}
+
+.btn-confirmar-pago-full {
+    width: 100%;
+    padding: 14px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-confirmar-pago-full:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.btn-confirmar-pago-full:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.contador-info {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+@media (max-width: 576px) {
+    .btn-confirmar-pago-full {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .btn-confirmar-pago-full {
+        padding: 10px;
+        font-size: 0.85rem;
+    }
+}

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import AdminPagoService from '../../services/AdminPagoService';
-import '../../admin.css';
+import '../../style/admin/config-pago.css';
 
 function AdminConfigPago() {
     const [tab, setTab] = useState('descuento');
