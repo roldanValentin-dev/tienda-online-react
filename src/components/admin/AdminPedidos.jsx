@@ -66,6 +66,7 @@ function AdminPedidos() {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         cargarPedidos();
     }, []);
 
@@ -122,7 +123,7 @@ function AdminPedidos() {
             showCancelButton: true,
             confirmButtonText: 'Sí, cambiar',
             cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#28a745',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d'
         });
 
@@ -149,7 +150,7 @@ function AdminPedidos() {
             text: 'Se confirmará el pago y se descontará el stock automáticamente.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#28a745',
+            confirmButtonColor: '#c9a84c',
             confirmButtonText: 'Sí, confirmar pago',
             cancelButtonText: 'Cancelar',
         });

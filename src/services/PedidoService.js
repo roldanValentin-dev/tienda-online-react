@@ -66,6 +66,10 @@ class PedidoService {
                 return { success: false, message: 'Debes iniciar sesión para ver tus pedidos' };
             }
             
+            if (error.response?.status === 404) {
+                return { success: false, message: 'no-cliente' };
+            }
+            
             return {
                 success: false,
                 message: error.response?.data?.message || 'Error al cargar pedidos'

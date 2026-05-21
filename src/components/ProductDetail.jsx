@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { CarritoContext } from '../context/CarritoContext';
 import { useProducts } from '../hooks/useProducts';
 import { SkeletonProductDetail } from './Skeleton';
@@ -9,164 +9,143 @@ import { PLACEHOLDER_PRODUCT } from '../config/placeholders';
 import '../style/product-detail.css';
 
 function ProductDetail() {
-    const { id } = useParams();
-    const navigate = useNavigate();
-    const { agregarAlCarrito } = useContext(CarritoContext);
-    const { loading, getProductById } = useProducts();
-    
-    const [cantidad, setCantidad] = useState(1);
-    const [selectedImage, setSelectedImage] = useState(0);
-    const [imagenes, setImagenes] = useState([]);
-    const [loadingImages, setLoadingImages] = useState(true);
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { agregarAlCarrito } = useContext(CarritoContext);
+  const { loading, getProductById } = useProducts();
+  const [cantidad, setCantidad] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [imagenes, setImagenes] = useState([]);
+  const [loadingImages, setLoadingImages] = useState(true);
+  const [added, setAdded] = useState(false);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-
-        const cargarImagenes = async () => {
-            setLoadingImages(true);
-            try {
-                const result = await ProductoImagenService.getImagenesByProductoId(id);
-                if (result.success) {
-                    // Ordenar imágenes: primero la principal, luego por el campo orden
-                    const imagenesOrdenadas = [...result.data].sort((a, b) => {
-                        if (a.esPrincipal) return -1;
-                        if (b.esPrincipal) return 1;
-                        return a.orden - b.orden;
-                    });
-                    setImagenes(imagenesOrdenadas);
-                }
-            } catch (error) {
-                console.error('Error al cargar imágenes del producto:', error);
-            } finally {
-                setLoadingImages(false);
-            }
-        };
-
-        if (id) {
-            cargarImagenes();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const cargarImagenes = async () => {
+      setLoadingImages(true);
+      try {
+        const result = await ProductoImagenService.getImagenesByProductoId(id);
+        if (result.success) {
+          const ordenadas = [...result.data].sort((a, b) => {
+            if (a.esPrincipal) return -1;
+            if (b.esPrincipal) return 1;
+            return a.orden - b.orden;
+          });
+          setImagenes(ordenadas);
         }
-    }, [id]);
-
-    const product = getProductById(id);
-
-    if (loading || loadingImages) {
-        return <SkeletonProductDetail />;
-    }
-
-    if (!product) {
-        navigate('/products');
-        return null;
-    }
-
-    // Construir array de URLs de imágenes
-    const images = imagenes.length > 0
-        ? imagenes.map(img => `${API_BASE_URL}${img.url}`)
-        : [product.imagenUrl || PLACEHOLDER_PRODUCT];
-
-    const handleIncrement = () => setCantidad(prev => prev + 1);
-    const handleDecrement = () => {
-        if (cantidad > 1) setCantidad(prev => prev - 1);
+      } catch (error) {
+        console.error('Error al cargar imágenes:', error);
+      } finally {
+        setLoadingImages(false);
+      }
     };
+    if (id) cargarImagenes();
+  }, [id]);
 
-    const handleAddToCart = () => {
-        agregarAlCarrito(product, cantidad);
-        const btn = document.getElementById('add-to-cart-btn');
-        btn.innerHTML = '<i class="bi bi-check-circle me-2"></i>¡Agregado!';
-        btn.style.background = '#7cb342';
-        
-        setTimeout(() => {
-            btn.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Agregar al carrito';
-            btn.style.background = '';
-        }, 2000);
-    };
+  const product = getProductById(id);
 
-    return (
-        <div className="detail-page">
-            <div className="container-custom">
-                <div className="breadcrumb-custom detail-fade-in">
-                    <a href="/products">← Volver a productos</a>
+  if (loading || loadingImages) return <SkeletonProductDetail />;
+  if (!product) { navigate('/products'); return null; }
+
+  const images = imagenes.length > 0
+    ? imagenes.map(img => `${API_BASE_URL}${img.url}`)
+    : [product.imagenUrl || PLACEHOLDER_PRODUCT];
+
+  const handleAddToCart = () => {
+    agregarAlCarrito(product, cantidad);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2000);
+  };
+
+  return (
+    <div className="at-detail">
+      <div className="at-detail-breadcrumb">
+        <Link to="/products"><i className="bi bi-arrow-left"></i> Volver a productos</Link>
+      </div>
+
+      <div className="at-detail-grid">
+        <div className="at-detail-gallery">
+          <div className="at-detail-main-image">
+            <img
+              src={images[selectedImage]}
+              alt={product.nombre}
+              style={{ animation: 'crossfade 0.4s ease-out' }}
+            />
+          </div>
+          {images.length > 1 && (
+            <div className="at-detail-thumbs">
+              {images.map((img, index) => (
+                <div
+                  key={index}
+                  className={`at-detail-thumb ${selectedImage === index ? 'is-active' : ''}`}
+                  onClick={() => setSelectedImage(index)}
+                >
+                  <img src={img} alt={`${product.nombre} ${index + 1}`} />
                 </div>
-
-                <div className="detail-container detail-fade-in">
-                    <div className="detail-grid">
-                        <div className="detail-gallery-section">
-                            <div className="gallery-main">
-                                <img src={images[selectedImage]} alt={product.nombre} />
-                            </div>
-                            <div className="gallery-thumbs">
-                                {images.map((img, index) => (
-                                    <div 
-                                        key={index}
-                                        className={`thumb ${selectedImage === index ? 'active' : ''}`}
-                                        onClick={() => setSelectedImage(index)}
-                                    >
-                                        <img src={img} alt={`${product.nombre} ${index + 1}`} />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="detail-info detail-info-fade-in">
-                            <span className="product-category">{product.categoria}</span>
-                            <h1 className="detail-title">{product.nombre}</h1>
-                            <p className="detail-price">${product.precioBase.toLocaleString()}</p>
-                            
-                            <div className="detail-description">
-                                <strong>Descripción</strong>
-                                <p>{product.descripcion}</p>
-                            </div>
-
-                            <div className="quantity-selector">
-                                <span className="quantity-label">Cantidad</span>
-                                <div className="quantity-controls">
-                                    <button className="quantity-btn" onClick={handleDecrement}>
-                                        <i className="bi bi-dash"></i>
-                                    </button>
-                                    <input 
-                                        type="text" 
-                                        className="quantity-input" 
-                                        value={cantidad}
-                                        readOnly
-                                    />
-                                    <button className="quantity-btn" onClick={handleIncrement}>
-                                        <i className="bi bi-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="action-buttons">
-                                <button 
-                                    id="add-to-cart-btn"
-                                    className="btn-add-cart"
-                                    onClick={handleAddToCart}
-                                >
-                                    <i className="bi bi-cart-plus me-2"></i>
-                                    Agregar al carrito
-                                </button>
-                                <button 
-                                    className="btn-back"
-                                    onClick={() => navigate('/products')}
-                                >
-                                    Seguir comprando
-                                </button>
-                            </div>
-
-                            <div className="shipping-info">
-                                <div className="shipping-item">
-                                    <i className="bi bi-truck"></i>
-                                    <span>Envío gratis en compras mayores a $50.000</span>
-                                </div>
-                                <div className="shipping-item">
-                                    <i className="bi bi-shield-check"></i>
-                                    <span>Compra protegida</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              ))}
             </div>
+          )}
         </div>
-    );
+
+        <div className="at-detail-info">
+          <span className="at-detail-category">{product.categoria}</span>
+          <h1 className="at-detail-name">{product.nombre}</h1>
+          <span className="at-detail-price">${product.precioBase.toLocaleString()}</span>
+
+          <div className="at-detail-desc">
+            <strong>Descripción</strong>
+            <p>{product.descripcion || 'Producto artesanal de alta calidad.'}</p>
+          </div>
+
+          <div className="at-detail-qty">
+            <span className="at-detail-qty-label">Cantidad</span>
+            <div className="at-qty-control">
+              <button
+                className="at-qty-btn"
+                onClick={() => setCantidad(prev => Math.max(1, prev - 1))}
+                disabled={cantidad <= 1}
+              >
+                <i className="bi bi-dash"></i>
+              </button>
+              <span className="at-qty-value">{cantidad}</span>
+              <button
+                className="at-qty-btn"
+                onClick={() => setCantidad(prev => prev + 1)}
+              >
+                <i className="bi bi-plus"></i>
+              </button>
+            </div>
+          </div>
+
+          <button
+            className={`at-detail-cart-btn ${added ? 'is-added' : ''}`}
+            onClick={handleAddToCart}
+          >
+            {added ? (
+              <><i className="bi bi-check-circle"></i> ¡Agregado!</>
+            ) : (
+              <><i className="bi bi-bag-plus"></i> Agregar al carrito</>
+            )}
+          </button>
+
+          <button className="at-detail-back-btn" onClick={() => navigate('/products')}>
+            <i className="bi bi-arrow-left"></i> Seguir comprando
+          </button>
+
+          <div className="at-detail-shipping">
+            <div className="at-detail-shipping-item">
+              <i className="bi bi-truck"></i>
+              <span>Envío gratis en compras mayores a $50.000</span>
+            </div>
+            <div className="at-detail-shipping-item">
+              <i className="bi bi-shield-check"></i>
+              <span>Compra protegida</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export default ProductDetail;

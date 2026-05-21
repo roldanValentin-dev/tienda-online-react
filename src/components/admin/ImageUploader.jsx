@@ -44,6 +44,7 @@ const ImageUploader = ({ productoId, onUploadSuccess }) => {
 
     useEffect(() => {
         cargarImagenes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [productoId]);
 
     const handleFileSelect = (e) => {
@@ -96,7 +97,7 @@ const ImageUploader = ({ productoId, onUploadSuccess }) => {
             } else {
                 toast.error(result.message);
             }
-        } catch (error) {
+        } catch {
             toast.error('Error al subir la imagen');
         } finally {
             setUploading(false);
@@ -109,7 +110,7 @@ const ImageUploader = ({ productoId, onUploadSuccess }) => {
             text: 'Esta será la imagen principal del producto',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#ff6b35',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, marcar',
             cancelButtonText: 'Cancelar'
@@ -139,7 +140,7 @@ const ImageUploader = ({ productoId, onUploadSuccess }) => {
             text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#dc3545',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'

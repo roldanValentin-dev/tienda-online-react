@@ -20,7 +20,7 @@ const AdminLayout = ({ children }) => {
             text: '¿Estás seguro que deseas salir del panel?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#ff6b35',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, salir',
             cancelButtonText: 'Cancelar'

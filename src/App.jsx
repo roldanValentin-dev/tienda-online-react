@@ -1,5 +1,5 @@
 import { CarritoProvider } from './context/CarritoContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
@@ -43,11 +43,10 @@ function ScrollToTop() {
  */
 function AppContent() {
   const location = useLocation();
-  const { user } = useAuth();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <div className="app-wrapper">
+    <div className="app-wrapper" style={{ paddingTop: !isAdminRoute ? 'var(--nav-height)' : '0' }}>
       {!isAdminRoute && <Navbar />}
       <main className="main-content">
         <Routes>

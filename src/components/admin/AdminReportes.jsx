@@ -73,8 +73,6 @@ function AdminReportes() {
         .sort((a, b) => b.cantidad - a.cantidad)
         .slice(0, 10);
 
-    const hoy = new Date().toISOString().split('T')[0];
-
     const formatearMonto = (monto) => {
         return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS' }).format(monto);
     };

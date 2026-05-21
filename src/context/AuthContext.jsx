@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import API_BASE_URL from "../config/api";
@@ -34,8 +35,7 @@ export const AuthProvider = ({ children }) => {
                 }
                 setUser(parsedUser);
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            } catch (error) {
-                // Si hay error al parsear, limpiar datos corruptos
+            } catch {
                 localStorage.removeItem('token');
                 localStorage.removeItem('user');
             }

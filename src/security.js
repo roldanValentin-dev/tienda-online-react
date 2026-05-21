@@ -103,7 +103,7 @@ const calculatePasswordStrength = (password) => {
  */
 export const validatePhone = (phone) => {
     const sanitized = sanitizeInput(phone);
-    const phoneRegex = /^[\d\s\-\+\(\)]{8,20}$/;
+    const phoneRegex = /^[\d\s\-+()]{8,20}$/;
     return phoneRegex.test(sanitized);
 };
 

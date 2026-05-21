@@ -1,4 +1,4 @@
-const DEBUG = true;
+const DEBUG = false;
 
 function log(type, data) {
     if (!DEBUG) return;

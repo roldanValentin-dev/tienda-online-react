@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import AdminPagoService from '../../services/AdminPagoService';
@@ -98,21 +98,24 @@ function SeccionBancos() {
     const [showForm, setShowForm] = useState(false);
     const [editId, setEditId] = useState(null);
 
-    const cargar = async () => {
+    const cargar = useCallback(async () => {
         const r = await AdminPagoService.getDatosBancarios();
         if (r.success) setCuentas(Array.isArray(r.data) ? r.data : []);
         else toast.error(r.message);
         setLoading(false);
-    };
+    }, []);
 
-    useEffect(() => { cargar(); }, []);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        cargar();
+    }, [cargar]);
 
     const handleDelete = async (id) => {
         const confirm = await Swal.fire({
             title: '¿Eliminar cuenta?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#dc3545',
+            confirmButtonColor: '#c9a84c',
             confirmButtonText: 'Eliminar',
         });
         if (!confirm.isConfirmed) return;

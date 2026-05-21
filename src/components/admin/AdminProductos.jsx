@@ -13,10 +13,6 @@ const AdminProductos = () => {
     const [categoriaFilter, setCategoriaFilter] = useState('todas');
     const [estadoFilter, setEstadoFilter] = useState('todos');
 
-    useEffect(() => {
-        cargarProductos();
-    }, []);
-
     const cargarProductos = async () => {
         setLoading(true);
         const result = await ProductoService.getAllProductos();
@@ -28,13 +24,18 @@ const AdminProductos = () => {
         setLoading(false);
     };
 
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        cargarProductos();
+    }, []);
+
     const handleDelete = async (id, nombre) => {
         const confirm = await Swal.fire({
             title: `¿Eliminar ${nombre}?`,
             text: "Esta acción no se puede deshacer y eliminará también sus imágenes.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#dc3545',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'

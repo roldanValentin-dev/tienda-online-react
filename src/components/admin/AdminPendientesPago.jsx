@@ -23,7 +23,10 @@ function AdminPendientesPago() {
         setLoading(false);
     };
 
-    useEffect(() => { cargar(); }, []);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        cargar();
+    }, []);
 
     const handleConfirmar = async (pedidoId) => {
         const confirm = await Swal.fire({
@@ -31,7 +34,7 @@ function AdminPendientesPago() {
             text: 'Se confirmará el pago y se descontará el stock. Esta acción no se puede deshacer.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#28a745',
+            confirmButtonColor: '#c9a84c',
             confirmButtonText: 'Sí, confirmar pago',
             cancelButtonText: 'Cancelar',
         });

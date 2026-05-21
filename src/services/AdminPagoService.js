@@ -1,7 +1,7 @@
 import axios from 'axios';
 import API_BASE_URL from '../config/api';
 
-const DEBUG = true;
+const DEBUG = false;
 
 function log(type, data) {
     if (!DEBUG) return;

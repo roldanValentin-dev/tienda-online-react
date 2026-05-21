@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect, useContext, useCallback } from "react";
 import API_BASE_URL from "../config/api";
 import axios from "axios";
@@ -5,7 +6,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from './AuthContext';
 import CarritoService from '../services/CarritoService';
 
-const DEBUG = true;
+const DEBUG = false;
 
 function debugLog(type, data) {
     if (!DEBUG) return;

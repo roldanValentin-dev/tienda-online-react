@@ -1,196 +1,206 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { CarritoContext } from "../context/CarritoContext";
+import API_BASE_URL from '../config/api';
 import { PLACEHOLDER_CART } from '../config/placeholders';
+import axios from 'axios';
 import '../style/cart.css';
 
 function Cart() {
-    const { cart, eliminarDelCarrito, actualizarCantidad, calcularTotal, syncing } = useContext(CarritoContext);
-    const navigate = useNavigate();
+  const { cart, eliminarDelCarrito, actualizarCantidad, calcularTotal, syncing } = useContext(CarritoContext);
+  const [productMap, setProductMap] = useState(null);
+  const navigate = useNavigate();
 
-    const handleRemoveItem = (product) => {
+  useEffect(() => {
+    const needsRefresh = cart.some(item => !item.imagenUrl && (!item.imagenes || item.imagenes.length === 0));
+    if (!needsRefresh) return;
+    axios.get(`${API_BASE_URL}/api/catalogo/productos`).then(res => {
+      const map = {};
+      res.data.forEach(p => { map[p.id] = p; });
+      setProductMap(map);
+    }).catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleRemoveItem = (product) => {
+    Swal.fire({
+      title: '¿Eliminar producto?',
+      html: `¿Estás seguro de eliminar <strong>${product.nombre}</strong> del carrito?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#c9a84c',
+      cancelButtonColor: '#666',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        eliminarDelCarrito(product.id);
         Swal.fire({
-            title: '¿Eliminar producto?',
-            html: `¿Estás seguro de eliminar <strong>${product.nombre}</strong> del carrito?`,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ff6b35',
-            cancelButtonColor: '#666',
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                eliminarDelCarrito(product.id);
-                Swal.fire({
-                    title: '¡Eliminado!',
-                    text: 'El producto ha sido eliminado del carrito',
-                    icon: 'success',
-                    confirmButtonColor: '#ff6b35',
-                    timer: 2000,
-                    timerProgressBar: true,
-                });
-            }
+          title: '¡Eliminado!',
+          icon: 'success',
+          confirmButtonColor: '#c9a84c',
+          timer: 1500,
+          timerProgressBar: true,
         });
-    };
+      }
+    });
+  };
 
-    const handleCheckout = () => {
-        navigate('/checkout');
-    };
-
-    if (syncing) {
-        return (
-            <div className="cart-page">
-                <div className="container-custom">
-                    <div className="page-header animate-fade-in">
-                        <h1 className="page-title">
-                            <i className="bi bi-cart3 me-2"></i>
-                            Mi Carrito
-                        </h1>
-                    </div>
-                    <div className="empty-state animate-fade-in-up">
-                        <div className="spinner-border text-primary mb-3" role="status">
-                            <span className="visually-hidden">Sincronizando...</span>
-                        </div>
-                        <h3>Sincronizando carrito...</h3>
-                        <p className="text-muted">Estamos actualizando tu carrito con el servidor</p>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
+  if (syncing) {
     return (
-        <div className="cart-page">
-            <div className="container-custom">
-                <div className="page-header animate-fade-in">
-                    <h1 className="page-title">
-                        <i className="bi bi-cart3 me-2"></i>
-                        Mi Carrito
-                    </h1>
-                    <p className="page-subtitle">
-                        {cart.length === 0
-                            ? 'Tu carrito está vacío'
-                            : `Tienes ${cart.length} producto${cart.length > 1 ? 's' : ''} en tu carrito`
-                        }
-                    </p>
-                </div>
-
-                {cart.length === 0 ? (
-                    <div className="empty-state animate-fade-in-up">
-                        <div className="empty-icon">🛒</div>
-                        <h3>Tu carrito está vacío</h3>
-                        <p className="text-muted">¡Agrega productos para comenzar tu compra!</p>
-                        <button
-                            className="btn-primary btn-large"
-                            onClick={() => navigate('/products')}
-                        >
-                            <i className="bi bi-bag-fill me-2"></i>
-                            Ver Productos
-                        </button>
-                    </div>
-                ) : (
-                    <div className="cart-layout">
-                        {/* Lista de productos */}
-                        <div className="cart-items">
-                            {cart.map((product, index) => (
-                                <div
-                                    key={product.id}
-                                    className="cart-item animate-slide-in"
-                                    style={{ animationDelay: `${index * 0.1}s` }}
-                                >
-                                    <div className="cart-item-image">
-                                        <img
-                                            src={product.imagenUrl || PLACEHOLDER_CART}
-                                            alt={product.nombre}
-                                            onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.src = PLACEHOLDER_CART;
-                                            }}
-                                        />
-                                    </div>
-                                    <div className="cart-item-info">
-                                        <span className="product-category-badge">{product.categoria}</span>
-                                        <h3 className="cart-item-name">{product.nombre}</h3>
-                                        <div className="cart-item-quantity-controls">
-                                            <button
-                                                className="qty-btn"
-                                                onClick={() => actualizarCantidad(product.id, product.cantidad - 1)}
-                                                disabled={product.cantidad <= 1}
-                                            >
-                                                <i className="bi bi-dash"></i>
-                                            </button>
-                                            <span className="qty-value">{product.cantidad}</span>
-                                            <button
-                                                className="qty-btn"
-                                                onClick={() => actualizarCantidad(product.id, product.cantidad + 1)}
-                                            >
-                                                <i className="bi bi-plus"></i>
-                                            </button>
-                                        </div>
-                                        <p className="cart-item-unit-price">
-                                            ${product.precioBase.toLocaleString()} c/u
-                                        </p>
-                                    </div>
-                                    <div className="cart-item-actions">
-                                        <p className="cart-item-total">
-                                            ${(product.precioBase * product.cantidad).toLocaleString()}
-                                        </p>
-                                        <button
-                                            className="btn-remove"
-                                            onClick={() => handleRemoveItem(product)}
-                                        >
-                                            <i className="bi bi-trash"></i>
-                                            Eliminar
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Resumen */}
-                        <div className="cart-summary animate-fade-in-up">
-                            <h2 className="summary-title">Resumen de compra</h2>
-
-                            <div className="summary-row">
-                                <span>Productos ({cart.length})</span>
-                                <span>${calcularTotal().toLocaleString()}</span>
-                            </div>
-                            <div className="summary-divider"></div>
-
-                            <div className="summary-total">
-                                <span>Total</span>
-                                <span className="total-amount">${calcularTotal().toLocaleString()}</span>
-                            </div>
-
-                            <button
-                                className="btn-primary btn-large btn-block"
-                                onClick={handleCheckout}
-                            >
-                                <i className="bi bi-credit-card me-2"></i>
-                                Finalizar Compra
-                            </button>
-
-                            <button
-                                className="btn-secondary btn-block"
-                                onClick={() => navigate('/products')}
-                            >
-                                <i className="bi bi-arrow-left me-2"></i>
-                                Seguir Comprando
-                            </button>
-
-                            <div className="summary-features">
-                                <div className="feature-item">
-                                    <i className="bi bi-shield-check"></i>
-                                    <span>Compra protegida</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                )}
-            </div>
+      <div className="at-cart">
+        <div className="container-custom">
+          <div className="loading-container">
+            <div className="spinner"></div>
+            <p style={{ marginTop: 16 }}>Sincronizando carrito...</p>
+          </div>
         </div>
+      </div>
     );
+  }
+
+  return (
+    <div className="at-cart">
+      <div className="at-cart-layout">
+        <div>
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '1.8rem',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            marginBottom: 8
+          }}>
+            Tu Pedido
+          </h1>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginBottom: 24 }}>
+            {cart.length === 0
+              ? 'Tu carrito está vacío'
+              : `${cart.length} producto${cart.length > 1 ? 's' : ''} en tu pedido`
+            }
+          </p>
+
+          {cart.length === 0 ? (
+            <div className="at-cart-empty">
+              <div className="at-cart-empty-icon">
+                <i className="bi bi-bag"></i>
+              </div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', marginBottom: 8, color: 'var(--text-primary)' }}>
+                Tu carrito está vacío
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', marginBottom: 24 }}>
+                Agregá productos para comenzar tu pedido
+              </p>
+              <button className="btn-gold" onClick={() => navigate('/products')}>
+                <i className="bi bi-bag"></i>
+                Ver Productos
+              </button>
+            </div>
+          ) : (
+            <div className="at-cart-items">
+              {cart.map((product, index) => (
+                <div
+                  key={product.id}
+                  className="at-cart-item"
+                  style={{
+                    animation: `revealUp 0.5s var(--transition-base) both`,
+                    animationDelay: `${index * 0.06}s`,
+                  }}
+                >
+                  <div className="at-cart-item-img">
+                    <img
+                      src={(() => {
+                        const p = productMap?.[product.id] || product;
+                        const img = p.imagenUrl || (p.imagenes && p.imagenes.length > 0 ? (p.imagenes.find(i => i.esPrincipal) || p.imagenes[0]).url : null);
+                        return img ? (img.startsWith('http') ? img : `${API_BASE_URL}${img}`) : PLACEHOLDER_CART;
+                      })()}
+                      alt={product.nombre}
+                      onError={(e) => { e.target.onerror = null; e.target.src = PLACEHOLDER_CART; }}
+                    />
+                  </div>
+                  <div className="at-cart-item-info">
+                    <span className="at-cart-item-category">{product.categoria}</span>
+                    <h3 className="at-cart-item-name">{product.nombre}</h3>
+                    <p className="at-cart-item-price">${product.precioBase.toLocaleString()} c/u</p>
+                    <div className="at-cart-item-qty">
+                      <button
+                        className="at-cart-qty-btn"
+                        onClick={() => actualizarCantidad(product.id, product.cantidad - 1)}
+                        disabled={product.cantidad <= 1}
+                      >
+                        <i className="bi bi-dash"></i>
+                      </button>
+                      <span className="at-cart-qty-value">{product.cantidad}</span>
+                      <button
+                        className="at-cart-qty-btn"
+                        onClick={() => actualizarCantidad(product.id, product.cantidad + 1)}
+                      >
+                        <i className="bi bi-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="at-cart-item-actions">
+                    <p className="at-cart-item-total">
+                      ${(product.precioBase * product.cantidad).toLocaleString()}
+                    </p>
+                    <button
+                      className="at-cart-remove-btn"
+                      onClick={() => handleRemoveItem(product)}
+                    >
+                      <i className="bi bi-trash3"></i>
+                      Eliminar
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {cart.length > 0 && (
+          <div className="at-cart-summary">
+            <h2 className="at-cart-summary-title">Resumen</h2>
+            <div className="at-cart-summary-row">
+              <span>Productos ({cart.length})</span>
+              <span>${calcularTotal().toLocaleString()}</span>
+            </div>
+            <div className="at-cart-summary-divider" />
+            <div className="at-cart-summary-total">
+              <span>Total</span>
+              <span className="at-cart-summary-amount">${calcularTotal().toLocaleString()}</span>
+            </div>
+
+            <button
+              className="at-cart-checkout-btn"
+              onClick={() => navigate('/checkout')}
+            >
+              <i className="bi bi-check-circle"></i>
+              Confirmar Pedido
+            </button>
+
+            <button
+              className="at-cart-back-btn"
+              onClick={() => navigate('/products')}
+            >
+              <i className="bi bi-arrow-left"></i>
+              Seguir Comprando
+            </button>
+
+            <div className="at-cart-features">
+              <div className="at-cart-feature">
+                <i className="bi bi-shield-check"></i>
+                <span>Compra protegida</span>
+              </div>
+              <div className="at-cart-feature">
+                <i className="bi bi-truck"></i>
+                <span>Envío gratis +$50k</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default Cart;
