@@ -9,6 +9,8 @@ import ProductsList from './components/ProductsList';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Auth from './components/Auth';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 import Checkout from './components/Checkout';
 import PagoPage from './components/PagoPage';
 import MisPedidos from './components/MisPedidos';
@@ -55,6 +57,8 @@ function AppContent() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pago/:id" element={<PagoPage />} />
           <Route path="/pago-exitoso" element={<PagoPage />} />

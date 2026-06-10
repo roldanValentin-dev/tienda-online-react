@@ -23,6 +23,8 @@ function ProductsList() {
   const { products, loading } = useProducts();
   const [sortBy, setSortBy] = useState('default');
   const [searchQuery, setSearchQuery] = useState('');
+  const [filterOferta, setFilterOferta] = useState(false);
+  const [filterInmediato, setFilterInmediato] = useState(false);
   const debouncedSearch = useDebounce(searchQuery, 300);
   const [gridRef, gridVisible] = useScrollReveal({ threshold: 0.05 });
 
@@ -43,11 +45,19 @@ function ProductsList() {
       result = result.filter(p => p.categoria === selectCategory);
     }
 
+    if (filterOferta && filterInmediato) {
+      result = result.filter(p => p.enOferta === true || p.stockInmediato === true);
+    } else if (filterOferta) {
+      result = result.filter(p => p.enOferta === true);
+    } else if (filterInmediato) {
+      result = result.filter(p => p.stockInmediato === true);
+    }
+
     switch(sortBy) {
-      case 'price-asc': return result.sort((a, b) => a.precioBase - b.precioBase);
-      case 'price-desc': return result.sort((a, b) => b.precioBase - a.precioBase);
-      case 'name-asc': return result.sort((a, b) => a.nombre.localeCompare(b.nombre));
-      case 'name-desc': return result.sort((a, b) => b.nombre.localeCompare(a.nombre));
+      case 'price-asc': return [...result].sort((a, b) => a.precioBase - b.precioBase);
+      case 'price-desc': return [...result].sort((a, b) => b.precioBase - a.precioBase);
+      case 'name-asc': return [...result].sort((a, b) => a.nombre.localeCompare(b.nombre));
+      case 'name-desc': return [...result].sort((a, b) => b.nombre.localeCompare(a.nombre));
       default: return result;
     }
   };
@@ -59,7 +69,14 @@ function ProductsList() {
       const img = producto.imagenes.find(i => i.esPrincipal) || producto.imagenes[0];
       return `${API_BASE_URL}${img.url}`;
     }
-    return producto.imagenUrl ? (producto.imagenUrl.startsWith('http') ? producto.imagenUrl : `${API_BASE_URL}${producto.imagenUrl}`) : PLACEHOLDER_PRODUCT;
+    return producto.imagenUrl
+      ? (producto.imagenUrl.startsWith('http') ? producto.imagenUrl : `${API_BASE_URL}${producto.imagenUrl}`)
+      : PLACEHOLDER_PRODUCT;
+  };
+
+  const calcDiscount = (p) => {
+    if (!p.enOferta || !p.precioOferta || !p.precioBase) return null;
+    return Math.round((1 - p.precioOferta / p.precioBase) * 100);
   };
 
   return (
@@ -69,115 +86,150 @@ function ProductsList() {
         <p className="at-products-hero-sub">Una selección artesanal para vos</p>
       </div>
 
-      <div className="at-products-layout">
-        <aside className="at-filters-sidebar">
-          <span className="at-filters-label">Filtrar</span>
+      <div className="at-products-catalog">
+        <div className="at-products-catalog-header">
+          <h2>Catálogo completo</h2>
+        </div>
 
-          <div className="at-filter-chips">
-            <button
-              className={`at-filter-chip ${selectCategory === 'todas' ? 'is-active' : ''}`}
-              onClick={() => setSelectCategory('todas')}
-            >
-              Todas
-            </button>
-            {category.filter(c => c !== 'todas').map(cat => (
+        <div className="at-products-layout">
+          <aside className="at-filters-sidebar">
+            <span className="at-filters-label">Filtrar</span>
+
+            <div className="at-filter-chips">
               <button
-                key={cat}
-                className={`at-filter-chip ${selectCategory === cat ? 'is-active' : ''}`}
-                onClick={() => setSelectCategory(cat)}
+                className={`at-filter-chip ${selectCategory === 'todas' ? 'is-active' : ''}`}
+                onClick={() => setSelectCategory('todas')}
               >
-                {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                Todas
               </button>
-            ))}
-          </div>
-
-          <div className="at-search-wrapper">
-            <i className="bi bi-search"></i>
-            <input
-              type="text"
-              placeholder="Buscar productos..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          <select
-            className="at-sort-select"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-          >
-            <option value="default">Más relevantes</option>
-            <option value="price-asc">Menor precio</option>
-            <option value="price-desc">Mayor precio</option>
-            <option value="name-asc">A—Z</option>
-            <option value="name-desc">Z—A</option>
-          </select>
-        </aside>
-
-        <div>
-          {loading ? (
-            <SkeletonGrid count={8} />
-          ) : displayProducts.length === 0 ? (
-            <div className="at-products-empty">
-              <div className="empty-state">
-                <div className="empty-icon"><i className="bi bi-search"></i></div>
-                <h3>Sin resultados</h3>
-                <p>
-                  {debouncedSearch.trim()
-                    ? `No encontramos productos para "${debouncedSearch}"`
-                    : 'No hay productos en esta categoría'}
-                </p>
+              {category.filter(c => c !== 'todas').map(cat => (
                 <button
-                  className="btn-gold"
-                  onClick={() => { setSearchQuery(''); setSelectCategory('todas'); setSortBy('default'); }}
+                  key={cat}
+                  className={`at-filter-chip ${selectCategory === cat ? 'is-active' : ''}`}
+                  onClick={() => setSelectCategory(cat)}
                 >
-                  Limpiar filtros
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
                 </button>
-              </div>
+              ))}
             </div>
-          ) : (
-            <>
-              {debouncedSearch.trim() && (
-                <p className="at-search-info">
-                  {displayProducts.length} resultado{displayProducts.length !== 1 ? 's' : ''} para <strong>"{debouncedSearch}"</strong>
-                </p>
-              )}
-              <div
-                ref={gridRef}
-                className="at-products-grid"
-                style={{
-                  opacity: gridVisible ? 1 : 0,
-                  transition: 'opacity 0.6s ease-out',
-                }}
+
+            <div className="at-filter-tags">
+              <button
+                className={`at-filter-tag ${filterOferta ? 'is-active-oferta' : ''}`}
+                onClick={() => { setFilterOferta(v => !v); setSelectCategory('todas'); }}
               >
-                {displayProducts.map((p, index) => (
-                  <div
-                    key={p.id}
-                    className="at-product-card"
-                  style={{
-                    animation: gridVisible ? `revealUp 0.6s var(--transition-base) both` : 'none',
-                    animationDelay: `${index * 0.06}s`,
-                  }}
-                    onClick={() => navigate(`/products/${p.id}`)}
+                <i className="bi bi-tag"></i> En oferta
+              </button>
+              <button
+                className={`at-filter-tag ${filterInmediato ? 'is-active-inmediato' : ''}`}
+                onClick={() => { setFilterInmediato(v => !v); setSelectCategory('todas'); }}
+              >
+                <i className="bi bi-clock"></i> Retiro hoy
+              </button>
+            </div>
+
+            <div className="at-search-wrapper">
+              <i className="bi bi-search"></i>
+              <input
+                type="text"
+                placeholder="Buscar productos..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+
+            <select
+              className="at-sort-select"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="default">Más relevantes</option>
+              <option value="price-asc">Menor precio</option>
+              <option value="price-desc">Mayor precio</option>
+              <option value="name-asc">A—Z</option>
+              <option value="name-desc">Z—A</option>
+            </select>
+          </aside>
+
+          <div>
+            {loading ? (
+              <SkeletonGrid count={8} />
+            ) : displayProducts.length === 0 ? (
+              <div className="at-products-empty">
+                <div className="empty-state">
+                  <div className="empty-icon"><i className="bi bi-search"></i></div>
+                  <h3>Sin resultados</h3>
+                  <p>
+                    {debouncedSearch.trim()
+                      ? `No encontramos productos para "${debouncedSearch}"`
+                      : 'No hay productos en esta categoría'}
+                  </p>
+                  <button
+                    className="btn-gold"
+                    onClick={() => { setSearchQuery(''); setSelectCategory('todas'); setSortBy('default'); setFilterOferta(false); setFilterInmediato(false); }}
                   >
-                    <div className="at-product-card-image">
-                      <img src={getProductImage(p)} alt={p.nombre} />
-                      <div className="at-product-card-overlay">
-                        <span className="at-product-card-add">
-                          <i className="bi bi-eye"></i> Ver detalle
-                        </span>
+                    Limpiar filtros
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {debouncedSearch.trim() && (
+                  <p className="at-search-info">
+                    {displayProducts.length} resultado{displayProducts.length !== 1 ? 's' : ''}
+                    <> para <strong>"{debouncedSearch}"</strong></>
+                  </p>
+                )}
+                <div
+                  ref={gridRef}
+                  className="at-products-grid"
+                  style={{
+                    opacity: gridVisible ? 1 : 0,
+                    transition: 'opacity 0.6s ease-out',
+                  }}
+                >
+                  {displayProducts.map((p, index) => (
+                    <div
+                      key={p.id}
+                      className="at-product-card"
+                      style={{
+                        animation: gridVisible ? `revealUp 0.6s var(--transition-base) both` : 'none',
+                        animationDelay: `${index * 0.06}s`,
+                      }}
+                      onClick={() => navigate(`/products/${p.id}`)}
+                    >
+                      <div className="at-product-card-image">
+                        <img src={getProductImage(p)} alt={p.nombre} />
+                        {(p.stockInmediato || p.enOferta) && (
+                          <div className="at-product-card-badges">
+                            {p.stockInmediato && <span className="at-badge-card at-badge-card-inmediato">Retiro hoy</span>}
+                            {p.enOferta && calcDiscount(p) && <span className="at-badge-card at-badge-card-oferta">-{calcDiscount(p)}%</span>}
+                          </div>
+                        )}
+                        <div className="at-product-card-overlay">
+                          <span className="at-product-card-add">
+                            <i className="bi bi-eye"></i> Ver detalle
+                          </span>
+                        </div>
+                      </div>
+                      <div className="at-product-card-body">
+                        <div className="at-product-card-category">{p.categoria}</div>
+                        <h3 className="at-product-card-name">{p.nombre}</h3>
+                        {p.enOferta && p.precioOferta ? (
+                          <div className="at-product-card-price-group">
+                            <span className="at-product-card-price at-product-card-price-old">${Number(p.precioBase).toLocaleString()}</span>
+                            <span className="at-product-card-price at-product-card-price-oferta">${Number(p.precioOferta).toLocaleString()}</span>
+                          </div>
+                        ) : (
+                          <span className="at-product-card-price">${Number(p.precioBase).toLocaleString()}</span>
+                        )}
                       </div>
                     </div>
-                    <div className="at-product-card-body">
-                      <div className="at-product-card-category">{p.categoria}</div>
-                      <h3 className="at-product-card-name">{p.nombre}</h3>
-                      <span className="at-product-card-price">${p.precioBase.toLocaleString()}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

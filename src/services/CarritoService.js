@@ -148,10 +148,9 @@ class CarritoService {
         }
     }
 
-    async checkout({ fechaEntrega, observaciones, tipoPago }) {
-        const body = { fechaEntrega };
+    async checkout({ fechaEntrega, observaciones, tipoPago, esRetiroLocal = true, direccionEntrega = null }) {
+        const body = { fechaEntrega, tipoPago, esRetiroLocal, direccionEntrega };
         if (observaciones) body.observaciones = observaciones;
-        if (tipoPago) body.tipoPago = tipoPago;
         try {
             debugLog('request', { url: 'POST /api/carrito/checkout', body });
             const response = await axios.post(
@@ -185,6 +184,9 @@ class CarritoService {
             categoria: item.productoCategoria,
             precioBase: item.precioUnitario,
             cantidad: item.cantidad,
+            enOferta: item.enOferta ?? false,
+            precioOferta: item.precioOferta ?? null,
+            stockInmediato: item.stockInmediato ?? false,
         }));
     }
 

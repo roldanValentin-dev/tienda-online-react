@@ -9,7 +9,19 @@
 .admin-container {
     display: flex;
     min-height: 100vh;
-    background: var(--light);
+    background: var(--adm-bg);
+    --primary: #c9a84c;
+    --primary-light: #f5edd6;
+    --primary-dark: #b8973e;
+    --primary-ring: rgba(201, 168, 76, 0.2);
+    --light: #fdf8f3;
+    --dark: #2d1b12;
+    --border: #e8ddd0;
+    --bg-cream: #fdf8f3;
+    --shadow-sm: 0 2px 8px rgba(45, 27, 18, 0.06);
+    --shadow-md: 0 4px 16px rgba(45, 27, 18, 0.1);
+    --text-muted: #a0928b;
+    --text-dark: #2d1b12;
 }
 
 .admin-sidebar {
@@ -24,7 +36,7 @@
     top: 0;
     transition: transform 0.3s ease;
     z-index: 1000;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
     border-right: 1px solid var(--border);
 }
 
@@ -60,7 +72,7 @@
     padding: 14px 20px;
     color: var(--text-muted);
     text-decoration: none;
-    transition: var(--transition-fast);
+    transition: 200ms ease;
     font-size: 0.95rem;
     font-weight: 500;
     border-left: 3px solid transparent;
@@ -90,28 +102,6 @@
 }
 
 .sidebar-nav .nav-item.active i {
-    color: var(--primary);
-}
-
-.nav-item i {
-    font-size: 1.2rem;
-    width: 24px;
-    text-align: center;
-}
-
-.nav-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
-    border-left-color: var(--primary);
-}
-
-.nav-item.active {
-    background: var(--primary-light);
-    color: var(--primary);
-    border-left-color: var(--primary);
-}
-
-.nav-item.active i {
     color: var(--primary);
 }
 
@@ -161,30 +151,25 @@
     font-size: 0.85rem;
     font-weight: 500;
     text-decoration: none;
-    color: rgb(2, 2, 2);
-    border: none;
-    transition: var(--transition-base);
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+    transition: 200ms ease;
     cursor: pointer;
     width: 100%;
     margin-bottom: 8px;
+    background: white;
 }
-.btn-back-home{
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-}
+
 .btn-logout:hover {
     background: var(--danger);
     color: white;
-    border-color: black;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+    border-color: transparent;
 }
 
 .btn-back-home:hover {
-    background: rgba(4, 196, 17, 0.745);
+    background: var(--success);
     color: white;
-    border-color: rgb(0, 0, 0);
-    transform: translateY(-2px);
+    border-color: transparent;
 }
 
 .admin-main {
@@ -194,6 +179,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .admin-sidebar.closed~.admin-main {
@@ -252,7 +238,7 @@
     font-size: 0.8rem;
     font-weight: 600;
     color: white;
-    box-shadow: 0 2px 8px rgba(255, 107, 53, 0.2);
+    box-shadow: 0 2px 8px rgba(201, 168, 76, 0.25);
 }
 
 .admin-content {

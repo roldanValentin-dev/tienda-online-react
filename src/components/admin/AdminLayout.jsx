@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
@@ -32,6 +32,13 @@ const AdminLayout = ({ children }) => {
         });
     };
     
+    useEffect(() => {
+        if (window.innerWidth <= 992) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setSidebarOpen(false);
+        }
+    }, [location.pathname]);
+
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
     };
@@ -79,7 +86,7 @@ const AdminLayout = ({ children }) => {
             {/* Sidebar */}
             <aside className={`admin-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
                 <div className="sidebar-header">
-                    <h2>🥐 Admin Panel</h2>
+                    <h2>Admin Panel</h2>
                     <button className="btn-toggle d-lg-none" onClick={toggleSidebar}>
                         <i className="bi bi-x"></i>
                     </button>

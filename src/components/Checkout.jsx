@@ -136,7 +136,9 @@ function Checkout() {
     const checkoutData = {
       fechaEntrega: fechaEntrega.toISOString(),
       observaciones: `[Personalización: cobertura=${frosting}, tamaño=${cakeSize}${message ? `, frase="${message}"` : ''}] ${observaciones}`.trim() || null,
-      tipoPago: TIPO_PAGO_MAP[tipoPago] || null,
+      tipoPago: TIPO_PAGO_MAP[tipoPago],
+      esRetiroLocal: true,
+      direccionEntrega: null,
     };
 
     setLoading(true);
@@ -205,9 +207,17 @@ function Checkout() {
                   </div>
                   <div className="at-review-item-info">
                     <div className="at-review-item-name">{item.nombre}</div>
-                    <div className="at-review-item-meta">Cantidad: {item.cantidad} × ${item.precioBase.toLocaleString()}</div>
+                    <div className="at-review-item-meta">Cantidad: {item.cantidad} × ${(() => {
+                      const p = productMap?.[item.id] || item;
+                      const precio = p.enOferta && p.precioOferta ? p.precioOferta : p.precioBase;
+                      return precio.toLocaleString();
+                    })()}</div>
                   </div>
-                  <div className="at-review-item-subtotal">${(item.precioBase * item.cantidad).toLocaleString()}</div>
+                  <div className="at-review-item-subtotal">${(() => {
+                    const p = productMap?.[item.id] || item;
+                    const precio = p.enOferta && p.precioOferta ? p.precioOferta : p.precioBase;
+                    return (precio * item.cantidad).toLocaleString();
+                  })()}</div>
                 </div>
               ))}
             </div>

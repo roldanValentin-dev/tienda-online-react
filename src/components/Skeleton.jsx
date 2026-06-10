@@ -80,4 +80,28 @@ function SkeletonTable({ rows = 5 }) {
   );
 }
 
-export { SkeletonCard, SkeletonGrid, SkeletonProductDetail, SkeletonHome, SkeletonTable };
+function SkeletonFeatured() {
+  return (
+    <div className="at-featured" style={{ opacity: 0.6, pointerEvents: 'none' }}>
+      <div className="at-featured-header">
+        <div>
+          <div className="sk sk-line sk-line-md" style={{ width: 200 }}></div>
+          <div className="sk sk-line sk-line-sm" style={{ width: 140, marginTop: 6 }}></div>
+        </div>
+      </div>
+      <div className="at-featured-grid">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="sk-card">
+            <div className="sk sk-image" style={{ aspectRatio: '1/1' }}></div>
+            <div className="sk-body">
+              <div className="sk sk-line sk-line-sm"></div>
+              <div className="sk sk-line sk-line-sm" style={{ width: '60%' }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export { SkeletonCard, SkeletonGrid, SkeletonProductDetail, SkeletonHome, SkeletonTable, SkeletonFeatured };

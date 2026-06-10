@@ -13,8 +13,7 @@ function Cart() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const needsRefresh = cart.some(item => !item.imagenUrl && (!item.imagenes || item.imagenes.length === 0));
-    if (!needsRefresh) return;
+    if (cart.length === 0) return;
     axios.get(`${API_BASE_URL}/api/catalogo/productos`).then(res => {
       const map = {};
       res.data.forEach(p => { map[p.id] = p; });
@@ -98,61 +97,74 @@ function Cart() {
             </div>
           ) : (
             <div className="at-cart-items">
-              {cart.map((product, index) => (
-                <div
-                  key={product.id}
-                  className="at-cart-item"
-                  style={{
-                    animation: `revealUp 0.5s var(--transition-base) both`,
-                    animationDelay: `${index * 0.06}s`,
-                  }}
-                >
-                  <div className="at-cart-item-img">
-                    <img
-                      src={(() => {
-                        const p = productMap?.[product.id] || product;
-                        const img = p.imagenUrl || (p.imagenes && p.imagenes.length > 0 ? (p.imagenes.find(i => i.esPrincipal) || p.imagenes[0]).url : null);
-                        return img ? (img.startsWith('http') ? img : `${API_BASE_URL}${img}`) : PLACEHOLDER_CART;
-                      })()}
-                      alt={product.nombre}
-                      onError={(e) => { e.target.onerror = null; e.target.src = PLACEHOLDER_CART; }}
-                    />
-                  </div>
-                  <div className="at-cart-item-info">
-                    <span className="at-cart-item-category">{product.categoria}</span>
-                    <h3 className="at-cart-item-name">{product.nombre}</h3>
-                    <p className="at-cart-item-price">${product.precioBase.toLocaleString()} c/u</p>
-                    <div className="at-cart-item-qty">
+              {cart.map((product, index) => {
+                const p = productMap?.[product.id] || product;
+                const precioUnitario = p.enOferta && p.precioOferta ? p.precioOferta : p.precioBase;
+                return (
+                  <div
+                    key={product.id}
+                    className="at-cart-item"
+                    style={{
+                      animation: `revealUp 0.5s var(--transition-base) both`,
+                      animationDelay: `${index * 0.06}s`,
+                    }}
+                  >
+                    <div className="at-cart-item-img">
+                      <img
+                        src={(() => {
+                          const img = p.imagenUrl || (p.imagenes && p.imagenes.length > 0 ? (p.imagenes.find(i => i.esPrincipal) || p.imagenes[0]).url : null);
+                          return img ? (img.startsWith('http') ? img : `${API_BASE_URL}${img}`) : PLACEHOLDER_CART;
+                        })()}
+                        alt={product.nombre}
+                        onError={(e) => { e.target.onerror = null; e.target.src = PLACEHOLDER_CART; }}
+                      />
+                    </div>
+                    <div className="at-cart-item-body">
+                      <p className="at-cart-item-meta">
+                        <span className="at-cart-item-category">{product.categoria}</span>
+                      </p>
+                      <h3 className="at-cart-item-name">{product.nombre}</h3>
+                      {p.enOferta && p.precioOferta ? (
+                        <p className="at-cart-item-price">
+                          <span className="at-cart-price-old">${p.precioBase.toLocaleString()}</span>
+                          <span className="at-cart-price-oferta">${p.precioOferta.toLocaleString()}</span>
+                          c/u
+                        </p>
+                      ) : (
+                        <p className="at-cart-item-price">${p.precioBase.toLocaleString()} c/u</p>
+                      )}
+                      <div className="at-cart-item-qty">
+                        <button
+                          className="at-cart-qty-btn"
+                          onClick={() => actualizarCantidad(product.id, product.cantidad - 1)}
+                          disabled={product.cantidad <= 1}
+                        >
+                          <i className="bi bi-dash"></i>
+                        </button>
+                        <span className="at-cart-qty-value">{product.cantidad}</span>
+                        <button
+                          className="at-cart-qty-btn"
+                          onClick={() => actualizarCantidad(product.id, product.cantidad + 1)}
+                        >
+                          <i className="bi bi-plus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="at-cart-item-aside">
+                      <p className="at-cart-item-total">
+                        ${(precioUnitario * product.cantidad).toLocaleString()}
+                      </p>
                       <button
-                        className="at-cart-qty-btn"
-                        onClick={() => actualizarCantidad(product.id, product.cantidad - 1)}
-                        disabled={product.cantidad <= 1}
+                        className="at-cart-remove-btn"
+                        onClick={() => handleRemoveItem(product)}
                       >
-                        <i className="bi bi-dash"></i>
-                      </button>
-                      <span className="at-cart-qty-value">{product.cantidad}</span>
-                      <button
-                        className="at-cart-qty-btn"
-                        onClick={() => actualizarCantidad(product.id, product.cantidad + 1)}
-                      >
-                        <i className="bi bi-plus"></i>
+                        <i className="bi bi-trash3"></i>
+                        Eliminar
                       </button>
                     </div>
                   </div>
-                  <div className="at-cart-item-actions">
-                    <p className="at-cart-item-total">
-                      ${(product.precioBase * product.cantidad).toLocaleString()}
-                    </p>
-                    <button
-                      className="at-cart-remove-btn"
-                      onClick={() => handleRemoveItem(product)}
-                    >
-                      <i className="bi bi-trash3"></i>
-                      Eliminar
-                    </button>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

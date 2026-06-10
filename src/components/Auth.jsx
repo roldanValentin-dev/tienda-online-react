@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import {
@@ -167,6 +167,9 @@ function Auth() {
                                     value={loginData.password} onChange={(e) => handleLoginChange('password', e.target.value)}
                                     maxLength="128" required autoComplete="current-password" />
                             </div>
+                            <Link to="/forgot-password" className="at-auth-link" style={{ display: 'block', textAlign: 'right', fontSize: '0.85rem', marginTop: -8, marginBottom: 16 }}>
+                                ¿Olvidaste tu contraseña?
+                            </Link>
                             <button type="submit" className="at-auth-btn" disabled={loading}>
                                 {loading ? TEXTS.loggingIn : TEXTS.loginButton}
                             </button>

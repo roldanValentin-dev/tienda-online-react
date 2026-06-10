@@ -16,12 +16,10 @@ function Navbar() {
   const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
 
   useEffect(() => {
-    if (menuOpen) {
-      setMenuOpen(false);
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMenuOpen(false);
     document.body.style.overflow = '';
     return () => { document.body.style.overflow = ''; };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
 
   useEffect(() => {

@@ -89,8 +89,27 @@ function ProductDetail() {
 
         <div className="at-detail-info">
           <span className="at-detail-category">{product.categoria}</span>
+          <div className="at-detail-badges">
+            {product.stockInmediato && (
+              <span className="at-badge at-badge-inmediato">
+                <i className="bi bi-clock"></i> Retiro hoy
+              </span>
+            )}
+            {product.enOferta && (
+              <span className="at-badge at-badge-oferta">
+                <i className="bi bi-tags"></i> OFERTA
+              </span>
+            )}
+          </div>
           <h1 className="at-detail-name">{product.nombre}</h1>
-          <span className="at-detail-price">${product.precioBase.toLocaleString()}</span>
+          {product.enOferta && product.precioOferta ? (
+            <div className="at-detail-price-group">
+              <span className="at-detail-price at-detail-price-old">${product.precioBase.toLocaleString()}</span>
+              <span className="at-detail-price at-detail-price-oferta">${product.precioOferta.toLocaleString()}</span>
+            </div>
+          ) : (
+            <span className="at-detail-price">${product.precioBase.toLocaleString()}</span>
+          )}
 
           <div className="at-detail-desc">
             <strong>Descripción</strong>

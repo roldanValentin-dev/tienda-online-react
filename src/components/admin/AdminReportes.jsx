@@ -209,13 +209,13 @@ function AdminReportes() {
                                     <tbody>
                                         {pedidosPeriodo.map(p => (
                                             <tr key={p.id}>
-                                                <td className="pedido-id">#{p.id}</td>
-                                                <td>{p.clienteNombre}</td>
-                                                <td>{new Date(p.fechaPedido).toLocaleDateString('es-AR')}</td>
-                                                <td>{TIPO_PAGO_MAP[p.tipoPago] || p.tipoPago || '-'}</td>
-                                                <td><span className={`badge-pago ${p.estadoPago === 'Pagado' ? 'pago-pagado' : 'pago-pendiente'}`}>{p.estadoPago || 'Pendiente'}</span></td>
-                                                <td className="text-right">{formatearMonto(p.total)}</td>
-                                                <td className="text-right">{p.montoConDescuento ? formatearMonto(p.montoConDescuento) : '-'}</td>
+                                                <td className="pedido-id" data-label="ID">#{p.id}</td>
+                                                <td data-label="Cliente">{p.clienteNombre}</td>
+                                                <td data-label="Fecha">{new Date(p.fechaPedido).toLocaleDateString('es-AR')}</td>
+                                                <td data-label="Tipo Pago">{TIPO_PAGO_MAP[p.tipoPago] || p.tipoPago || '-'}</td>
+                                                <td data-label="Estado"><span className={`badge-pago ${p.estadoPago === 'Pagado' ? 'pago-pagado' : 'pago-pendiente'}`}>{p.estadoPago || 'Pendiente'}</span></td>
+                                                <td className="text-right" data-label="Total">{formatearMonto(p.total)}</td>
+                                                <td className="text-right" data-label="Total c/Desc.">{p.montoConDescuento ? formatearMonto(p.montoConDescuento) : '-'}</td>
                                             </tr>
                                         ))}
                                     </tbody>

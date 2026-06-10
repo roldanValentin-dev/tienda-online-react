@@ -255,7 +255,10 @@ export function CarritoProvider({ children }) {
     }, [isAuthenticated]);
 
     const calcularTotal = useCallback(() => {
-        return cart.reduce((sum, i) => sum + i.precioBase * i.cantidad, 0);
+        return cart.reduce((sum, i) => {
+            const precio = i.enOferta && i.precioOferta ? i.precioOferta : i.precioBase;
+            return sum + precio * i.cantidad;
+        }, 0);
     }, [cart]);
 
     return (

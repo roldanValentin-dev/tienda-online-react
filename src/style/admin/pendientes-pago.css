@@ -1,5 +1,6 @@
 .admin-pendientes-pago {
     animation: fadeIn 0.4s ease-out;
+    overflow-x: hidden;
 }
 
 .badge-pago {
