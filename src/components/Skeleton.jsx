@@ -46,8 +46,8 @@ function SkeletonProductDetail() {
 
 function SkeletonHome() {
   return (
-    <div className="at-home">
-      <div className="sk-hero">
+    <div className="hm-home">
+      <div className="sk-hero sk-hero-dark">
         <div className="sk-hero-content">
           <div className="sk sk-badge"></div>
           <div className="sk sk-title"></div>
@@ -55,16 +55,71 @@ function SkeletonHome() {
           <div className="sk sk-btn"></div>
         </div>
       </div>
-      <div className="sk-stats">
-        {[1,2,3,4].map(i => (
-          <div key={i} className="sk-stat">
-            <div className="sk sk-stat-num"></div>
-            <div className="sk sk-stat-label"></div>
-          </div>
-        ))}
+      <div className="sk-section">
+        <div className="sk-categories-track">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="sk-category-circle">
+              <div className="sk sk-circle"></div>
+              <div className="sk sk-line-sm"></div>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="sk-categories">
-        {[1,2].map(i => <div key={i} className="sk sk-cat"></div>)}
+      <div className="sk-section sk-section-white">
+        <div className="sk-offers">
+          <div className="sk-offer-card sk-offer-card-lg">
+            <div className="sk sk-offer-image-lg"></div>
+            <div className="sk-offer-body">
+              <div className="sk sk-line-md"></div>
+              <div className="sk sk-line-sm"></div>
+            </div>
+          </div>
+          <div className="sk-offer-card">
+            <div className="sk sk-offer-image-sm"></div>
+            <div className="sk-offer-body">
+              <div className="sk sk-line-md"></div>
+              <div className="sk sk-line-sm"></div>
+            </div>
+          </div>
+          {[3,4,5].map(i => (
+            <div key={i} className="sk-offer-card">
+              <div className="sk sk-offer-image-xs"></div>
+              <div className="sk-offer-body">
+                <div className="sk sk-line-md"></div>
+                <div className="sk sk-line-sm"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="sk-section sk-section-white">
+        <div className="sk-features">
+          <div className="sk sk-feature-hero"></div>
+          {[1,2,3].map(i => <div key={i} className="sk sk-feature-card"></div>)}
+        </div>
+      </div>
+      <div className="sk-section">
+        <div className="sk-process">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="sk-process-step">
+              <div className="sk sk-process-visual-block"></div>
+              <div className="sk-process-body">
+                <div className="sk sk-line-lg" style={{ height: 40 }}></div>
+                <div className="sk sk-line-lg"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="sk-stats-bar">
+        <div className="sk-stats-bar-inner">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="sk-stat-item-s">
+              <div className="sk sk-stat-num"></div>
+              <div className="sk sk-stat-label"></div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

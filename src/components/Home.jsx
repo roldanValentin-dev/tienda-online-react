@@ -4,6 +4,9 @@ import { CarritoContext } from '../context/CarritoContext';
 import { GiBread, GiCakeSlice, GiCupcake, GiCookie } from 'react-icons/gi';
 import { SkeletonHome } from './Skeleton';
 import useScrollReveal from '../hooks/useScrollReveal';
+import { useProducts } from '../hooks/useProducts';
+import API_BASE_URL from '../config/api';
+import { PLACEHOLDER_PRODUCT } from '../config/placeholders';
 import '../style/home.css';
 
 const categorySvgs = {
@@ -20,12 +23,6 @@ const features = [
   { icon: 'bi-shield-check', title: 'Compra Segura', desc: 'Pago protegido con MercadoPago' },
 ];
 
-const testimonials = [
-  { initials: 'MG', name: 'María G.', text: 'El pastel de cumpleaños fue espectacular. Todos preguntaron dónde lo compré.' },
-  { initials: 'CR', name: 'Carlos R.', text: 'Pido todas las semanas. La calidad es consistente y el servicio impecable.' },
-  { initials: 'AL', name: 'Ana L.', text: 'Las facturas son como las de mi abuela. Frescas, delicadas y deliciosas.' },
-];
-
 const stats = [
   { number: '15+', label: 'Años de experiencia' },
   { number: '50K+', label: 'Clientes felices' },
@@ -33,16 +30,26 @@ const stats = [
   { number: '100%', label: 'Frescura garantizada' },
 ];
 
+const processSteps = [
+  { title: 'Elegís y pedís online', desc: 'Explorá nuestra carta de temporada y seleccioná tus favoritos. Cada pieza se prepara exclusivamente para vos, garantizando la frescura que nos distingue.' },
+  { title: 'Preparamos justo para vos', desc: 'No tenemos stock acumulado. Una vez confirmado tu pedido, nuestros maestros pasteleros comienzan la elaboración utilizando las mejores materias primas locales.' },
+  { title: 'Horneamos con dedicación', desc: 'Técnicas tradicionales y atención artesanal en cada pieza. El aroma del horneo fresco es nuestra garantía de calidad.' },
+  { title: 'Recibís en casa', desc: 'Llevamos la experiencia de la verdadera pastelería a la puerta de tu hogar. Cuidado extremo en el transporte para que todo llegue en perfecto estado.' },
+];
+
 function Home() {
   const navigate = useNavigate();
   const { category, setSelectCategory } = useContext(CarritoContext);
+  const { products: allProducts, loading: productsLoading } = useProducts();
   const [heroRef] = useScrollReveal({ threshold: 0.1 });
-  const [statsRef, statsVisible] = useScrollReveal();
   const [categoriesRef, catVisible] = useScrollReveal();
-  const [processRef, procVisible] = useScrollReveal();
-  const [testimonialsRef, testVisible] = useScrollReveal();
+  const [offersRef, offersVisible] = useScrollReveal();
   const [featuresRef, featVisible] = useScrollReveal();
+  const [processRef, procVisible] = useScrollReveal();
+  const [statsRef, statsVisible] = useScrollReveal();
   const [ctaRef, ctaVisible] = useScrollReveal();
+
+  const offerProducts = allProducts.filter(p => p.enOferta);
 
   const handleCategoryClick = (cat) => {
     setSelectCategory(cat);
@@ -54,197 +61,265 @@ function Home() {
   }
 
   return (
-    <div className="at-home">
-      <section ref={heroRef} className="at-hero">
-        <div className="at-hero-text" style={{ animationDelay: '0.1s' }}>
-          <span className="at-hero-badge">Pastelería Artesanal</span>
-          <h1 className="at-hero-title">
-            El arte de la
-            <span className="at-hero-title-italic">pastelería fina</span>
+    <div className="hm-home">
+
+      {/* ===== HERO ===== */}
+      <section ref={heroRef} className="hm-hero">
+        <div className="hm-hero-noise" />
+        <div className="hm-hero-body">
+          <span className="hm-hero-badge">Pastelería Artesanal</span>
+          <h1 className="hm-hero-title">
+            Pastelería artesanal
           </h1>
-          <p className="at-hero-desc">
-            Creaciones horneadas con ingredientes seleccionados y dedicación artesanal.
-            Cada bocado cuenta una historia de tradición y calidad.
+          <p className="hm-hero-subtitle">
+            hecha con <em>dedicación</em>
           </p>
-          <div className="at-hero-actions">
+          <p className="hm-hero-desc">
+            Todo se produce contra pedido. Envíos a domicilio en Tucumán.
+          </p>
+          <div className="hm-hero-actions">
             <button className="btn-gold" onClick={() => navigate('/products')}>
-              <i className="bi bi-bag"></i>
-              Ver Productos
+              Hacer mi pedido
             </button>
-            <button className="btn-gold-outline" onClick={() => navigate('/products')}>
-              Explorar Categorías
-            </button>
-          </div>
-          <div className="at-hero-rating">
-            <div className="at-hero-rating-stars">
-              {[...Array(5)].map((_, i) => <i key={i} className="bi bi-star-fill"></i>)}
-            </div>
-            <span>4.9 — Más de 2,000 reseñas</span>
-          </div>
-        </div>
-        <div className="at-hero-visual" style={{ animationDelay: '0.3s' }}>
-          <div className="at-hero-accent" />
-          <div className="at-hero-svg-wrapper">
-            <svg viewBox="0 0 400 480" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="cakeGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#c9a84c" />
-                  <stop offset="100%" stopColor="#8b7355" />
-                </linearGradient>
-                <linearGradient id="creamGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#fdf8f3" />
-                  <stop offset="100%" stopColor="#e8ddd0" />
-                </linearGradient>
-                <linearGradient id="layerGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#d4a5a5" />
-                  <stop offset="100%" stopColor="#c17f4e" />
-                </linearGradient>
-              </defs>
-              <ellipse cx="200" cy="460" rx="160" ry="16" fill="rgba(0,0,0,0.06)" />
-              <rect x="80" y="280" width="240" height="160" rx="16" fill="url(#cakeGrad)" />
-              <rect x="60" y="250" width="280" height="50" rx="25" fill="url(#creamGrad)" stroke="#e8ddd0" strokeWidth="1" />
-              <rect x="100" y="200" width="200" height="70" rx="12" fill="url(#layerGrad)" />
-              <rect x="80" y="175" width="240" height="40" rx="20" fill="url(#creamGrad)" stroke="#e8ddd0" strokeWidth="1" />
-              <ellipse cx="200" cy="175" rx="120" ry="20" fill="url(#creamGrad)" />
-              <circle cx="155" cy="160" r="12" fill="#d4a5a5" />
-              <circle cx="200" cy="148" r="14" fill="#d4a5a5" />
-              <circle cx="245" cy="160" r="12" fill="#d4a5a5" />
-              <path d="M160 100 Q200 60 240 100" stroke="var(--accent-gold)" strokeWidth="2" fill="none" opacity="0.5" />
-              <text x="200" y="440" textAnchor="middle" fontFamily="Playfair Display" fontSize="18" fontWeight="600" fill="white">softpan</text>
-              <text x="200" y="420" textAnchor="middle" fontFamily="Cormorant Garamond" fontSize="14" fontStyle="italic" fill="white" opacity="0.8">pastelería artesanal</text>
-            </svg>
           </div>
         </div>
       </section>
 
-      <section ref={statsRef} className={`at-stats ${statsVisible ? 'is-revealed' : ''}`}>
-        <div className="at-stats-grid">
-          {stats.map((stat, i) => (
-            <div key={i} className="at-stat" style={{ animationDelay: `${i * 0.1}s` }}>
-              <span className="at-stat-number">{stat.number}</span>
-              <span className="at-stat-label">{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section ref={categoriesRef} className={`at-categories ${catVisible ? 'is-revealed' : ''}`}>
-        <div className="section-header" style={{ textAlign: 'center', padding: '0 24px' }}>
+      {/* ===== CATEGORIES ===== */}
+      <section ref={categoriesRef} className={`hm-categories ${catVisible ? 'is-revealed' : ''}`}>
+        <div className="section-header" style={{ textAlign: 'center' }}>
           <span className="section-tag">Categorías</span>
-          <h2 className="section-title">Explora por Categoría</h2>
-          <p className="section-subtitle" style={{ margin: '0 auto' }}>
-            Elegí entre nuestra variedad de productos artesanales
-          </p>
+          <h2 className="section-title">Nuestras especialidades</h2>
         </div>
-        <div className="at-categories-grid">
+        <div className="hm-categories-track">
           {category.filter(c => c !== 'todas').map((cat, index) => {
             const cfg = categorySvgs[cat] || { icon: <GiBread />, gradient: ['#8b7355', '#5a4a3a'] };
             return (
               <button
                 key={index}
-                className="at-category-strip"
-                style={{ animationDelay: `${index * 0.12}s` }}
+                className="hm-category-btn"
+                style={{ animationDelay: `${index * 0.08}s` }}
                 onClick={() => handleCategoryClick(cat)}
               >
-                <div
-                  className="at-category-bg"
-                  style={{
-                    background: `linear-gradient(135deg, ${cfg.gradient[0]}, ${cfg.gradient[1]})`,
-                  }}
-                />
-                <div className="at-category-strip-content">
-                  <div className="at-category-strip-icon">{cfg.icon}</div>
-                  <h3 className="at-category-strip-title">
-                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
-                  </h3>
-                  <span className="at-category-strip-count">Ver productos →</span>
+                <div className="hm-category-circle">
+                  {cfg.icon}
                 </div>
-                <div className="at-category-strip-arrow">
-                  <i className="bi bi-arrow-right"></i>
-                </div>
+                <span className="hm-category-label">
+                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                </span>
               </button>
             );
           })}
         </div>
       </section>
 
-      <section ref={processRef} className={`at-process ${procVisible ? 'is-revealed' : ''}`}>
-        <div className="section-header" style={{ textAlign: 'center', padding: '0 24px' }}>
-          <span className="section-tag">Proceso</span>
-          <h2 className="section-title">Cómo trabajamos</h2>
-        </div>
-        <div className="at-process-grid">
-          {[
-            { num: '01', title: 'Seleccionamos', desc: 'Los mejores ingredientes para cada creación' },
-            { num: '02', title: 'Horneamos', desc: 'Con técnicas tradicionales y dedicación artesanal' },
-            { num: '03', title: 'Decoramos', desc: 'Cada pieza con detalle y precisión' },
-            { num: '04', title: 'Entregamos', desc: 'Fresco y listo para disfrutar' },
-          ].map((step, i) => (
-            <div key={i} className="at-process-step" style={{ animationDelay: `${i * 0.15}s` }}>
-              <div className="at-process-number">{step.num}</div>
-              <h3 className="at-process-step-title">{step.title}</h3>
-              <p className="at-process-step-desc">{step.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section ref={testimonialsRef} className={`at-testimonials ${testVisible ? 'is-revealed' : ''}`}>
-        <div className="section-header" style={{ textAlign: 'center', padding: '0 24px' }}>
-          <span className="section-tag">Testimonios</span>
-          <h2 className="section-title">Lo que dicen</h2>
-        </div>
-        <div className="at-testimonials-grid">
-          {testimonials.map((t, i) => (
-            <div key={i} className="at-testimonial-card" style={{ animationDelay: `${i * 0.12}s` }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div className="at-testimonial-seal">{t.initials}</div>
-                <div>
-                  <span className="at-testimonial-author">{t.name}</span>
-                  <div className="at-testimonial-stars">
-                    {[...Array(5)].map((_, j) => <i key={j} className="bi bi-star-fill"></i>)}
+      {/* ===== OFFERS ===== */}
+      {!productsLoading && offerProducts.length > 0 && (
+        <section ref={offersRef} className={`hm-offers ${offersVisible ? 'is-revealed' : ''}`}>
+          <div className="section-header" style={{ textAlign: 'center' }}>
+            <span className="section-tag">Ofertas</span>
+            <h2 className="section-title">Productos en oferta</h2>
+          </div>
+          <div className="hm-offers-grid">
+            {offerProducts.slice(0, 5).map((p, i) => {
+              const discount = p.precioOferta && p.precioBase
+                ? Math.round((1 - Number(p.precioOferta) / Number(p.precioBase)) * 100)
+                : 0;
+              const mainImg = p.imagenes?.find(i => i.esPrincipal) || p.imagenes?.[0];
+              const rawUrl = mainImg?.url || p.imagenUrl || null;
+              const imgUrl = rawUrl
+                ? (rawUrl.startsWith('http') ? rawUrl : `${API_BASE_URL}${rawUrl}`)
+                : PLACEHOLDER_PRODUCT;
+              const isLarge = i === 0;
+              return (
+                <div
+                  key={p.id}
+                  className={`hm-offer-card ${isLarge ? 'hm-offer-card-lg' : ''}`}
+                  onClick={() => navigate(`/products/${p.id}`)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && navigate(`/products/${p.id}`)}
+                >
+                  <div className="hm-offer-image">
+                    <img
+                      src={imgUrl}
+                      alt={p.nombre}
+                      loading="lazy"
+                    />
+                    {discount > 0 && <div className="hm-offer-badge">-{discount}%</div>}
+                  </div>
+                  <div className="hm-offer-info">
+                    <h3 className="hm-offer-name">{p.nombre}</h3>
+                    {p.precioOferta && (
+                      <div className="hm-offer-prices">
+                        <span className="hm-offer-old">${Number(p.precioBase).toLocaleString('es-AR')}</span>
+                        <span className="hm-offer-new">${Number(p.precioOferta).toLocaleString('es-AR')}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-              <p className="at-testimonial-text">"{t.text}"</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section ref={featuresRef} className={`at-features ${featVisible ? 'is-revealed' : ''}`}>
-        <div className="section-header" style={{ textAlign: 'center', padding: '0 24px' }}>
-          <span className="section-tag" style={{ color: 'var(--accent-gold-light)' }}>Por qué elegirnos</span>
-          <h2 className="section-title">Compromiso con la calidad</h2>
-          <p className="section-subtitle" style={{ margin: '0 auto' }}>
-            Cada detalle importa para ofrecerte la mejor experiencia
-          </p>
-        </div>
-        <div className="at-features-grid">
-          {features.map((f, i) => (
-            <div key={i} className="at-feature-card" style={{ animationDelay: `${i * 0.1}s` }}>
-              <div className="at-feature-icon"><i className={f.icon}></i></div>
-              <h3 className="at-feature-title">{f.title}</h3>
-              <p className="at-feature-desc">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section ref={ctaRef} className={`at-cta ${ctaVisible ? 'is-revealed' : ''}`}>
-        <div className="at-cta-inner">
-          <h2 className="at-cta-title">¿Listo para probar lo mejor?</h2>
-          <p className="at-cta-text">
-            Hacé tu pedido hoy y recibilo fresco. Primera compra con 10% de descuento.
-          </p>
-          <div className="at-cta-actions">
-            <button className="btn-gold" onClick={() => navigate('/products')}>
-              <i className="bi bi-bag"></i>
-              Comenzar mi pedido
-            </button>
+              );
+            })}
           </div>
+        </section>
+      )}
+      {!productsLoading && offerProducts.length === 0 && (
+        <section className="hm-offers hm-offers-empty">
+          <div className="section-header" style={{ textAlign: 'center' }}>
+            <span className="section-tag">Ofertas</span>
+            <h2 className="section-title">Productos en oferta</h2>
+            <p className="section-subtitle" style={{ margin: '0 auto' }}>
+              Pronto tendremos ofertas especiales para vos. ¡Volvé pronto!
+            </p>
+          </div>
+        </section>
+      )}
+
+      {/* ===== FEATURES EDITORIAL GRID ===== */}
+      <section ref={featuresRef} className={`hm-features ${featVisible ? 'is-revealed' : ''}`}>
+        <div className="hm-features-grid">
+          <div className="hm-feature-hero">
+            <div className="hm-feature-hero-content">
+              <span className="section-tag">Por qué elegirnos</span>
+              <h2 className="section-title" style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)' }}>
+                Compromiso con la calidad
+              </h2>
+              <p className="section-subtitle" style={{ maxWidth: 420 }}>
+                Cada detalle importa para ofrecerte la mejor experiencia de pastelería artesanal.
+              </p>
+            </div>
+          </div>
+          {features.map((f, i) => (
+            <div key={i} className="hm-feature-card" style={{ animationDelay: `${i * 0.1}s` }}>
+              <div className="hm-feature-card-icon"><i className={f.icon}></i></div>
+              <h3 className="hm-feature-card-title">{f.title}</h3>
+              <p className="hm-feature-card-desc">{f.desc}</p>
+            </div>
+          ))}
         </div>
       </section>
+
+      {/* ===== PROCESS ===== */}
+      <section ref={processRef} className={`hm-process ${procVisible ? 'is-revealed' : ''}`}>
+        <div className="hm-process-steps">
+          {processSteps.map((step, i) => (
+            <div key={i} className={`hm-process-step ${i % 2 === 1 ? 'hm-process-step-reverse' : ''}`}>
+              <div className="hm-process-visual">
+                {i === 0 && (
+                  <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="500" rx="16" fill="url(#pgG)" opacity="0.04" />
+                    <rect x="120" y="70" width="160" height="280" rx="24" fill="url(#pgG)" opacity="0.08" stroke="var(--accent-gold)" strokeWidth="0.5" />
+                    <rect x="135" y="90" width="130" height="200" rx="12" fill="url(#pgG)" opacity="0.05" />
+                    <circle cx="200" cy="320" r="16" fill="url(#pgG)" opacity="0.15" />
+                    <rect x="155" y="270" width="90" height="6" rx="3" fill="url(#pgG)" opacity="0.12" />
+                    <rect x="165" y="284" width="70" height="4" rx="2" fill="url(#pgG)" opacity="0.08" />
+                    <path d="M160 370 L200 360 L240 370" stroke="var(--accent-gold)" strokeWidth="1.5" opacity="0.3" fill="none" />
+                    <circle cx="130" cy="200" r="4" fill="var(--accent-gold)" opacity="0.2" />
+                    <circle cx="270" cy="180" r="3" fill="var(--accent-gold)" opacity="0.15" />
+                    <text x="200" y="430" textAnchor="middle" fontFamily="Playfair Display" fontSize="40" fontWeight="700" fill="var(--accent-gold)" opacity="0.08">01</text>
+                    <defs>
+                      <linearGradient id="pgG" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#c9a84c" />
+                        <stop offset="100%" stopColor="#8b7355" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
+                {i === 1 && (
+                  <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="500" rx="16" fill="url(#pgP)" opacity="0.04" />
+                    <path d="M100 300 Q200 340 300 300 L280 200 Q200 240 120 200 Z" fill="url(#pgP)" opacity="0.1" />
+                    <ellipse cx="200" cy="230" rx="80" ry="30" fill="url(#pgP)" opacity="0.06" />
+                    <path d="M170 170 L190 230 L210 230 L230 170" stroke="var(--accent-gold)" strokeWidth="1.5" opacity="0.3" fill="none" />
+                    <circle cx="200" cy="150" r="5" fill="var(--accent-gold)" opacity="0.2" />
+                    <ellipse cx="200" cy="300" rx="60" ry="8" fill="url(#pgP)" opacity="0.08" />
+                    <circle cx="160" cy="180" r="3" fill="var(--accent-gold)" opacity="0.15" />
+                    <circle cx="240" cy="200" r="4" fill="var(--accent-gold)" opacity="0.12" />
+                    <text x="200" y="430" textAnchor="middle" fontFamily="Playfair Display" fontSize="40" fontWeight="700" fill="var(--accent-gold)" opacity="0.08">02</text>
+                    <defs>
+                      <linearGradient id="pgP" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#c9a84c" />
+                        <stop offset="100%" stopColor="#8b7355" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
+                {i === 2 && (
+                  <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="500" rx="16" fill="url(#pgH)" opacity="0.04" />
+                    <rect x="100" y="180" width="200" height="160" rx="12" fill="url(#pgH)" opacity="0.08" stroke="var(--accent-gold)" strokeWidth="0.5" />
+                    <rect x="115" y="192" width="170" height="120" rx="8" fill="url(#pgH)" opacity="0.05" />
+                    <rect x="130" y="200" width="140" height="80" rx="4" fill="url(#pgH)" opacity="0.04" />
+                    <path d="M155 330 L165 360 L235 360 L245 330" fill="url(#pgH)" opacity="0.08" />
+                    <path d="M160 150 Q200 130 240 150" stroke="var(--accent-gold)" strokeWidth="1.5" opacity="0.25" fill="none" />
+                    <path d="M170 140 Q200 120 230 140" stroke="var(--accent-gold)" strokeWidth="1" opacity="0.15" fill="none" />
+                    <circle cx="140" cy="170" r="3" fill="var(--accent-gold)" opacity="0.2" />
+                    <circle cx="260" cy="170" r="3" fill="var(--accent-gold)" opacity="0.2" />
+                    <text x="200" y="430" textAnchor="middle" fontFamily="Playfair Display" fontSize="40" fontWeight="700" fill="var(--accent-gold)" opacity="0.08">03</text>
+                    <defs>
+                      <linearGradient id="pgH" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#c9a84c" />
+                        <stop offset="100%" stopColor="#8b7355" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
+                {i === 3 && (
+                  <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="400" height="500" rx="16" fill="url(#pgD)" opacity="0.04" />
+                    <rect x="110" y="130" width="180" height="200" rx="12" fill="url(#pgD)" opacity="0.08" stroke="var(--accent-gold)" strokeWidth="0.5" />
+                    <rect x="125" y="140" width="150" height="130" rx="8" fill="url(#pgD)" opacity="0.05" />
+                    <path d="M130 330 L140 380 L260 380 L270 330" fill="url(#pgD)" opacity="0.06" />
+                    <path d="M160 120 L200 90 L240 120" stroke="var(--accent-gold)" strokeWidth="2" opacity="0.3" fill="none" />
+                    <path d="M165 115 L200 95 L235 115" stroke="var(--accent-gold)" strokeWidth="1" opacity="0.15" fill="none" />
+                    <circle cx="155" cy="270" r="4" fill="var(--accent-gold)" opacity="0.2" />
+                    <circle cx="245" cy="250" r="3" fill="var(--accent-gold)" opacity="0.15" />
+                    <path d="M260 340 L280 360 L320 320" stroke="var(--accent-gold)" strokeWidth="2" opacity="0.25" fill="none" />
+                    <text x="200" y="430" textAnchor="middle" fontFamily="Playfair Display" fontSize="40" fontWeight="700" fill="var(--accent-gold)" opacity="0.08">04</text>
+                    <defs>
+                      <linearGradient id="pgD" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#c9a84c" />
+                        <stop offset="100%" stopColor="#8b7355" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
+              </div>
+              <div className="hm-process-body">
+                <h2 className="hm-process-step-title">{step.title}</h2>
+                <p className="hm-process-step-desc">{step.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== STATS BAND (DARK) ===== */}
+      <section ref={statsRef} className={`hm-stats ${statsVisible ? 'is-revealed' : ''}`}>
+        <div className="hm-stats-band">
+          {stats.map((stat, i) => (
+            <div key={i} className="hm-stat-item" style={{ animationDelay: `${i * 0.1}s` }}>
+              <span className="hm-stat-number">{stat.number}</span>
+              <span className="hm-stat-label">{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===== CTA ===== */}
+      <section ref={ctaRef} className={`hm-cta ${ctaVisible ? 'is-revealed' : ''}`}>
+        <div className="hm-cta-body">
+          <h2 className="hm-cta-title">¿Listo para probar?</h2>
+          <p className="hm-cta-desc">
+            Hacé tu pedido hoy y recibilo en las próximas 24-48hs.
+          </p>
+          <button className="btn-gold" onClick={() => navigate('/products')}>
+            <i className="bi bi-bag"></i>
+            Comenzar mi pedido
+          </button>
+        </div>
+      </section>
+
     </div>
   );
 }
