@@ -1,144 +1,162 @@
 import '../style/skeleton.css';
-// Skeleton para tarjeta de producto
+
 function SkeletonCard() {
-    return (
-        <div className="skeleton-card">
-            <div className="skeleton skeleton-image"></div>
-            <div className="skeleton-body">
-                <div className="skeleton skeleton-badge"></div>
-                <div className="skeleton skeleton-title"></div>
-                <div className="skeleton skeleton-price"></div>
-                <div className="skeleton skeleton-button"></div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="sk-card">
+      <div className="sk sk-image"></div>
+      <div className="sk-body">
+        <div className="sk sk-line sk-line-sm"></div>
+        <div className="sk sk-line sk-line-md"></div>
+        <div className="sk sk-line sk-line-sm"></div>
+      </div>
+    </div>
+  );
 }
 
-// Skeleton para grid de productos
 function SkeletonGrid({ count = 8 }) {
-    return (
-        <div className="products-grid">
-            {Array.from({ length: count }).map((_, index) => (
-                <SkeletonCard key={index} />
-            ))}
-        </div>
-    );
+  return (
+    <div className="sk-grid">
+      {Array.from({ length: count }).map((_, i) => <SkeletonCard key={i} />)}
+    </div>
+  );
 }
 
-// Skeleton para detalle de producto
 function SkeletonProductDetail() {
-    return (
-        <div className="detail-page">
-            <div className="container-custom">
-                <div className="skeleton skeleton-breadcrumb"></div>
-                
-                <div className="detail-container">
-                    <div className="detail-grid">
-                        {/* Galería */}
-                        <div className="skeleton-gallery">
-                            <div className="skeleton skeleton-gallery-main"></div>
-                            <div className="skeleton-gallery-thumbs">
-                                <div className="skeleton skeleton-thumb"></div>
-                                <div className="skeleton skeleton-thumb"></div>
-                                <div className="skeleton skeleton-thumb"></div>
-                                <div className="skeleton skeleton-thumb"></div>
-                            </div>
-                        </div>
-                        
-                        {/* Info */}
-                        <div className="skeleton-detail-info">
-                            <div className="skeleton skeleton-category-badge"></div>
-                            <div className="skeleton skeleton-detail-title"></div>
-                            <div className="skeleton skeleton-detail-title-short"></div>
-                            <div className="skeleton skeleton-detail-price"></div>
-                            <div className="skeleton skeleton-description"></div>
-                            <div className="skeleton skeleton-quantity"></div>
-                            <div className="skeleton skeleton-btn-large"></div>
-                            <div className="skeleton skeleton-btn-medium"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="at-detail">
+      <div className="sk-detail">
+        <div className="sk-detail-gallery">
+          <div className="sk sk-detail-main"></div>
+          <div className="sk-detail-thumbs">
+            {[1,2,3,4].map(i => <div key={i} className="sk sk-detail-thumb"></div>)}
+          </div>
         </div>
-    );
+        <div className="sk-detail-info">
+          <div className="sk sk-line sk-line-sm"></div>
+          <div className="sk sk-line sk-line-lg"></div>
+          <div className="sk sk-line sk-line-md"></div>
+          <div className="sk sk-line sk-line-lg" style={{ height: 80 }}></div>
+          <div className="sk sk-line sk-line-sm"></div>
+          <div className="sk sk-line sk-line-lg" style={{ height: 48 }}></div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-// Skeleton para Home
 function SkeletonHome() {
-    return (
-        <div className="home-page">
-            <section className="skeleton-hero">
-                <div className="hero-content">
-                    <div className="skeleton skeleton-hero-badge"></div>
-                    <div className="skeleton skeleton-hero-title"></div>
-                    <div className="skeleton skeleton-hero-subtitle"></div>
-                    <div className="skeleton skeleton-hero-button"></div>
-                    <div className="skeleton skeleton-hero-rating"></div>
-                </div>
-            </section>
-
-            <section className="stats-section">
-                <div className="container-custom">
-                    <div className="stats-grid">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="stat-card">
-                                <div className="skeleton skeleton-stat-number"></div>
-                                <div className="skeleton skeleton-stat-label"></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="categories-section">
-                <div className="container-custom">
-                    <div className="section-header">
-                        <div className="skeleton skeleton-section-tag" style={{ margin: '0 auto 12px' }}></div>
-                        <div className="skeleton skeleton-section-title"></div>
-                        <div className="skeleton skeleton-section-subtitle"></div>
-                    </div>
-                    <div className="categories-grid">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="skeleton skeleton-category-image"></div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <section className="features-section">
-                <div className="container-custom">
-                    <div className="features-grid">
-                        {Array.from({ length: 4 }).map((_, i) => (
-                            <div key={i} className="skeleton-feature-card">
-                                <div className="skeleton skeleton-feature-icon"></div>
-                                <div className="skeleton skeleton-feature-title"></div>
-                                <div className="skeleton skeleton-feature-description"></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+  return (
+    <div className="hm-home">
+      <div className="sk-hero sk-hero-dark">
+        <div className="sk-hero-content">
+          <div className="sk sk-badge"></div>
+          <div className="sk sk-title"></div>
+          <div className="sk sk-subtitle"></div>
+          <div className="sk sk-btn"></div>
         </div>
-    );
+      </div>
+      <div className="sk-section">
+        <div className="sk-categories-track">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="sk-category-circle">
+              <div className="sk sk-circle"></div>
+              <div className="sk sk-line-sm"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="sk-section sk-section-white">
+        <div className="sk-offers">
+          <div className="sk-offer-card sk-offer-card-lg">
+            <div className="sk sk-offer-image-lg"></div>
+            <div className="sk-offer-body">
+              <div className="sk sk-line-md"></div>
+              <div className="sk sk-line-sm"></div>
+            </div>
+          </div>
+          <div className="sk-offer-card">
+            <div className="sk sk-offer-image-sm"></div>
+            <div className="sk-offer-body">
+              <div className="sk sk-line-md"></div>
+              <div className="sk sk-line-sm"></div>
+            </div>
+          </div>
+          {[3,4,5].map(i => (
+            <div key={i} className="sk-offer-card">
+              <div className="sk sk-offer-image-xs"></div>
+              <div className="sk-offer-body">
+                <div className="sk sk-line-md"></div>
+                <div className="sk sk-line-sm"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="sk-section sk-section-white">
+        <div className="sk-features">
+          <div className="sk sk-feature-hero"></div>
+          {[1,2,3].map(i => <div key={i} className="sk sk-feature-card"></div>)}
+        </div>
+      </div>
+      <div className="sk-section">
+        <div className="sk-process">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="sk-process-step">
+              <div className="sk sk-process-visual-block"></div>
+              <div className="sk-process-body">
+                <div className="sk sk-line-lg" style={{ height: 40 }}></div>
+                <div className="sk sk-line-lg"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="sk-stats-bar">
+        <div className="sk-stats-bar-inner">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="sk-stat-item-s">
+              <div className="sk sk-stat-num"></div>
+              <div className="sk sk-stat-label"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-// Skeleton para tabla de pedidos
 function SkeletonTable({ rows = 5 }) {
-    return (
-        <div className="table-skeleton">
-            {Array.from({ length: rows }).map((_, index) => (
-                <div key={index} className="skeleton-row">
-                    <div className="skeleton skeleton-cell-sm"></div>
-                    <div className="skeleton skeleton-cell-md"></div>
-                    <div className="skeleton skeleton-cell-md"></div>
-                    <div className="skeleton skeleton-cell-md"></div>
-                    <div className="skeleton skeleton-cell-sm"></div>
-                    <div className="skeleton skeleton-cell-sm"></div>
-                    <div className="skeleton skeleton-cell-sm"></div>
-                </div>
-            ))}
-        </div>
-    );
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="sk sk-line sk-line-lg" style={{ height: 40 }}></div>
+      ))}
+    </div>
+  );
 }
 
-export { SkeletonCard, SkeletonGrid, SkeletonProductDetail, SkeletonHome, SkeletonTable };
+function SkeletonFeatured() {
+  return (
+    <div className="at-featured" style={{ opacity: 0.6, pointerEvents: 'none' }}>
+      <div className="at-featured-header">
+        <div>
+          <div className="sk sk-line sk-line-md" style={{ width: 200 }}></div>
+          <div className="sk sk-line sk-line-sm" style={{ width: 140, marginTop: 6 }}></div>
+        </div>
+      </div>
+      <div className="at-featured-grid">
+        {[1, 2, 3, 4].map(i => (
+          <div key={i} className="sk-card">
+            <div className="sk sk-image" style={{ aspectRatio: '1/1' }}></div>
+            <div className="sk-body">
+              <div className="sk sk-line sk-line-sm"></div>
+              <div className="sk sk-line sk-line-sm" style={{ width: '60%' }}></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export { SkeletonCard, SkeletonGrid, SkeletonProductDetail, SkeletonHome, SkeletonTable, SkeletonFeatured };

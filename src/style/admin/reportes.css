@@ -1,5 +1,6 @@
 .admin-reportes {
     animation: fadeIn 0.4s ease-out;
+    overflow-x: hidden;
 }
 
 .reportes-filtros {

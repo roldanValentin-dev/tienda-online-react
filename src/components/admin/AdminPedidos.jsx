@@ -66,6 +66,7 @@ function AdminPedidos() {
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         cargarPedidos();
     }, []);
 
@@ -122,7 +123,7 @@ function AdminPedidos() {
             showCancelButton: true,
             confirmButtonText: 'Sí, cambiar',
             cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#28a745',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d'
         });
 
@@ -149,7 +150,7 @@ function AdminPedidos() {
             text: 'Se confirmará el pago y se descontará el stock automáticamente.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#28a745',
+            confirmButtonColor: '#c9a84c',
             confirmButtonText: 'Sí, confirmar pago',
             cancelButtonText: 'Cancelar',
         });
@@ -250,52 +251,98 @@ function AdminPedidos() {
                     <p>No se encontraron pedidos con los filtros aplicados</p>
                 </div>
             ) : (
-                <div className="tabla-pedidos">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Cliente</th>
-                                <th>Fecha Pedido</th>
-                                <th>Fecha Entrega</th>
-                                <th>Total</th>
-                                <th>Tipo Pago</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {pedidosFiltrados.map(pedido => (
-                                <tr key={pedido.id}>
-                                    <td className="pedido-id" data-label="ID">#{pedido.id}</td>
-                                    <td className="cliente-info" data-label="Cliente">
+                <>
+                    <div className="tabla-pedidos-desktop">
+                        <div className="tabla-pedidos">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Cliente</th>
+                                        <th>Fecha Pedido</th>
+                                        <th>Fecha Entrega</th>
+                                        <th>Total</th>
+                                        <th>Tipo Pago</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {pedidosFiltrados.map(pedido => (
+                                        <tr key={pedido.id}>
+                                            <td className="pedido-id" data-label="ID">#{pedido.id}</td>
+                                            <td className="cliente-info" data-label="Cliente">
+                                                <strong>{pedido.clienteNombre}</strong>
+                                                <span>{pedido.clienteEmail}</span>
+                                                <span>{pedido.clienteTelefono}</span>
+                                            </td>
+                                            <td data-label="Fecha Pedido">{formatearFecha(pedido.fechaPedido)}</td>
+                                            <td data-label="Fecha Entrega">{formatearFecha(pedido.fechaEntrega)}</td>
+                                            <td className="total" data-label="Total">{formatearPrecio(pedido.total)}</td>
+                                            <td data-label="Tipo Pago">{mostrarTipoPago(pedido.tipoPago)}</td>
+                                            <td data-label="Estado">
+                                                <span className={`badge-estado ${obtenerClaseEstado(pedido.estadoId)}`}>
+                                                    {pedido.estadoNombre}
+                                                </span>
+                                            </td>
+                                            <td className="acciones" data-label="Acciones">
+                                                <button
+                                                    className="btn-ver"
+                                                    onClick={() => abrirDetalle(pedido)}
+                                                    title="Ver detalle"
+                                                >
+                                                    <FaEye />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div className="pedidos-cards-mobile">
+                        {pedidosFiltrados.map(pedido => (
+                            <div className="pedido-card-mobile" key={pedido.id}>
+                                <div className="pedido-card-header">
+                                    <span className="pedido-card-id">#{pedido.id}</span>
+                                    <span className={`badge-estado ${obtenerClaseEstado(pedido.estadoId)}`}>
+                                        {pedido.estadoNombre}
+                                    </span>
+                                </div>
+                                <div className="pedido-card-body">
+                                    <div className="pedido-card-cliente">
                                         <strong>{pedido.clienteNombre}</strong>
                                         <span>{pedido.clienteEmail}</span>
                                         <span>{pedido.clienteTelefono}</span>
-                                    </td>
-                                    <td data-label="Fecha Pedido">{formatearFecha(pedido.fechaPedido)}</td>
-                                    <td data-label="Fecha Entrega">{formatearFecha(pedido.fechaEntrega)}</td>
-                                    <td className="total" data-label="Total">{formatearPrecio(pedido.total)}</td>
-                                    <td data-label="Tipo Pago">{mostrarTipoPago(pedido.tipoPago)}</td>
-                                    <td data-label="Estado">
-                                        <span className={`badge-estado ${obtenerClaseEstado(pedido.estadoId)}`}>
-                                            {pedido.estadoNombre}
-                                        </span>
-                                    </td>
-                                    <td className="acciones" data-label="Acciones">
-                                        <button
-                                            className="btn-ver"
-                                            onClick={() => abrirDetalle(pedido)}
-                                            title="Ver detalle"
-                                        >
-                                            <FaEye />
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                                    </div>
+                                    <div className="pedido-card-info">
+                                        <div className="pedido-card-row">
+                                            <span>Pedido</span>
+                                            <strong>{formatearFecha(pedido.fechaPedido)}</strong>
+                                        </div>
+                                        <div className="pedido-card-row">
+                                            <span>Entrega</span>
+                                            <strong>{formatearFecha(pedido.fechaEntrega)}</strong>
+                                        </div>
+                                        <div className="pedido-card-row">
+                                            <span>Pago</span>
+                                            <strong>{mostrarTipoPago(pedido.tipoPago)}</strong>
+                                        </div>
+                                        <div className="pedido-card-row">
+                                            <span>Total</span>
+                                            <strong className="pedido-card-total">{formatearPrecio(pedido.total)}</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="pedido-card-footer">
+                                    <button className="btn-ver" onClick={() => abrirDetalle(pedido)} title="Ver detalle">
+                                        <FaEye /> Ver detalle
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </>
             )}
 
             {mostrarModal && pedidoSeleccionado && (

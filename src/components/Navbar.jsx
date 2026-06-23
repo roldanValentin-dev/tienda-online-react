@@ -1,221 +1,141 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
 import { AuthContext } from '../context/AuthContext';
 import Swal from 'sweetalert2';
 import '../style/navbar.css';
 
 function Navbar() {
-    const { cart } = useContext(CarritoContext);
-    const { user, logout } = useContext(AuthContext);
-    const location = useLocation();
-    const navigate = useNavigate();
-    
-    const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
+  const { cart } = useContext(CarritoContext);
+  const { user, logout } = useContext(AuthContext);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    /**
-     * Maneja el cierre de sesión con confirmación
-     */
-    const handleLogout = () => {
+  const totalItems = cart.reduce((sum, item) => sum + item.cantidad, 0);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMenuOpen(false);
+    document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
+  const handleLogout = () => {
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: '¿Estás seguro que deseas cerrar sesión?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#c9a84c',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Sí, cerrar sesión',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+        navigate('/');
+        setMenuOpen(false);
         Swal.fire({
-            title: '¿Cerrar sesión?',
-            text: '¿Estás seguro que deseas cerrar sesión?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#ff6b35',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Sí, cerrar sesión',
-            cancelButtonText: 'Cancelar'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                logout();
-                navigate('/');
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sesión cerrada',
-                    text: '¡Hasta pronto!',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            }
+          icon: 'success',
+          title: 'Sesión cerrada',
+          text: '¡Hasta pronto!',
+          timer: 1500,
+          showConfirmButton: false
         });
-    };
+      }
+    });
+  };
 
-    // Cerrar el offcanvas cuando cambia la ruta
-    useEffect(() => {
-        const offcanvasElement = document.getElementById('offcanvasNavbar');
-        const backdrop = document.querySelector('.offcanvas-backdrop');
-        
-        if (offcanvasElement?.classList.contains('show')) {
-            if (document.activeElement) {
-                document.activeElement.blur();
-            }
-            
-            offcanvasElement.classList.add('hiding');
-            
-            setTimeout(() => {
-                offcanvasElement.classList.remove('show', 'hiding');
-                offcanvasElement.removeAttribute('aria-modal');
-                offcanvasElement.removeAttribute('role');
-                
-                document.body.classList.remove('offcanvas-open');
-                document.body.style.overflow = '';
-                document.body.style.paddingRight = '';
-                
-                if (backdrop) {
-                    backdrop.classList.add('fade');
-                    backdrop.classList.remove('show');
-                    setTimeout(() => backdrop.remove(), 150);
-                }
-            }, 300);
-        }
-    }, [location]);
+  return (
+    <>
+      <header className={`at-header ${scrolled ? 'is-scrolled' : ''}`}>
+        <div className="at-header-inner">
+          <Link className="at-logo" to="/">softpan</Link>
 
-    return (
-        <>
-            {/* Navbar para mobile con offcanvas */}
-            <nav className="navbar d-lg-none">
-                <div className="container-fluid">
-                    <button 
-                        className="navbar-toggler" 
-                        type="button" 
-                        data-bs-toggle="offcanvas" 
-                        data-bs-target="#offcanvasNavbar"
-                        aria-controls="offcanvasNavbar"
-                        aria-label="Toggle navigation"
-                    >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    
-                    <Link className="navbar-brand mx-auto" to="/">🥐 Panadería</Link>
-                    
-                    <Link to="/cart" className="cart-icon-mobile">
-                        <i className="bi bi-cart3"></i>
-                        {totalItems > 0 && (
-                            <span className="cart-badge">{totalItems}</span>
-                        )}
-                    </Link>
+          <ul className="at-nav-links">
+            <li><Link className="at-nav-link" to="/">Inicio</Link></li>
+            <li><Link className="at-nav-link" to="/products">Productos</Link></li>
+            {user && (
+              <li><Link className="at-nav-link" to="/mis-pedidos">Pedidos</Link></li>
+            )}
+          </ul>
+
+          <div className="at-nav-right">
+            <button className="at-cart-btn" onClick={() => navigate('/cart')} aria-label="Carrito">
+              <i className="bi bi-bag"></i>
+              {totalItems > 0 && (
+                <span className="at-cart-badge">{totalItems > 9 ? '9+' : totalItems}</span>
+              )}
+            </button>
+
+            {user ? (
+              <>
+                <div className="at-user-menu" onClick={() => navigate('/perfil')}>
+                  <i className="bi bi-person"></i>
+                  <span>{user.nombre || user.firstName || 'Perfil'}</span>
                 </div>
-            </nav>
+                <button className="at-logout-btn" onClick={handleLogout} title="Cerrar sesión">
+                  <i className="bi bi-box-arrow-right"></i>
+                </button>
+              </>
+            ) : (
+              <Link className="at-auth-btn" to="/auth">Ingresar</Link>
+            )}
 
-            {/* Offcanvas para mobile */}
-            <div 
-                className="offcanvas offcanvas-start" 
-                tabIndex="-1" 
-                id="offcanvasNavbar"
-                aria-labelledby="offcanvasNavbarLabel"
+            <button
+              className={`at-hamburger ${menuOpen ? 'is-open' : ''}`}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Menú"
             >
-                <div className="offcanvas-header">
-                    <h5 className="offcanvas-title" id="offcanvasNavbarLabel">Menú</h5>
-                    <button 
-                        type="button" 
-                        className="btn-close" 
-                        data-bs-dismiss="offcanvas"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div className="offcanvas-body p-0">
-                    <ul className="nav flex-column">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/">
-                                <i className="bi bi-house-door me-3"></i>Home
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/products">
-                                <i className="bi bi-bag me-3"></i>Productos
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/cart">
-                                <i className="bi bi-cart3 me-3"></i>Carrito
-                                {totalItems > 0 && (
-                                    <span className="badge-custom ms-2">{totalItems}</span>
-                                )}
-                            </Link>
-                        </li>
-                        {user ? (
-                            <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/mis-pedidos">
-                                        <i className="bi bi-box-seam me-3"></i>Mis Pedidos
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/perfil">
-                                        <i className="bi bi-person-circle me-3"></i>Mi Perfil
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <button className="nav-link" onClick={handleLogout}>
-                                        <i className="bi bi-box-arrow-right me-3"></i>Cerrar Sesión
-                                    </button>
-                                </li>
-                            </>
-                        ) : (
-                            <li className="nav-item">
-                                <Link className="nav-link" to="/auth">
-                                    <i className="bi bi-person me-3"></i>Ingresar
-                                </Link>
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            </div>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </header>
 
-            {/* Navbar fijo para desktop (sin desplegable) */}
-            <nav className="navbar navbar-expand d-none d-lg-block">
-                <div className="container-fluid">
-                    <Link className="navbar-brand" to="/">🥐 Panadería</Link>
-                    <ul className="navbar-nav ms-auto">
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/">
-                                <i className="bi bi-house-door me-2"></i>Home
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/products">
-                                <i className="bi bi-bag me-2"></i>Productos
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link className="nav-link" to="/cart">
-                                <i className="bi bi-cart3 me-2"></i>Carrito
-                                {totalItems > 0 && (
-                                    <span className="badge-custom ms-2">{totalItems}</span>
-                                )}
-                            </Link>
-                        </li>
-                        {user ? (
-                            <>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/mis-pedidos">
-                                        <i className="bi bi-receipt me-2"></i>Mis Pedidos
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/perfil">
-                                        <i className="bi bi-person-circle me-2"></i>Mi Perfil
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <button className="btn-logout-nav" onClick={handleLogout}>
-                                        Cerrar Sesión
-                                    </button>
-                                </li>
-                            </>
-                        ) : (
-                            <li className="nav-item">
-                                <Link className="btn-login-nav" to="/auth">
-                                    Ingresar
-                                </Link>
-                            </li>
-                        )}
-                    </ul>
-                </div>
-            </nav>
-        </>
-    );
+      <div className={`at-offcanvas-overlay ${menuOpen ? 'is-open' : ''}`} onClick={() => setMenuOpen(false)} />
+      <div className={`at-offcanvas ${menuOpen ? 'is-open' : ''}`}>
+        <button className="at-offcanvas-close" onClick={() => setMenuOpen(false)}>×</button>
+        <ul className="at-offcanvas-links">
+          <li><Link className="at-offcanvas-link" to="/" onClick={() => setMenuOpen(false)}><i className="bi bi-house-door"></i>Inicio</Link></li>
+          <li><Link className="at-offcanvas-link" to="/products" onClick={() => setMenuOpen(false)}><i className="bi bi-bag"></i>Productos</Link></li>
+          <li><Link className="at-offcanvas-link" to="/cart" onClick={() => setMenuOpen(false)}><i className="bi bi-cart3"></i>Carrito{totalItems > 0 && <span className="at-offcanvas-badge">{totalItems}</span>}</Link></li>
+          <div className="at-offcanvas-divider" />
+          {user ? (
+            <>
+              <li><Link className="at-offcanvas-link" to="/mis-pedidos" onClick={() => setMenuOpen(false)}><i className="bi bi-box-seam"></i>Mis Pedidos</Link></li>
+              <li><Link className="at-offcanvas-link" to="/perfil" onClick={() => setMenuOpen(false)}><i className="bi bi-person-circle"></i>Mi Perfil</Link></li>
+              {user.role === 'Admin' && (
+                <li><Link className="at-offcanvas-link" to="/admin/productos" onClick={() => setMenuOpen(false)}><i className="bi bi-gear"></i>Admin</Link></li>
+              )}
+              <div className="at-offcanvas-divider" />
+              <li><button className="at-offcanvas-link" onClick={handleLogout} style={{ border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}><i className="bi bi-box-arrow-right"></i>Cerrar Sesión</button></li>
+            </>
+          ) : (
+            <li><Link className="at-offcanvas-link" to="/auth" onClick={() => setMenuOpen(false)}><i className="bi bi-person"></i>Ingresar</Link></li>
+          )}
+        </ul>
+        <div className="at-offcanvas-footer">
+          <p className="at-offcanvas-footer-text">softpan — pastelería artesanal</p>
+        </div>
+      </div>
+    </>
+  );
 }
 
 export default Navbar;

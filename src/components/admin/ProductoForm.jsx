@@ -16,7 +16,10 @@ const ProductoForm = () => {
         stock: '',
         stockMinimo: '',
         categoria: '',
-        activo: true
+        activo: true,
+        stockInmediato: false,
+        enOferta: false,
+        precioOferta: '',
     });
     const [loading, setLoading] = useState(false);
     const [saving, setSaving] = useState(false);
@@ -36,7 +39,6 @@ const ProductoForm = () => {
         const result = await ProductoService.getProductoById(id);
         if (result.success) {
             setFormData({
-                
                 nombre: result.data.nombre,
                 descripcion: result.data.descripcion,
                 precio: result.data.precioBase,
@@ -44,6 +46,9 @@ const ProductoForm = () => {
                 stockMinimo: result.data.stockMinimo,
                 categoria: result.data.categoria,
                 activo: result.data.activo,
+                stockInmediato: result.data.stockInmediato ?? false,
+                enOferta: result.data.enOferta ?? false,
+                precioOferta: result.data.precioOferta ?? '',
                 id: parseInt(id)
             });
         } else {
@@ -104,6 +109,15 @@ const ProductoForm = () => {
             newErrors.categoria = 'La categoría no puede exceder 50 caracteres';
         }
 
+        if (formData.enOferta) {
+            const oferta = parseFloat(formData.precioOferta);
+            if (isNaN(oferta) || oferta <= 0) {
+                newErrors.precioOferta = 'El precio de oferta debe ser mayor a 0';
+            } else if (oferta >= parseFloat(formData.precio)) {
+                newErrors.precioOferta = 'El precio de oferta debe ser menor al precio base';
+            }
+        }
+
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -121,8 +135,13 @@ const ProductoForm = () => {
         let dataToSend;
         let result;
         
+        const ofertaData = {
+            stockInmediato: formData.stockInmediato,
+            enOferta: formData.enOferta,
+            precioOferta: formData.enOferta ? parseFloat(formData.precioOferta) : null,
+        };
+
         if (isEditMode) {
-            // Para actualizar: enviar todos los campos que acepta UpdateProductoDto
             dataToSend = {
                 id: parseInt(id),
                 nombre: formData.nombre.trim(),
@@ -131,18 +150,19 @@ const ProductoForm = () => {
                 stock: parseInt(formData.stock) || 0,
                 stockMinimo: parseInt(formData.stockMinimo) || 0,
                 categoria: formData.categoria.trim(),
-                activo: formData.activo
+                activo: formData.activo,
+                ...ofertaData,
             };
             result = await ProductoService.updateProducto(id, dataToSend);
         } else {
-            // Para crear: enviar todos los campos
             dataToSend = {
                 nombre: formData.nombre.trim(),
                 descripcion: formData.descripcion.trim(),
                 precioBase: parseFloat(formData.precio),
                 stock: parseInt(formData.stock),
                 stockMinimo: parseInt(formData.stockMinimo),
-                categoria: formData.categoria.trim()
+                categoria: formData.categoria.trim(),
+                ...ofertaData,
             };
             result = await ProductoService.createProducto(dataToSend);
         }
@@ -332,6 +352,62 @@ const ProductoForm = () => {
                             <span className="check-description">El producto será visible para los clientes</span>
                         </label>
                     </div>
+                    <div className="form-check-admin" style={{ marginTop: 8 }}>
+                        <input
+                            type="checkbox"
+                            className="form-checkbox-admin"
+                            id="stockInmediato"
+                            name="stockInmediato"
+                            checked={formData.stockInmediato}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label-admin" htmlFor="stockInmediato">
+                            <span className="check-title">Stock Inmediato</span>
+                            <span className="check-description">Disponible para retiro hoy</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div className="form-section">
+                    <h3 className="section-title">
+                        <i className="bi bi-tags"></i>
+                        Oferta
+                    </h3>
+                    <div className="form-check-admin">
+                        <input
+                            type="checkbox"
+                            className="form-checkbox-admin"
+                            id="enOferta"
+                            name="enOferta"
+                            checked={formData.enOferta}
+                            onChange={handleChange}
+                        />
+                        <label className="form-check-label-admin" htmlFor="enOferta">
+                            <span className="check-title">Producto en Oferta</span>
+                            <span className="check-description">Aplicar precio rebajado</span>
+                        </label>
+                    </div>
+                    {formData.enOferta && (
+                        <div className="form-group-admin" style={{ marginTop: 12 }}>
+                            <label htmlFor="precioOferta" className="form-label-admin">
+                                Precio de Oferta <span className="required">*</span>
+                            </label>
+                            <div className="input-with-icon">
+                                <span className="input-icon">$</span>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    className={`form-input-admin with-icon ${errors.precioOferta ? 'error' : ''}`}
+                                    id="precioOferta"
+                                    name="precioOferta"
+                                    value={formData.precioOferta}
+                                    onChange={handleChange}
+                                    placeholder="0.00"
+                                />
+                            </div>
+                            {errors.precioOferta && <span className="error-message">{errors.precioOferta}</span>}
+                        </div>
+                    )}
                 </div>
 
                 <div className="form-actions">

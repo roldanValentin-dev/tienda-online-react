@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Pâtisserie &amp; Tradition | Pastelería Artesanal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&amp;family=Playfair+Display:wght@800&amp;family=Cormorant+Garamond:ital,wght@1,600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#100401", // Dark background variant
+                        "brand-dark": "#1a0f0a",
+                        "brand-light": "#fdf8f3",
+                        "brand-gold": "#c9a84c",
+                        "brand-text": "#2d1b12",
+                        "surface-variant": "#e6e2dd",
+                        "outline-variant": "#d3c3bd",
+                    },
+                    fontFamily: {
+                        "display": ["Playfair Display", "serif"],
+                        "body": ["DM Sans", "sans-serif"],
+                        "italic": ["Cormorant Garamond", "serif"],
+                    },
+                    spacing: {
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "container-max": "1200px",
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .scroll-snap-x { scroll-snap-type: x mandatory; }
+        .scroll-snap-align { scroll-snap-align: start; }
+        
+        /* Custom image transitions */
+        .img-hover-zoom { overflow: hidden; }
+        .img-hover-zoom img { transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .img-hover-zoom:hover img { transform: scale(1.05); }
+
+        /* Typography sizing matching playfair display 800 */
+        .hero-title { font-size: clamp(3rem, 8vw, 6rem); line-height: 1; }
+    </style>
+</head>
+<body class="font-body text-brand-text bg-brand-light antialiased">
+<!-- HERO SECTION -->
+<section class="relative min-h-screen bg-brand-dark flex flex-col items-center justify-center text-center px-margin-mobile overflow-hidden">
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/pinstripe.png')]"></div>
+</div>
+<div class="z-10 max-w-4xl mx-auto space-y-8">
+<div class="space-y-2">
+<h1 class="hero-title font-display font-[800] text-brand-light tracking-tight">
+                    Pastelería artesanal
+                </h1>
+<p class="text-3xl md:text-5xl font-italic italic text-brand-gold">
+                    hecha con dedicación
+                </p>
+</div>
+<p class="text-lg md:text-xl text-brand-light/80 max-w-xl mx-auto font-light tracking-wide">
+                Todo se produce contra pedido. Envíos a domicilio en Tucumán.
+            </p>
+<div class="pt-6">
+<a class="inline-block bg-brand-gold text-brand-dark px-12 py-5 font-bold uppercase tracking-widest text-sm transition-all hover:scale-105 active:scale-95" href="#order">
+                    Hacer mi pedido
+                </a>
+</div>
+</div>
+</section>
+<!-- CATEGORIES SECTION -->
+<section class="py-24 bg-brand-light">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="flex overflow-x-auto no-scrollbar scroll-snap-x gap-12 pb-8">
+<!-- Macarons -->
+<div class="flex-shrink-0 w-48 scroll-snap-align flex flex-col items-center gap-6">
+<div class="w-48 h-48 rounded-full overflow-hidden border border-brand-gold/20">
+<img alt="Macarons Artesanales" class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/AP1WRLv-Mv1m4m566qiD188-QCogDC_FHLZfoTpIIyqy7v1c9e0pi-zHTa8zMb-OF79dgu5qKnfBpazi7VMUcQ7cywhDpvJMBfrEU7mGyzMX62mTLexGDilfuCRE4xTwgOzxxsY9TSAsyFYieg2JC9Mn27eQGf3fAhgnHSDYnjdLQ7VL3bNLE2Rb9JiCbt9z_Q7QkgCqiNmvJEn5icittGk2PCkjoMJCxDP_RNVNXogVYXYBjeDPAYsRaxfXjFr6"/>
+</div>
+<span class="font-medium tracking-widest uppercase text-xs">Macarons</span>
+</div>
+<!-- Viennoiserie -->
+<div class="flex-shrink-0 w-48 scroll-snap-align flex flex-col items-center gap-6">
+<div class="w-48 h-48 rounded-full overflow-hidden border border-brand-gold/20">
+<img alt="Viennoiserie" class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida/AP1WRLsW-50y9wRqslH83hhMWP5jfnXzvWO6SwcP_ENNNZHUMAP3kvhivO3h7m7FrJEGd6nxJlYYbrwMB1lhxOmhXY0AZz8qru4q2VOBhUEQaC8tB6YbQytxURJ52wQNspwHLLs8o2y_oWIMzySqK98SoE1s4nFqci1c6DiWgTXSABA38QVq-l-enYbFfSwSQM2kJvRR8FDeKef_xlo0vJjj6sWosmibR5ou77TtgrJsEn9ML9mYtUDf-e7nRW8"/>
+</div>
+<span class="font-medium tracking-widest uppercase text-xs">Viennoiserie</span>
+</div>
+<!-- Cakes -->
+<div class="flex-shrink-0 w-48 scroll-snap-align flex flex-col items-center gap-6">
+<div class="w-48 h-48 rounded-full overflow-hidden border border-brand-gold/20">
+<img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" data-alt="A close-up of a layered gourmet cake with delicate vanilla buttercream frosting, topped with edible gold leaf and fresh white ranunculus. The cake is set against a soft, creamy background with elegant, warm light creating a luxurious and artisanal atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjCpo8F8XUNh_TPDP0Ubc0AqgzPb1NXZBSAam8odj0LvEnajybk8-9RDyNUXV4stJKHdiBQoywRp8mA491rRV9Az5AIHLqnbTBX9cHe-SaqQEzg-f9o2rm1FJ-_6a-U8Z3hZdbWpvvcSPSmdNQDrEaoI-TvNWHzL51YZWLWyRl1FO1mQn_6Jr6urqF0u63RWJf0DGYQYpjIB7x110P5-X1AM0c876m003LNOARc1Slg7gSO71upiEeKSVYOn0vDnw-v8jF91EAClVD"/>
+</div>
+<span class="font-medium tracking-widest uppercase text-xs">Tortas</span>
+</div>
+<!-- Tartas -->
+<div class="flex-shrink-0 w-48 scroll-snap-align flex flex-col items-center gap-6">
+<div class="w-48 h-48 rounded-full overflow-hidden border border-brand-gold/20">
+<img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" data-alt="A rustic fruit tart with a perfectly golden, flaky crust, filled with glistening fresh berries and a light dusting of powdered sugar. The scene is shot in high-end editorial style with soft window light casting gentle shadows on a linen tablecloth, emphasizing the organic textures of the pastry." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAo4V7S7zBlzN31XqS_xmlBuIY-QxJfUi2U0O6kURoIqii7iTiZ-spIPpG669UBYwf5wH-KTZVMSyEjp04EGWs4nKVrJK3H57SzMfhNvS5UnkassYmlRqsIMaqSYhpvLxLw0h0jqKnvrSSC66Z3fYYRxRK00a5GuBtuu0GOsl8-9Q5B3If7lMjxUZ0tolyvybZvljNZloA_4HTQUFew_DWtVyicfGjpyxg0PdBtHWR7xvgSPpWfmFpRsPQvc2vC8bElsZWuwhhrQ8fL"/>
+</div>
+<span class="font-medium tracking-widest uppercase text-xs">Tartas</span>
+</div>
+<!-- Cookies -->
+<div class="flex-shrink-0 w-48 scroll-snap-align flex flex-col items-center gap-6">
+<div class="w-48 h-48 rounded-full overflow-hidden border border-brand-gold/20">
+<img class="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700" data-alt="Gourmet thick-chunk chocolate cookies stacked elegantly on a ceramic plate. Melted chocolate pools are visible, and a sprinkle of sea salt flakes glistens under warm, focused lighting. The composition is modern and minimalist with a palette of warm browns and off-whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuArrhCcA1torgxr3OX_Dy79oX4SO9EuQ1zA9OoaoN4yGmZ6jj1llx1Dgz0rxh9_FDtKxqSxc48hZhZWtynLH9hgRwM2i9FITF1Wcf2_5GRnOdyURSKaCdnofdvdZX2Q59AvGlNzV6eP4M-9vU1m6ccvvWdx_OS8OaIcKnoBvESx-hM3sHM8Uj-v_u8aT7oNeBrPRNIxOFnW04Wj4AGNpvg6NCw5Mz12VzECnAuC8hkbA6S_VBuUzBiKXHbkuJCn4_MwlpJKwrTjqlhf"/>
+</div>
+<span class="font-medium tracking-widest uppercase text-xs">Cookies</span>
+</div>
+</div>
+</div>
+</section>
+<!-- FEATURED PRODUCTS -->
+<section class="py-24 bg-brand-light">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<!-- Row 1: 2/3 and 1/3 -->
+<div class="md:col-span-2 img-hover-zoom">
+<img alt="Signature Collection" class="w-full h-[500px] object-cover border border-brand-gold/10" src="https://lh3.googleusercontent.com/aida/AP1WRLsr_oO90zGvlL71MrIgYLrFKXLnpp8hOG-7-vx_oBKEKGwE13qyv-0YG0tRh5e6m7mNpD6J8oEb7v6SQrd8sJk8YnPf28J19opbfd5wPiF37h44hx3V6286r92o6QYWxLG-LrQVcNmqWP63q_9MpIOG-LyEWhgw0YxHpoHvIz5Ea4P6QEPr2_kvExl9Nd_BtJ5myAsFg-iZsr2S9KFuUPg__9tc_6f1I2GEvF3Zv38GVgfNkrC8oq71X1uX"/>
+<div class="mt-6 flex justify-between items-baseline">
+<h3 class="font-display text-3xl font-[800]">Caja Signature Selección</h3>
+<div class="text-right">
+<span class="block text-sm line-through text-brand-text/40">$12.500</span>
+<span class="text-xl font-bold text-brand-gold">$10.900</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-1 img-hover-zoom">
+<img class="w-full h-[500px] object-cover border border-brand-gold/10" data-alt="A single, perfectly golden croissant resting on a simple white plate. The lighting is crisp and editorial, highlighting every buttery layer and the slight dusting of flour. The background is a clean, minimalist off-white, reflecting a premium Parisian bakery aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBsRyJ26eqNvCz3J8632aXE_qxPxdCXcy5tLRVJJg_bw64YX6WBCQ-ATYVqVJElLZ5g57Q4hST154XS9ekLL-THJvlKcqXMM31PeezGgz6dFZ8N1GrWNoobqeOcld2bmuf2oBd35BIuceF2aumFbYL-OW72gg5AnmmoknUdYBSOLgvD-Z9fqanTLiWyLgWFaQXXGiyFhxNGEMNydks4RG-E-yuaSJstg6BBnL6lQwalapkj4DfYfKAjx9zzpnSlWQGCVFmTQLQ8BWLm"/>
+<div class="mt-6">
+<h3 class="font-display text-2xl font-[800]">Croissants x 6</h3>
+<p class="text-lg font-bold text-brand-gold mt-2">$4.200</p>
+</div>
+</div>
+<!-- Row 2: 1/3 each -->
+<div class="img-hover-zoom">
+<img class="w-full h-[400px] object-cover border border-brand-gold/10" data-alt="A decadent dark chocolate éclair with a smooth, glossy chocolate glaze and a hint of gold leaf. The pastry is presented on a minimalist stone surface with soft, directional lighting that emphasizes its rich texture and sophisticated dark tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfnXOu9HhHwdzJBFb-U3qcM4g6DS_5asTOQPc510YzSFDgmKNed3xlqRH5h9jWfU7DkoKm3B5T0Z0W8NNc7hLmKJ_v1LzgVU_U_vX2cWjqfb5D6DKKjei-gmuCJgZC895nQOVtUx436NN6kQj905PGYplm5kM4L9Gmt6MgyzU0xvYNKBDo9c_xAj8QWePe-EGbVmM_ilKsbGXzTz1hZgl4eVWLj0jI0DHrSmtylWlHdq3zYxEPkjD62k_z2cXIQREdEDm5oJd6lf7Q"/>
+<div class="mt-6">
+<h3 class="font-display text-xl font-[800]">Éclair de Chocolate</h3>
+<p class="text-lg font-bold text-brand-gold mt-1">$1.800</p>
+</div>
+</div>
+<div class="img-hover-zoom">
+<img class="w-full h-[400px] object-cover border border-brand-gold/10" data-alt="A variety of fresh artisanal breads including sourdough and baguettes, arranged in a simple basket. The lighting is warm and morning-like, highlighting the crusty textures and organic shapes. The overall style is clean, rustic-modern, and high-end editorial." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPtz-uAYg09SNGdc_svE1QJj2hm-A-BAktAHFsjf0fNvg0RBZHAVu0oTUTsuHdr5MpKcGUtVOeJd0G6nsT07edYIDG0X89RoIqcwCjThI-ClB-Qc8BQfXNvacO4gI_szFSL91VoQxk_0dvvQXr-OzX2cWXcPcmhGOZg2forrVwbSa1jhNRC__R7TDV9HtEA3zDyLFcQyqoA1sHgKCk93Jjl3dMtzItvjC4PRG7R8K2rv6L34yHiKwMSVwyJyOIYZ_Ew-Oi3yJznI2a"/>
+<div class="mt-6">
+<h3 class="font-display text-xl font-[800]">Pan de Masamadre</h3>
+<p class="text-lg font-bold text-brand-gold mt-1">$2.500</p>
+</div>
+</div>
+<div class="img-hover-zoom">
+<img class="w-full h-[400px] object-cover border border-brand-gold/10" data-alt="Delicate lemon meringue tartlets with perfectly toasted meringue peaks. The colors are bright and fresh, with the yellow of the curd popping against a clean white background. The shot is high-contrast and follows a bold, clean editorial layout." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBytqT45scfx5htcV0AqRgGJp1lO5gT1EfnlTbeZb3VsahbCZI5dyDf670TlZeNylGIOMMu9wTv0sjl0908ExRpFxwfPi2yQaH3iclKicbVwnVIlZeZ1trYHXPFKFyFtbyDgpeLAf8yu7hqqk14JptK_DbldE9S_9mSG42bq_UwwI0RxKq_SlqYO96Z1skyUGhv4FBAxvhMy8v5wzcswsAZKJud9_gzYYQLf9ZIM7JkTpkFRzo-sKooc5Je1fFZt00b7JSrHK4P-BQh"/>
+<div class="mt-6">
+<h3 class="font-display text-xl font-[800]">Tarta de Limón</h3>
+<p class="text-lg font-bold text-brand-gold mt-1">$2.100</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- HOW IT WORKS -->
+<section class="py-32 bg-white">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-32">
+<!-- Step 1 -->
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div class="img-hover-zoom aspect-[4/5] md:aspect-auto h-[600px]">
+<img class="w-full h-full object-cover" data-alt="A person browsing a beautiful, minimalist digital pastry menu on a tablet. The setting is a bright, cozy kitchen with soft morning light. The focus is on the clean interface and the anticipation of selecting gourmet treats, captured in an elegant editorial style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA183WXcWTGoFieIK3VERsL4X0QMlacmXtw9XI8Tlwfgt9713Rv3Opii67vHBBaz0RJ5amM6hxpEW-MET5m3cUFa3Kn9h7vr4278CLpKTkrKWwZeOiNohlvHLKjZYEYccsLuELhiZrBhC1sN6zLdIqZZhbBxTUuPw67Y09epvNue4V_jk4Cm8hWAVnWct3tLB5nGStl87v-9wP_ZvtBgkeHXUeIL3XK-lhUyYXTJDI62N6FEYT2g1AXQsPoKKixP1VKcW7CSvkigqWL"/>
+</div>
+<div class="space-y-6 md:pl-12">
+<h2 class="font-display text-5xl md:text-7xl font-[800] leading-none">Elegís y pedís online</h2>
+<p class="text-xl text-brand-text/70 leading-relaxed font-light">Explorá nuestra carta de temporada y seleccioná tus favoritos. Cada pieza se prepara exclusivamente para vos, garantizando la frescura que nos distingue.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div class="order-2 md:order-1 space-y-6 md:pr-12">
+<h2 class="font-display text-5xl md:text-7xl font-[800] leading-none">Preparamos justo para vos</h2>
+<p class="text-xl text-brand-text/70 leading-relaxed font-light">No tenemos stock acumulado. Una vez confirmado tu pedido, nuestros maestros pasteleros comienzan la elaboración utilizando las mejores materias primas locales.</p>
+</div>
+<div class="order-1 md:order-2 img-hover-zoom aspect-[4/5] md:aspect-auto h-[600px]">
+<img class="w-full h-full object-cover" data-alt="Close-up of a pastry chef's hands delicately dusting a freshly baked tray of pain au chocolat with powdered sugar. Flour particles are suspended in the warm, focused air of an artisanal workshop. The scene is intimate, moody, and celebrates the craft of handmade baking." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBZWK-zMKxLos9ZN_-cJb5FQ4bOfzF_ew5fGLt1icdjlSuiGf9I-jHAtwcBA2eZ6DOkQ286lC-bURGyNjKAskkAJwYxNxWW3c9NKdVm2hYY9nN1IlxhR1W1CekVMlhgp52dsN0kffaSKDoXm3a35Zb-SUjDZ5-E5ZsKKM41b7a99Q6gtJlhh2PkEaRzq3jgQuB8OtrLzx6T9xYUH625fI2XTp97YvjJ61XtMjgtAmROcWbyJJleJnxq7N68zgMcta7_WpX4NI54UmhK"/>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="grid md:grid-cols-2 gap-16 items-center">
+<div class="img-hover-zoom aspect-[4/5] md:aspect-auto h-[600px]">
+<img class="w-full h-full object-cover" data-alt="A beautiful, premium gift box tied with a gold silk ribbon being delivered to a doorstep. The packaging is minimalist white with gold embossing. The lighting is soft and inviting, emphasizing the excitement and luxury of receiving a special artisanal delivery." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYt7d_E_M5y_iryWYNXc-g-8_9fRN-y7iVXkci3I_4lC3tlAaq6qKFfBL7w7jhh3gZ9_M1yOD1qrxWp1weurwtnglJmU2bhwuWRMIwrMW6LangNrXn7rYb0JDq8ul1zTlg8995I_FQ6aD_wvcj1QhTdc_OoBjHtO6n0JF4GlA0beG0OiXFB8gRZAN3GkBvHLmZ-wbuRNUOUJCOKqc6xl_0MQd8frXM3nS5XyAbuAb3s8M8_l-aUCn0N4f108lVC_3O5j8_XDF2HLnN"/>
+</div>
+<div class="space-y-6 md:pl-12">
+<h2 class="font-display text-5xl md:text-7xl font-[800] leading-none">Recibís en casa</h2>
+<p class="text-xl text-brand-text/70 leading-relaxed font-light">Llevamos la experiencia de la verdadera pastelería a la puerta de tu hogar. Cuidado extremo en el transporte para que todo llegue en perfecto estado.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- INSTAGRAM GRID -->
+<section class="py-24 bg-brand-dark">
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+<div class="mb-12 text-center">
+<a class="text-brand-light font-medium tracking-widest uppercase hover:text-brand-gold transition-colors" href="#">Seguinos en Instagram @pasteleria</a>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="relative group aspect-square overflow-hidden border border-transparent hover:border-brand-gold transition-all duration-300">
+<img class="w-full h-full object-cover" data-alt="Editorial Instagram post of a minimalist breakfast table featuring coffee and a golden croissant. The aesthetic is clean, moody, and focuses on high-contrast lighting and rich textures of the pastry. Dark background with warm highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBn13Q6_T_nkdiw5IAmuC6LQRSQcsv-IUOngtD9ShxwCgD3jRLFc6aViHNtGcacgNdBYW2-noYvSwJjjwyJJ2eeonggYEz4sG6cuvsoiPubD0C5KsSWCJ3oplNAwFI2HjKmiaIm6OPvojUvGHdXX9IWmSCvDVZqYc4fTUHxF74zGmcZq6hn6xBM3PdTU57A4fp4YN600elBH-n3bCxyOzs-EDyF3mROB-1avzAOEH4rlmL4pEh9O3r48-cwkStEY_v-jsqBXlkamLEw"/>
+</div>
+<div class="relative group aspect-square overflow-hidden border border-transparent hover:border-brand-gold transition-all duration-300">
+<img class="w-full h-full object-cover" data-alt="Gourmet donuts with intricate chocolate drizzles and nut toppings. The shot is vertical and styled for social media with a focus on color harmony and appetizing detail. The lighting is soft but dynamic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNHNBZx1m_u8qHzjNv8bzHlrjHOYq-5Fn245zxCf4ZLEXjc5FGqTPMoRUeSkIB6YQF4fQ100taBF87Lrt9t6AwOGb5ldSn2B2JRdP2Iwc1lpRIWivZGLuR4kmIlnXxEX-OJH6gb-EBYIOtG82RthZZ9eQfWc4GsQ0-XLkVZkJMxR9xZC5g642Rv6FMbaDNxt8uB5hHnd-qQP1W6eEE3U2qW1wZljMWpjlqJZ3jUZ_MQxypg3wwrgGhkLCrGVUVQkuZZl4xYy68mFCd"/>
+</div>
+<div class="relative group aspect-square overflow-hidden border border-transparent hover:border-brand-gold transition-all duration-300">
+<img class="w-full h-full object-cover" data-alt="Close up of a tray of freshly baked sourdough bread with deep score marks and a rich, dark crust. Natural textures are highlighted through high-resolution photography. The mood is authentic and artisanal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA_Y3turR4B-wOxhLOFKVA42aKBGRcQ0hiC9_6kMBZbfrAkmN4lnBOojYwoLAufegXqmX9NSaVYBVuU90mxdfHKcZBY5cRROpN8EYV7gZXHnFM3emHHtnJj61qnv_hHMUbLTDYrhMj9FxKn8JdAsRdiZ0TB1jzeoz8j9KPLv9UPcIhB89H2oTebDJp_PWmEicDPRb87XQGUPXVGMlKFFliOGyD7wUtlrLPeEuJDnbdtGichbSN1h6gxIGxNnpWPM3HBKwmRFfpQ0YFO"/>
+</div>
+<div class="relative group aspect-square overflow-hidden border border-transparent hover:border-brand-gold transition-all duration-300">
+<img class="w-full h-full object-cover" data-alt="A stack of colorful macarons against a soft pastel background, lit from the side to reveal their delicate 'feet' and smooth shells. The composition is artistic and minimalist, suitable for a high-end bakery social feed." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBD1hkKlx8yjrOQIwoxWx8RQn7m_o9-mjrC_PwbYw5JDOL-GUebmQzR3NFdk60I6p-mWr07gMqPgmzg0lrLQrEZikLj8ybdj-OM631xxMRBeRz2faFsP0m7cLcQQ4-VxHi-neP2G6x4xIuJgItcMWrMQ0lDTfA_NbRPYcPg5psqjkBDXV8nJ7e58SZIm5xpz07BDl1IfRoZy43OGxNXaDnhFuxyp8bnSxdVcCnOvSc__0spkrp-mNMOylUn54tC4bLhj4mOZ-7AADc6"/>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA SECTION -->
+<section class="py-32 bg-brand-light border-t border-brand-gold" id="order">
+<div class="max-w-container-max mx-auto px-margin-mobile text-center space-y-10">
+<h2 class="font-display text-5xl md:text-6xl font-[800]">¿Listo para probar?</h2>
+<p class="text-xl text-brand-text/60 max-w-lg mx-auto">Hacé tu pedido hoy y recibilo en las próximas 24-48hs.</p>
+<div>
+<button class="bg-brand-gold text-brand-dark px-16 py-6 font-bold uppercase tracking-widest text-sm hover:bg-brand-text hover:text-brand-gold transition-all duration-300">
+                    Comenzar mi pedido
+                </button>
+</div>
+</div>
+</section>
+<script>
+        // Micro-interaction for buttons
+        document.querySelectorAll('button, a').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                // Subtle feedback could be added here
+            });
+        });
+
+        // Intersection Observer for fade-in animations on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section > div > *').forEach(el => {
+            // el.classList.add('transition-all', 'duration-1000', 'ease-out', 'opacity-0', 'translate-y-10');
+            // observer.observe(el);
+        });
+    </script>
+</body></html>

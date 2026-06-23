@@ -26,8 +26,8 @@ const ProtectedRoute = ({ children, requiredRole = 'Admin' }) => {
         return <Navigate to="/auth" replace />;
     }
     
-    // Verificar permisos: Admin tiene acceso total; otros roles deben coincidir exactamente
-    if (requiredRole && user?.role !== 'Admin' && user?.role !== requiredRole) {
+    // Verificar permisos: solo el rol exacto requerido puede acceder
+    if (requiredRole && user?.role !== requiredRole) {
         return <Navigate to="/" replace />;
     }
     

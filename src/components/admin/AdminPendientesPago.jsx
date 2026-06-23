@@ -23,7 +23,10 @@ function AdminPendientesPago() {
         setLoading(false);
     };
 
-    useEffect(() => { cargar(); }, []);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        cargar();
+    }, []);
 
     const handleConfirmar = async (pedidoId) => {
         const confirm = await Swal.fire({
@@ -31,7 +34,7 @@ function AdminPendientesPago() {
             text: 'Se confirmará el pago y se descontará el stock. Esta acción no se puede deshacer.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#28a745',
+            confirmButtonColor: '#c9a84c',
             confirmButtonText: 'Sí, confirmar pago',
             cancelButtonText: 'Cancelar',
         });
@@ -113,15 +116,15 @@ function AdminPendientesPago() {
                         <tbody>
                             {filtrados.map(p => (
                                 <tr key={p.id}>
-                                    <td className="pedido-id">#{p.id}</td>
-                                    <td className="cliente-info">
+                                    <td className="pedido-id" data-label="ID">#{p.id}</td>
+                                    <td className="cliente-info" data-label="Cliente">
                                         <strong>{p.clienteNombre}</strong>
                                     </td>
-                                    <td>{formatearFecha(p.fechaPedido)}</td>
-                                    <td>{formatearFecha(p.fechaPago)}</td>
-                                    <td className="total">{formatearMonto(p.total)}</td>
-                                    <td>{p.tipoPago || '-'}</td>
-                                    <td className="acciones">
+                                    <td data-label="Fecha Pedido">{formatearFecha(p.fechaPedido)}</td>
+                                    <td data-label="Fecha Pago">{formatearFecha(p.fechaPago)}</td>
+                                    <td className="total" data-label="Total">{formatearMonto(p.total)}</td>
+                                    <td data-label="Tipo Pago">{p.tipoPago || '-'}</td>
+                                    <td className="acciones" data-label="Acciones">
                                         <button className="btn-ver" onClick={() => abrirDetalle(p)} title="Ver detalle">
                                             <FaEye />
                                         </button>

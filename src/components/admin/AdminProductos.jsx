@@ -13,10 +13,6 @@ const AdminProductos = () => {
     const [categoriaFilter, setCategoriaFilter] = useState('todas');
     const [estadoFilter, setEstadoFilter] = useState('todos');
 
-    useEffect(() => {
-        cargarProductos();
-    }, []);
-
     const cargarProductos = async () => {
         setLoading(true);
         const result = await ProductoService.getAllProductos();
@@ -28,13 +24,18 @@ const AdminProductos = () => {
         setLoading(false);
     };
 
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        cargarProductos();
+    }, []);
+
     const handleDelete = async (id, nombre) => {
         const confirm = await Swal.fire({
             title: `¿Eliminar ${nombre}?`,
             text: "Esta acción no se puede deshacer y eliminará también sus imágenes.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#dc3545',
+            confirmButtonColor: '#c9a84c',
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
@@ -182,6 +183,7 @@ const AdminProductos = () => {
                                 <th>Nombre</th>
                                 <th>Categoría</th>
                                 <th style={{ width: '120px' }}>Precio</th>
+                                <th style={{ width: '140px' }}>Etiquetas</th>
                                 <th style={{ width: '100px' }}>Stock</th>
                                 <th style={{ width: '100px' }}>Estado</th>
                                 <th style={{ width: '180px' }} className="text-center">Acciones</th>
@@ -205,6 +207,12 @@ const AdminProductos = () => {
                                     </td>
                                     <td>
                                         <span className="table-precio">${p.precioBase?.toLocaleString()}</span>
+                                    </td>
+                                    <td>
+                                        <div className="table-etiquetas">
+                                            {p.enOferta && <span className="table-tag table-tag-oferta"><i className="bi bi-tag"></i> Oferta</span>}
+                                            {p.stockInmediato && <span className="table-tag table-tag-inmediato"><i className="bi bi-clock"></i> Retiro</span>}
+                                        </div>
                                     </td>
                                     <td>
                                         <span className={`table-stock ${p.stock <= p.stockMinimo ? 'bajo' : ''}`}>
@@ -273,6 +281,12 @@ const AdminProductos = () => {
                         <div className="mobile-info">
                             <span className="mobile-categoria">{p.categoria}</span>
                             <h3 className="mobile-nombre">{p.nombre}</h3>
+                            {(p.enOferta || p.stockInmediato) && (
+                                <div className="mobile-etiquetas">
+                                    {p.enOferta && <span className="mobile-tag mobile-tag-oferta"><i className="bi bi-tag"></i> Oferta</span>}
+                                    {p.stockInmediato && <span className="mobile-tag mobile-tag-inmediato"><i className="bi bi-clock"></i> Retiro hoy</span>}
+                                </div>
+                            )}
                             <div className="mobile-detalles">
                                 <span className="mobile-precio">${p.precioBase?.toLocaleString()}</span>
                                 <span className={`mobile-stock ${p.stock <= p.stockMinimo ? 'bajo' : ''}`}>

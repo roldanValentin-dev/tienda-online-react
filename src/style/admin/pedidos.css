@@ -1,5 +1,6 @@
 .admin-pedidos-container {
     animation: fadeIn 0.4s ease-out;
+    overflow-x: hidden;
 }
 
 .admin-pedidos-header {
@@ -45,7 +46,7 @@
     background: var(--primary);
     color: white;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+    box-shadow: 0 4px 12px rgba(201,168,76,0.3);
 }
 
 .filtros-pedidos {
@@ -83,7 +84,7 @@
 .busqueda-pedidos input:focus {
     outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
 }
 
 .filtros-estado {
@@ -162,7 +163,7 @@
 }
 
 .tabla-pedidos tbody tr:hover {
-    background: rgba(255,107,53,0.03);
+    background: rgba(201,168,76,0.03);
 }
 
 .tabla-pedidos tbody tr:last-child {
@@ -516,9 +517,9 @@
 
 .cambiar-estado {
     padding: 20px;
-    background: linear-gradient(135deg, rgba(255,107,53,0.05) 0%, rgba(255,140,66,0.1) 100%);
+    background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, rgba(201,168,76,0.1) 100%);
     border-radius: 10px;
-    border: 2px solid rgba(255,107,53,0.2);
+    border: 2px solid rgba(201,168,76,0.2);
 }
 
 .estado-botones {
@@ -606,7 +607,7 @@
     margin: 0 0 12px 0;
 }
 
-@media (max-width: 991px) {
+@media (max-width: 992px) {
     .admin-pedidos-container {
         overflow-x: hidden;
     }
@@ -633,93 +634,6 @@
 
     .filtro-btn {
         flex-shrink: 0;
-    }
-
-    .tabla-pedidos table,
-    .tabla-pedidos thead,
-    .tabla-pedidos tbody,
-    .tabla-pedidos th,
-    .tabla-pedidos td,
-    .tabla-pedidos tr {
-        display: block;
-    }
-
-    .tabla-pedidos {
-        overflow: visible;
-    }
-
-    .tabla-pedidos thead {
-        display: none;
-    }
-
-    .tabla-pedidos table {
-        min-width: unset;
-    }
-
-    .tabla-pedidos tbody tr {
-        background: white;
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        margin-bottom: 12px;
-        padding: 0;
-        box-shadow: var(--shadow-sm);
-    }
-
-    .tabla-pedidos tbody tr:hover {
-        transform: none;
-    }
-
-    .tabla-pedidos td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 16px;
-        border: none;
-        border-bottom: 1px solid var(--border);
-        text-align: right;
-    }
-
-    .tabla-pedidos td:last-child {
-        border-bottom: none;
-    }
-
-    .tabla-pedidos td::before {
-        content: attr(data-label);
-        font-weight: 600;
-        color: #6c757d;
-        font-size: 0.85rem;
-        text-align: left;
-    }
-
-    .tabla-pedidos td.pedido-id {
-        background: var(--primary);
-        color: white;
-        border-radius: 10px 10px 0 0;
-        border-bottom: none;
-        justify-content: space-between;
-        padding: 12px 16px;
-    }
-
-    .tabla-pedidos td.pedido-id::before {
-        color: rgba(255,255,255,0.8);
-    }
-
-    .tabla-pedidos td.cliente-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 2px;
-    }
-
-    .tabla-pedidos td.cliente-info::before {
-        margin-bottom: 4px;
-    }
-
-    .tabla-pedidos td.cliente-info span {
-        font-size: 0.85rem;
-    }
-
-    .acciones {
-        justify-content: flex-end;
     }
 
     .modal-pedido {
@@ -751,19 +665,6 @@
 }
 
 @media (max-width: 480px) {
-    .tabla-pedidos tbody td {
-        padding: 8px 12px;
-    }
-
-    .tabla-pedidos tbody tr {
-        margin-bottom: 8px;
-        border-radius: var(--radius-md);
-    }
-
-    .tabla-pedidos td.pedido-id {
-        padding: 10px 12px;
-    }
-
     .info-cliente,
     .info-pedido,
     .info-pago-detalle {
@@ -838,6 +739,27 @@
 
     .producto-item {
         gap: 8px;
+        min-width: 0;
+    }
+
+    .producto-item span {
+        white-space: normal;
+        word-break: break-word;
+        min-width: 0;
+    }
+
+    .detalles-pedido table {
+        table-layout: fixed;
+    }
+
+    .detalles-pedido tbody td:nth-child(1) {
+        width: 45%;
+    }
+
+    .detalles-pedido tbody td:nth-child(2),
+    .detalles-pedido tbody td:nth-child(3),
+    .detalles-pedido tbody td:nth-child(4) {
+        width: 18%;
     }
 
     .observaciones {
@@ -858,15 +780,129 @@
         padding: 12px;
     }
 
-    .tabla-pedidos tbody td {
-        padding: 8px 12px;
-    }
-
     .modal-pedido {
         border-radius: var(--radius-lg);
     }
 
     .modal-body {
         padding: 12px;
+    }
+
+    .badge-estado {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+        white-space: nowrap;
+    }
+}
+
+/* --- Show/hide desktop vs mobile --- */
+.tabla-pedidos-desktop {
+    display: block;
+}
+
+.pedidos-cards-mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    .tabla-pedidos-desktop {
+        display: none;
+    }
+
+    .pedidos-cards-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    .pedido-card-mobile {
+        background: white;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+    }
+
+    .pedido-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 14px 16px;
+        background: var(--primary);
+        color: white;
+    }
+
+    .pedido-card-id {
+        font-weight: 700;
+        font-size: 1rem;
+    }
+
+    .pedido-card-body {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pedido-card-cliente {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .pedido-card-cliente strong {
+        font-size: 0.95rem;
+        color: var(--dark);
+    }
+
+    .pedido-card-cliente span {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        word-break: break-word;
+    }
+
+    .pedido-card-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        background: var(--light);
+        padding: 10px 12px;
+        border-radius: var(--radius-md);
+    }
+
+    .pedido-card-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pedido-card-row span {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+    }
+
+    .pedido-card-row strong {
+        font-size: 0.88rem;
+        color: var(--dark);
+    }
+
+    .pedido-card-row .pedido-card-total {
+        color: var(--primary);
+        font-size: 1rem;
+    }
+
+    .pedido-card-footer {
+        padding: 12px 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .pedido-card-footer .btn-ver {
+        width: 100%;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 16px;
     }
 }

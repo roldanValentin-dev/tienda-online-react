@@ -1,5 +1,5 @@
 import { CarritoProvider } from './context/CarritoContext';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useEffect } from 'react';
@@ -9,6 +9,8 @@ import ProductsList from './components/ProductsList';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Auth from './components/Auth';
+import ForgotPassword from './components/ForgotPassword';
+import ResetPassword from './components/ResetPassword';
 import Checkout from './components/Checkout';
 import PagoPage from './components/PagoPage';
 import MisPedidos from './components/MisPedidos';
@@ -43,11 +45,10 @@ function ScrollToTop() {
  */
 function AppContent() {
   const location = useLocation();
-  const { user } = useAuth();
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   return (
-    <div className="app-wrapper">
+    <div className="app-wrapper" style={{ paddingTop: !isAdminRoute ? 'var(--nav-height)' : '0' }}>
       {!isAdminRoute && <Navbar />}
       <main className="main-content">
         <Routes>
@@ -56,6 +57,8 @@ function AppContent() {
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/pago/:id" element={<PagoPage />} />
           <Route path="/pago-exitoso" element={<PagoPage />} />

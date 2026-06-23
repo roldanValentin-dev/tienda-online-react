@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import AdminPagoService from '../../services/AdminPagoService';
@@ -23,12 +23,16 @@ function AdminConfigPago() {
                 <button className={`config-tab ${tab === 'direccion' ? 'active' : ''}`} onClick={() => setTab('direccion')}>
                     <i className="bi bi-geo-alt"></i> Dirección de Retiro
                 </button>
+                <button className={`config-tab ${tab === 'envio' ? 'active' : ''}`} onClick={() => setTab('envio')}>
+                    <i className="bi bi-truck"></i> Envío
+                </button>
             </div>
 
             <div className="config-content">
                 {tab === 'descuento' && <SeccionDescuento />}
                 {tab === 'bancos' && <SeccionBancos />}
                 {tab === 'direccion' && <SeccionDireccion />}
+                {tab === 'envio' && <SeccionEnvio />}
             </div>
         </div>
     );
@@ -98,21 +102,24 @@ function SeccionBancos() {
     const [showForm, setShowForm] = useState(false);
     const [editId, setEditId] = useState(null);
 
-    const cargar = async () => {
+    const cargar = useCallback(async () => {
         const r = await AdminPagoService.getDatosBancarios();
         if (r.success) setCuentas(Array.isArray(r.data) ? r.data : []);
         else toast.error(r.message);
         setLoading(false);
-    };
+    }, []);
 
-    useEffect(() => { cargar(); }, []);
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        cargar();
+    }, [cargar]);
 
     const handleDelete = async (id) => {
         const confirm = await Swal.fire({
             title: '¿Eliminar cuenta?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#dc3545',
+            confirmButtonColor: '#c9a84c',
             confirmButtonText: 'Eliminar',
         });
         if (!confirm.isConfirmed) return;
@@ -310,6 +317,95 @@ function SeccionDireccion() {
                 <div className="form-group-config">
                     <label>Teléfono de contacto</label>
                     <input name="telefono" value={form.telefono} onChange={handleChange} className="form-input-config" placeholder="123456789" />
+                </div>
+            </div>
+            <button className="btn-save-config" onClick={handleSave} disabled={saving}>
+                {saving ? 'Guardando...' : 'Guardar'}
+            </button>
+        </div>
+    );
+}
+
+function SeccionEnvio() {
+    const [form, setForm] = useState({ costoEnvio: '', minimoGratis: '' });
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+
+    useEffect(() => {
+        const load = async () => {
+            const r = await AdminPagoService.getEnvioConfig();
+            if (r.success) {
+                setForm({
+                    costoEnvio: r.data.costoEnvio ?? '',
+                    minimoGratis: r.data.minimoGratis ?? '',
+                });
+            }
+            setLoading(false);
+        };
+        load();
+    }, []);
+
+    const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+    const handleSave = async () => {
+        const costo = parseFloat(form.costoEnvio);
+        if (isNaN(costo) || costo < 0) {
+            toast.error('El costo de envío debe ser un número mayor o igual a 0');
+            return;
+        }
+        const data = { costoEnvio: costo };
+        const minimo = form.minimoGratis;
+        if (minimo !== '' && minimo !== null) {
+            const parsed = parseFloat(minimo);
+            if (!isNaN(parsed) && parsed >= 0) {
+                data.minimoGratis = parsed;
+            }
+        }
+        setSaving(true);
+        const r = await AdminPagoService.updateEnvioConfig(data);
+        setSaving(false);
+        if (r.success) toast.success('Configuración de envío actualizada');
+        else toast.error(r.message);
+    };
+
+    if (loading) return <div className="config-loading"><div className="spinner-border" /></div>;
+
+    return (
+        <div className="config-card">
+            <div className="config-card-header">
+                <i className="bi bi-truck"></i>
+                <h3>Configuración de Envío</h3>
+            </div>
+            <p className="config-desc">Establecé la tarifa de envío y el monto mínimo para envío gratis.</p>
+            <div className="direccion-form">
+                <div className="form-group-config">
+                    <label>Costo de envío ($) *</label>
+                    <input
+                        name="costoEnvio"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={form.costoEnvio}
+                        onChange={handleChange}
+                        className="form-input-config"
+                        placeholder="0.00"
+                    />
+                </div>
+                <div className="form-group-config">
+                    <label>Monto mínimo para envío gratis ($)</label>
+                    <input
+                        name="minimoGratis"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={form.minimoGratis}
+                        onChange={handleChange}
+                        className="form-input-config"
+                        placeholder="Dejar vacío para deshabilitar"
+                    />
+                    <small style={{ color: 'var(--text-muted)', display: 'block', marginTop: 4 }}>
+                        Si se deja vacío, no se aplicará envío gratis automáticamente.
+                    </small>
                 </div>
             </div>
             <button className="btn-save-config" onClick={handleSave} disabled={saving}>

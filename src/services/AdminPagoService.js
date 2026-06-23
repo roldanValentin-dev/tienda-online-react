@@ -1,7 +1,7 @@
 import axios from 'axios';
 import API_BASE_URL from '../config/api';
 
-const DEBUG = true;
+const DEBUG = false;
 
 function log(type, data) {
     if (!DEBUG) return;
@@ -129,6 +129,33 @@ class AdminPagoService {
         } catch (e) {
             log('err', e.response?.data || e.message);
             return { success: false, message: extractError(e.response?.data, 'Error al actualizar dirección') };
+        }
+    }
+
+    async getEnvioConfig() {
+        try {
+            log('req', 'GET /api/admin/envio/config');
+            const r = await axios.get(`${API_BASE_URL}/api/admin/envio/config`, { timeout: this.timeout });
+            log('res', r.data);
+            return { success: true, data: r.data };
+        } catch (e) {
+            log('err', e.response?.data || e.message);
+            return { success: false, message: extractError(e.response?.data, 'Error al obtener configuración de envío') };
+        }
+    }
+
+    async updateEnvioConfig(data) {
+        try {
+            log('req', { url: 'PUT /api/admin/envio/config', body: data });
+            const r = await axios.put(`${API_BASE_URL}/api/admin/envio/config`, data, {
+                timeout: this.timeout,
+                headers: { 'Content-Type': 'application/json' }
+            });
+            log('res', r.data);
+            return { success: true, data: r.data };
+        } catch (e) {
+            log('err', e.response?.data || e.message);
+            return { success: false, message: extractError(e.response?.data, 'Error al actualizar configuración de envío') };
         }
     }
 }

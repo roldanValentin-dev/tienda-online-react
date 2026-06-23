@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useState, useEffect, useContext, useCallback } from "react";
 import API_BASE_URL from "../config/api";
 import axios from "axios";
@@ -5,7 +6,7 @@ import { toast } from 'react-toastify';
 import { AuthContext } from './AuthContext';
 import CarritoService from '../services/CarritoService';
 
-const DEBUG = true;
+const DEBUG = false;
 
 function debugLog(type, data) {
     if (!DEBUG) return;
@@ -254,7 +255,10 @@ export function CarritoProvider({ children }) {
     }, [isAuthenticated]);
 
     const calcularTotal = useCallback(() => {
-        return cart.reduce((sum, i) => sum + i.precioBase * i.cantidad, 0);
+        return cart.reduce((sum, i) => {
+            const precio = i.enOferta && i.precioOferta ? i.precioOferta : i.precioBase;
+            return sum + precio * i.cantidad;
+        }, 0);
     }, [cart]);
 
     return (
