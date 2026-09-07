@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;0,900;1,400;1,600;1,700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
 
 * {
   margin: 0;
@@ -8,6 +13,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -17,6 +23,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -53,6 +60,7 @@ img {
 
 .container-custom {
   max-width: var(--container-max);
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -129,7 +137,7 @@ img {
 }
 
 .btn-gold:hover {
-  background: #b89530;
+  background: var(--accent-gold-hover);
   box-shadow: var(--shadow-gold);
   transform: translateY(-2px);
 }

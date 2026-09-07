@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { FaCheck, FaTimes, FaEye, FaShoppingBag } from 'react-icons/fa';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../../config/swal';
 import AdminPedidoService from '../../services/AdminPedidoService';
 import { SkeletonTable } from '../Skeleton';
 import '../../style/admin/pedidos.css';
@@ -14,6 +15,7 @@ function AdminPendientesPago() {
     const [busqueda, setBusqueda] = useState('');
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
     const [mostrarModal, setMostrarModal] = useState(false);
+    const [loadingDetalle, setLoadingDetalle] = useState(false);
 
     const cargar = async () => {
         setLoading(true);
@@ -34,7 +36,7 @@ function AdminPendientesPago() {
             text: 'Se confirmará el pago y se descontará el stock. Esta acción no se puede deshacer.',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#c9a84c',
+            confirmButtonColor: SWAL_COLOR,
             confirmButtonText: 'Sí, confirmar pago',
             cancelButtonText: 'Cancelar',
         });
@@ -69,9 +71,15 @@ function AdminPendientesPago() {
         return String(p.id).includes(q) || (p.clienteNombre || '').toLowerCase().includes(q);
     });
 
-    const abrirDetalle = (pedido) => {
-        setPedidoSeleccionado(pedido);
+    const abrirDetalle = async (pedido) => {
         setMostrarModal(true);
+        setLoadingDetalle(true);
+        setPedidoSeleccionado({ ...pedido });
+        const r = await AdminPedidoService.getDetalle(pedido.id);
+        if (r.success) {
+            setPedidoSeleccionado(prev => ({ ...prev, ...r.data }));
+        }
+        setLoadingDetalle(false);
     };
 
     return (
@@ -155,6 +163,15 @@ function AdminPendientesPago() {
                             </button>
                         </div>
                         <div className="modal-body">
+                            {loadingDetalle ? (
+                                <div style={{ textAlign: 'center', padding: '40px' }}>
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Cargando...</span>
+                                    </div>
+                                    <p style={{ marginTop: 16, color: '#6c757d' }}>Cargando detalle del pedido...</p>
+                                </div>
+                            ) : (
+                            <>
                             <div className="info-cliente">
                                 <h4>Información del Cliente</h4>
                                 <p><strong>Nombre:</strong> {pedidoSeleccionado.clienteNombre}</p>
@@ -195,6 +212,47 @@ function AdminPendientesPago() {
                                 )}
                             </div>
 
+                            <div className="detalles-pedido">
+                                <h4>Productos</h4>
+                                {pedidoSeleccionado.detalles && pedidoSeleccionado.detalles.length > 0 ? (
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th>Cantidad</th>
+                                                <th>Precio</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {pedidoSeleccionado.detalles.map(detalle => (
+                                                <tr key={detalle.id}>
+                                                    <td>
+                                                        <div className="producto-item">
+                                                            {detalle.productoImagen && (
+                                                                <img src={detalle.productoImagen} alt={detalle.productoNombre} />
+                                                            )}
+                                                            <span>{detalle.productoNombre}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>{detalle.cantidad}</td>
+                                                    <td>{formatearMonto(detalle.precioUnitario)}</td>
+                                                    <td>{formatearMonto(detalle.subtotal)}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colSpan="3"><strong>Total</strong></td>
+                                                <td><strong>{formatearMonto(pedidoSeleccionado.montoConDescuento || pedidoSeleccionado.total)}</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                ) : (
+                                    <p style={{ color: '#6c757d', padding: '12px 0' }}>No hay detalles de productos disponibles.</p>
+                                )}
+                            </div>
+
                             <div className="cambiar-estado">
                                 <h4>Confirmar Pago</h4>
                                 <p className="text-muted">Al confirmar se descontará el stock automáticamente y el pedido pasará a "Confirmado".</p>
@@ -210,6 +268,8 @@ function AdminPendientesPago() {
                                     )}
                                 </button>
                             </div>
+                            </>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -27,6 +27,7 @@
   grid-template-columns: 1fr 380px;
   gap: 32px;
   max-width: var(--container-max);
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
   align-items: start;
@@ -173,7 +174,7 @@
   font-family: var(--font-decorative);
   font-size: 1.2rem;
   font-style: italic;
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
   font-weight: 600;
   margin: 0;
   white-space: nowrap;
@@ -247,7 +248,7 @@
   font-family: var(--font-decorative);
   font-size: 1.5rem;
   font-style: italic;
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
   font-weight: 700;
 }
 
@@ -271,7 +272,7 @@
 }
 
 .at-cart-checkout-btn:hover {
-  background: #b89530;
+  background: var(--accent-gold-hover);
   box-shadow: var(--shadow-gold);
   transform: translateY(-2px);
 }

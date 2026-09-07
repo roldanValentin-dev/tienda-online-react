@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ProductoImagenService from '../../services/ProductoImagenService';
 import API_BASE_URL from '../../config/api';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../../config/swal';
 import { toast } from 'react-toastify';
 import '../../style/admin/imagenes.css';
 
@@ -110,7 +111,7 @@ const ImageUploader = ({ productoId, onUploadSuccess }) => {
             text: 'Esta será la imagen principal del producto',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#c9a84c',
+            confirmButtonColor: SWAL_COLOR,
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, marcar',
             cancelButtonText: 'Cancelar'
@@ -140,7 +141,7 @@ const ImageUploader = ({ productoId, onUploadSuccess }) => {
             text: 'Esta acción no se puede deshacer',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#c9a84c',
+            confirmButtonColor: SWAL_COLOR,
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'

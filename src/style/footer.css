@@ -17,6 +17,7 @@
 
 .at-footer-inner {
   max-width: var(--container-max);
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -119,10 +120,11 @@
   line-height: 1.5;
 }
 
-.at-footer-contact li i {
+.at-footer-contact li .material-symbols-outlined {
   color: var(--accent-gold);
   margin-top: 3px;
   flex-shrink: 0;
+  font-size: 1.2rem;
 }
 
 .at-footer-bottom {

@@ -83,12 +83,11 @@ function ProductsList() {
     <div className="at-products">
       <div className="at-products-hero">
         <h1 className="at-products-hero-title">Nuestros Productos</h1>
-        <p className="at-products-hero-sub">Una selección artesanal para vos</p>
       </div>
 
       <div className="at-products-catalog">
         <div className="at-products-catalog-header">
-          <h2>Catálogo completo</h2>
+          <h2 style={{ textAlign: 'center', width: '100%' }}>Catálogo completo</h2>
         </div>
 
         <div className="at-products-layout">
@@ -118,18 +117,18 @@ function ProductsList() {
                 className={`at-filter-tag ${filterOferta ? 'is-active-oferta' : ''}`}
                 onClick={() => { setFilterOferta(v => !v); setSelectCategory('todas'); }}
               >
-                <i className="bi bi-tag"></i> En oferta
+                <span className="material-symbols-outlined">sell</span> En oferta
               </button>
               <button
                 className={`at-filter-tag ${filterInmediato ? 'is-active-inmediato' : ''}`}
                 onClick={() => { setFilterInmediato(v => !v); setSelectCategory('todas'); }}
               >
-                <i className="bi bi-clock"></i> Retiro hoy
+                <span className="material-symbols-outlined">schedule</span> Retiro hoy
               </button>
             </div>
 
             <div className="at-search-wrapper">
-              <i className="bi bi-search"></i>
+              <span className="material-symbols-outlined at-search-icon">search</span>
               <input
                 type="text"
                 placeholder="Buscar productos..."
@@ -157,7 +156,7 @@ function ProductsList() {
             ) : displayProducts.length === 0 ? (
               <div className="at-products-empty">
                 <div className="empty-state">
-                  <div className="empty-icon"><i className="bi bi-search"></i></div>
+                  <div className="empty-icon"><span className="material-symbols-outlined">search</span></div>
                   <h3>Sin resultados</h3>
                   <p>
                     {debouncedSearch.trim()
@@ -200,20 +199,17 @@ function ProductsList() {
                     >
                       <div className="at-product-card-image">
                         <img src={getProductImage(p)} alt={p.nombre} />
-                        {(p.stockInmediato || p.enOferta) && (
-                          <div className="at-product-card-badges">
-                            {p.stockInmediato && <span className="at-badge-card at-badge-card-inmediato">Retiro hoy</span>}
-                            {p.enOferta && calcDiscount(p) && <span className="at-badge-card at-badge-card-oferta">-{calcDiscount(p)}%</span>}
-                          </div>
+                        <span className="at-product-card-category-badge">{p.categoria}</span>
+                        {p.enOferta && calcDiscount(p) && (
+                          <span className="at-badge-card-oferta">-{calcDiscount(p)}%</span>
                         )}
                         <div className="at-product-card-overlay">
                           <span className="at-product-card-add">
-                            <i className="bi bi-eye"></i> Ver detalle
+                            <span className="material-symbols-outlined">visibility</span> Ver detalle
                           </span>
                         </div>
                       </div>
                       <div className="at-product-card-body">
-                        <div className="at-product-card-category">{p.categoria}</div>
                         <h3 className="at-product-card-name">{p.nombre}</h3>
                         {p.enOferta && p.precioOferta ? (
                           <div className="at-product-card-price-group">

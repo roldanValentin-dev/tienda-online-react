@@ -20,16 +20,18 @@ function AdminReportes() {
     });
     const [hasta, setHasta] = useState(() => new Date().toISOString().split('T')[0]);
 
+    const cargar = async () => {
+        setLoading(true);
+        const r = await AdminPedidoService.getTodosLosPedidos();
+        if (r.success) {
+            const filtrados = (r.data || []).filter(p => p.estado !== 'Carrito');
+            setPedidos(filtrados);
+        }
+        setLoading(false);
+    };
+
     useEffect(() => {
-        const cargar = async () => {
-            setLoading(true);
-            const r = await AdminPedidoService.getTodosLosPedidos();
-            if (r.success) {
-                const filtrados = (r.data || []).filter(p => p.estado !== 'Carrito');
-                setPedidos(filtrados);
-            }
-            setLoading(false);
-        };
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         cargar();
     }, []);
 
@@ -81,7 +83,7 @@ function AdminReportes() {
         <div className="admin-reportes">
             <div className="admin-pedidos-header">
                 <h2><i className="bi bi-graph-up"></i> Reportes</h2>
-                <button className="btn-refresh" onClick={() => window.location.reload()}>
+                <button className="btn-refresh" onClick={cargar}>
                     <i className="bi bi-arrow-clockwise"></i> Actualizar
                 </button>
             </div>

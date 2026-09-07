@@ -80,3 +80,97 @@
         font-size: 0.85rem;
     }
 }
+
+/* Responsive table stacking (data-label) */
+@media (max-width: 992px) {
+    .admin-pendientes-pago .tabla-pedidos table,
+    .admin-pendientes-pago .tabla-pedidos thead,
+    .admin-pendientes-pago .tabla-pedidos tbody,
+    .admin-pendientes-pago .tabla-pedidos tr {
+        display: block;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos thead {
+        display: none;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody tr {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        gap: 4px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        margin-bottom: 16px;
+        background: white;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border: none;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.85rem;
+        min-width: 120px;
+        flex-shrink: 0;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.pedido-id::before {
+        min-width: 100px;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.pedido-id {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.cliente-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.cliente-info::before {
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.cliente-info strong {
+        font-size: 0.95rem;
+        color: var(--dark);
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.total {
+        font-weight: 700;
+        color: var(--primary);
+        font-size: 1.1rem;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.acciones {
+        justify-content: flex-end;
+        border-bottom: none;
+        padding-top: 4px;
+        gap: 8px;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td.acciones::before {
+        display: none;
+    }
+
+    .admin-pendientes-pago .tabla-pedidos tbody td:empty {
+        display: none;
+    }
+}

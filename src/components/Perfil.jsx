@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import PerfilService from '../services/PerfilService';
 import { validatePasswordStrength, validatePhone } from '../security';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import '../style/perfil.css';
 
 const Perfil = () => {
@@ -28,9 +29,9 @@ const Perfil = () => {
       setFormDatos({ nombre: data.nombre || '', apellido: data.apellido || '', telefono: data.telefono || '', direccion: data.direccion || '' });
     } catch (error) {
       if (error.message.includes('Perfil no encontrado')) {
-        Swal.fire({ icon: 'warning', title: 'Perfil no disponible', text: 'Solo para clientes registrados.', confirmButtonText: 'Entendido', confirmButtonColor: '#c9a84c' }).then(() => navigate('/'));
+        Swal.fire({ icon: 'warning', title: 'Perfil no disponible', text: 'Solo para clientes registrados.', confirmButtonText: 'Entendido', confirmButtonColor: SWAL_COLOR }).then(() => navigate('/'));
       } else {
-        Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: '#c9a84c' });
+        Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: SWAL_COLOR });
       }
     } finally { setLoading(false); }
   }, [navigate]);
@@ -86,10 +87,10 @@ const Perfil = () => {
       const data = await PerfilService.updatePerfil(formDatos);
       setPerfil(data);
       setFormDatos({ nombre: data.nombre || '', apellido: data.apellido || '', telefono: data.telefono || '', direccion: data.direccion || '' });
-      Swal.fire({ icon: 'success', title: '¡Perfil actualizado!', timer: 2000, showConfirmButton: false, confirmButtonColor: '#c9a84c' });
+      Swal.fire({ icon: 'success', title: '¡Perfil actualizado!', timer: 2000, showConfirmButton: false, confirmButtonColor: SWAL_COLOR });
       setEditando(false);
     } catch (error) {
-      Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: '#c9a84c' });
+      Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: SWAL_COLOR });
     } finally { setGuardando(false); }
   };
 
@@ -105,11 +106,11 @@ const Perfil = () => {
     try {
       setCambiandoPassword(true);
       await PerfilService.cambiarPassword(formPassword.passwordActual, formPassword.passwordNueva);
-      Swal.fire({ icon: 'success', title: '¡Contraseña actualizada!', timer: 2000, showConfirmButton: false, confirmButtonColor: '#c9a84c' });
+      Swal.fire({ icon: 'success', title: '¡Contraseña actualizada!', timer: 2000, showConfirmButton: false, confirmButtonColor: SWAL_COLOR });
       setFormPassword({ passwordActual: '', passwordNueva: '', confirmarPassword: '' });
       setErrores({});
     } catch (error) {
-      Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: '#c9a84c' });
+      Swal.fire({ icon: 'error', title: 'Error', text: error.message, confirmButtonColor: SWAL_COLOR });
     } finally { setCambiandoPassword(false); }
   };
 

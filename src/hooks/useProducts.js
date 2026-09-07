@@ -8,18 +8,14 @@ export const useProducts = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Delay artificial de 2 segundos para ver el skeleton
-        setTimeout(() => {
-            axios.get(`${API_BASE_URL}/api/catalogo/productos`).then(res => {
-                console.log(res.data);
-                setProducts(res.data);
-                setLoading(false);
-            }).catch(err => {
-                console.error(`error al cargar productos ${err}`);
-                setError(err);
-                setLoading(false);
-            });
-        }, 2000);
+        axios.get(`${API_BASE_URL}/api/catalogo/productos`).then(res => {
+            setProducts(res.data);
+            setLoading(false);
+        }).catch(err => {
+            console.error(`error al cargar productos ${err}`);
+            setError(err);
+            setLoading(false);
+        });
     },[]);
     
     const getProductById = (id) => {

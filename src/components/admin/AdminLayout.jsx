@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../../config/swal';
 import '../../style/admin/layout.css';
 
 /**
@@ -20,7 +21,7 @@ const AdminLayout = ({ children }) => {
             text: '¿Estás seguro que deseas salir del panel?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonColor: '#c9a84c',
+            confirmButtonColor: SWAL_COLOR,
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, salir',
             cancelButtonText: 'Cancelar'
@@ -45,16 +46,16 @@ const AdminLayout = ({ children }) => {
 
     const menuItems = [
         {
-            path: '/admin/productos',
-            icon: 'bi-box-seam',
-            label: 'Productos',
-            roles: ['Admin', 'Vendedor']
-        },
-        {
             path: '/admin/pedidos',
             icon: 'bi-receipt',
             label: 'Pedidos',
             roles: ['Admin', 'Vendedor']
+        },
+        {
+            path: '/admin/pendientes-pago',
+            icon: 'bi-credit-card-2-front',
+            label: 'Pendientes Pago',
+            roles: ['Admin']
         },
         {
             path: '/admin/reportes',
@@ -63,10 +64,10 @@ const AdminLayout = ({ children }) => {
             roles: ['Admin']
         },
         {
-            path: '/admin/pendientes-pago',
-            icon: 'bi-credit-card-2-front',
-            label: 'Pendientes Pago',
-            roles: ['Admin']
+            path: '/admin/productos',
+            icon: 'bi-box-seam',
+            label: 'Productos',
+            roles: ['Admin', 'Vendedor']
         },
         {
             path: '/admin/config-pago',
@@ -140,10 +141,6 @@ const AdminLayout = ({ children }) => {
                 {/* Content */}
                 <main className="admin-content">
                     {children}
-                    <div className="admin-disclaimer">
-                        <i className="bi bi-info-circle"></i>
-                        Este sistema gestiona pedidos y cobros internos. No reemplaza la facturación electrónica obligatoria ni las obligaciones fiscales del negocio. Consulte con su contador.
-                    </div>
                 </main>
             </div>
             

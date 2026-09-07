@@ -5,13 +5,13 @@
 /* ---------- Variables del sistema de diseño admin ---------- */
 :root {
   --adm-primary: #c9a84c;
-  --adm-primary-light: #f5edd6;
-  --adm-primary-dark: #b8973e;
+  --adm-primary-light: #f5f0eb;
+  --adm-primary-dark: #b89530;
   --adm-primary-ring: rgba(201, 168, 76, 0.2);
   --adm-surface: #ffffff;
-  --adm-bg: #fdf8f3;
-  --adm-text-primary: #2d1b12;
-  --adm-text-secondary: #8b7355;
+  --adm-bg: #f5f0eb;
+  --adm-text-primary: #3c2415;
+  --adm-text-secondary: #3c2415;
   --adm-text-muted: #a0928b;
   --adm-border: #e8ddd0;
   --adm-border-light: #f0e8dd;
@@ -23,12 +23,12 @@
   --adm-radius-md: 8px;
   --adm-radius-lg: 12px;
   --adm-radius-xl: 16px;
-  --adm-shadow-sm: 0 2px 8px rgba(45, 27, 18, 0.06);
-  --adm-shadow-md: 0 4px 16px rgba(45, 27, 18, 0.1);
-  --adm-shadow-lg: 0 8px 32px rgba(45, 27, 18, 0.12);
+  --adm-shadow-sm: 0 2px 8px rgba(60, 36, 21, 0.06);
+  --adm-shadow-md: 0 4px 16px rgba(60, 36, 21, 0.1);
+  --adm-shadow-lg: 0 8px 32px rgba(60, 36, 21, 0.12);
   --adm-transition: 200ms ease;
   --adm-font: 'DM Sans', sans-serif;
-  --adm-font-heading: 'Playfair Display', Georgia, serif;
+  --adm-font-heading: 'DM Sans', sans-serif;
 }
 
 /* ---------- Animaciones ---------- */
@@ -472,7 +472,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 2000;
+  z-index: 1050;
   padding: 20px;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);

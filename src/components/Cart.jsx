@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import { CarritoContext } from "../context/CarritoContext";
 import API_BASE_URL from '../config/api';
 import { PLACEHOLDER_CART } from '../config/placeholders';
@@ -28,7 +29,7 @@ function Cart() {
       html: `¿Estás seguro de eliminar <strong>${product.nombre}</strong> del carrito?`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#c9a84c',
+      confirmButtonColor: SWAL_COLOR,
       cancelButtonColor: '#666',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
@@ -38,7 +39,7 @@ function Cart() {
         Swal.fire({
           title: '¡Eliminado!',
           icon: 'success',
-          confirmButtonColor: '#c9a84c',
+          confirmButtonColor: SWAL_COLOR,
           timer: 1500,
           timerProgressBar: true,
         });

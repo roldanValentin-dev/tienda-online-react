@@ -1,6 +1,7 @@
 .at-perfil {
   padding: 40px 0 80px;
   max-width: 640px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -154,7 +155,7 @@
 }
 
 .at-perfil-btn.gold:hover {
-  background: #b89530;
+  background: var(--accent-gold-hover);
   box-shadow: var(--shadow-gold);
 }
 

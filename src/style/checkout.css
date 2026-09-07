@@ -2,6 +2,7 @@
 .at-config {
   padding: 40px 0 80px;
   max-width: 800px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -147,7 +148,7 @@
   font-family: var(--font-decorative);
   font-size: 1.1rem;
   font-style: italic;
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
   font-weight: 600;
 }
 
@@ -172,7 +173,7 @@
   font-family: var(--font-decorative);
   font-size: 1.6rem;
   font-style: italic;
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
   font-weight: 700;
 }
 
@@ -228,7 +229,7 @@
 .at-customizer-option.is-selected {
   border-color: var(--accent-gold);
   background: rgba(201, 168, 76, 0.08);
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
   font-weight: 500;
 }
 
@@ -375,7 +376,7 @@
 
 .at-calendar-day:hover:not(.is-disabled):not(.is-empty) {
   background: rgba(201, 168, 76, 0.12);
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
 }
 
 .at-calendar-day.is-today {
@@ -440,7 +441,7 @@
 .at-time-chip.is-selected {
   border-color: var(--accent-gold);
   background: rgba(201, 168, 76, 0.08);
-  color: var(--accent-caramel);
+  color: var(--accent-gold);
   font-weight: 500;
 }
 
@@ -547,6 +548,151 @@
   height: 10px;
   border-radius: 50%;
   background: var(--accent-gold);
+}
+
+/* ===== DELIVERY OPTIONS ===== */
+.at-delivery-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.at-delivery-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.at-delivery-card:hover {
+  border-color: var(--accent-gold);
+}
+
+.at-delivery-card.is-selected {
+  border-color: var(--accent-gold);
+  background: rgba(201, 168, 76, 0.04);
+}
+
+.at-delivery-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.at-delivery-icon.local {
+  background: #fefce8;
+  color: var(--accent-gold);
+}
+
+.at-delivery-icon.delivery {
+  background: #eff6ff;
+  color: var(--info);
+}
+
+.at-delivery-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all var(--transition-fast);
+}
+
+.at-delivery-card.is-selected .at-delivery-radio {
+  border-color: var(--accent-gold);
+}
+
+.at-delivery-card.is-selected .at-delivery-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+}
+
+.at-delivery-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--bg-warm);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  margin-bottom: 28px;
+}
+
+.at-delivery-info .material-symbols-outlined {
+  font-size: 1.5rem;
+  color: var(--accent-gold);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.at-delivery-info strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.at-delivery-info p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.at-delivery-info-whatsapp {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.at-delivery-info-whatsapp .material-symbols-outlined {
+  color: #22c55e;
+}
+
+.at-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 20px;
+  background: #25D366;
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.at-whatsapp-btn:hover {
+  background: #1ebe5d;
+  transform: scale(1.02);
+  color: white;
+}
+
+.at-whatsapp-btn .material-symbols-outlined {
+  font-size: 1.2rem;
+  color: white !important;
 }
 
 /* ===== STEP NAV ===== */

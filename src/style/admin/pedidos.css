@@ -321,7 +321,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 2000;
+    z-index: 1050;
     padding: 20px;
     backdrop-filter: blur(4px);
 }
@@ -795,114 +795,100 @@
     }
 }
 
-/* --- Show/hide desktop vs mobile --- */
-.tabla-pedidos-desktop {
-    display: block;
-}
-
-.pedidos-cards-mobile {
-    display: none;
-}
-
+/* --- Responsive table (data-label stacking) --- */
 @media (max-width: 992px) {
-    .tabla-pedidos-desktop {
+    .tabla-pedidos table,
+    .tabla-pedidos thead,
+    .tabla-pedidos tbody,
+    .tabla-pedidos tr {
+        display: block;
+    }
+
+    .tabla-pedidos thead {
         display: none;
     }
 
-    .pedidos-cards-mobile {
+    .tabla-pedidos tbody tr {
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        animation: fadeIn 0.4s ease-out;
-    }
-
-    .pedido-card-mobile {
-        background: white;
+        padding: 16px;
+        gap: 4px;
         border: 1px solid var(--border);
         border-radius: var(--radius-lg);
+        margin-bottom: 16px;
+        background: white;
         box-shadow: var(--shadow-sm);
-        overflow: hidden;
     }
 
-    .pedido-card-header {
+    .tabla-pedidos tbody td {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 14px 16px;
-        background: var(--primary);
-        color: white;
+        padding: 8px 0;
+        border: none;
+        border-bottom: 1px solid var(--border);
     }
 
-    .pedido-card-id {
+    .tabla-pedidos tbody td:last-child {
+        border-bottom: none;
+    }
+
+    .tabla-pedidos tbody td::before {
+        content: attr(data-label);
+        font-weight: 600;
+        color: #6c757d;
+        font-size: 0.85rem;
+        min-width: 120px;
+        flex-shrink: 0;
+    }
+
+    .tabla-pedidos tbody td.pedido-id::before {
+        min-width: 100px;
+    }
+
+    .tabla-pedidos tbody td.pedido-id {
         font-weight: 700;
-        font-size: 1rem;
+        color: var(--primary);
+        font-size: 1.1rem;
     }
 
-    .pedido-card-body {
-        padding: 12px 16px;
-        display: flex;
+    .tabla-pedidos tbody td.cliente-info {
         flex-direction: column;
-        gap: 10px;
-    }
-
-    .pedido-card-cliente {
-        display: flex;
-        flex-direction: column;
+        align-items: flex-start;
         gap: 2px;
     }
 
-    .pedido-card-cliente strong {
+    .tabla-pedidos tbody td.cliente-info::before {
+        display: block;
+        margin-bottom: 2px;
+    }
+
+    .tabla-pedidos tbody td.cliente-info strong {
         font-size: 0.95rem;
         color: var(--dark);
     }
 
-    .pedido-card-cliente span {
+    .tabla-pedidos tbody td.cliente-info span {
         font-size: 0.85rem;
-        color: var(--text-muted);
-        word-break: break-word;
+        color: #6c757d;
     }
 
-    .pedido-card-info {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        background: var(--light);
-        padding: 10px 12px;
-        border-radius: var(--radius-md);
-    }
-
-    .pedido-card-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .pedido-card-row span {
-        font-size: 0.82rem;
-        color: var(--text-muted);
-    }
-
-    .pedido-card-row strong {
-        font-size: 0.88rem;
-        color: var(--dark);
-    }
-
-    .pedido-card-row .pedido-card-total {
+    .tabla-pedidos tbody td.total {
+        font-weight: 700;
         color: var(--primary);
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
 
-    .pedido-card-footer {
-        padding: 12px 16px;
-        border-top: 1px solid var(--border);
-        display: flex;
+    .tabla-pedidos tbody td.acciones {
         justify-content: flex-end;
+        border-bottom: none;
+        padding-top: 4px;
     }
 
-    .pedido-card-footer .btn-ver {
-        width: 100%;
-        justify-content: center;
-        gap: 8px;
-        padding: 10px 16px;
+    .tabla-pedidos tbody td.acciones::before {
+        display: none;
+    }
+
+    .tabla-pedidos tbody td:empty {
+        display: none;
     }
 }

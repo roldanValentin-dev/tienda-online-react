@@ -1,11 +1,22 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../../config/swal';
 import AdminPagoService from '../../services/AdminPagoService';
 import '../../style/admin/config-pago.css';
 
 function AdminConfigPago() {
-    const [tab, setTab] = useState('descuento');
+    const [tab, setTab] = useState(() => {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('tab') || 'descuento';
+    });
+
+    const handleTabChange = (newTab) => {
+        setTab(newTab);
+        const url = new URL(window.location);
+        url.searchParams.set('tab', newTab);
+        window.history.replaceState({}, '', url);
+    };
 
     return (
         <div className="admin-config-pago">
@@ -14,16 +25,16 @@ function AdminConfigPago() {
             </div>
 
             <div className="config-tabs">
-                <button className={`config-tab ${tab === 'descuento' ? 'active' : ''}`} onClick={() => setTab('descuento')}>
+                <button className={`config-tab ${tab === 'descuento' ? 'active' : ''}`} onClick={() => handleTabChange('descuento')}>
                     <i className="bi bi-percent"></i> Descuento
                 </button>
-                <button className={`config-tab ${tab === 'bancos' ? 'active' : ''}`} onClick={() => setTab('bancos')}>
+                <button className={`config-tab ${tab === 'bancos' ? 'active' : ''}`} onClick={() => handleTabChange('bancos')}>
                     <i className="bi bi-bank"></i> Datos Bancarios
                 </button>
-                <button className={`config-tab ${tab === 'direccion' ? 'active' : ''}`} onClick={() => setTab('direccion')}>
+                <button className={`config-tab ${tab === 'direccion' ? 'active' : ''}`} onClick={() => handleTabChange('direccion')}>
                     <i className="bi bi-geo-alt"></i> Dirección de Retiro
                 </button>
-                <button className={`config-tab ${tab === 'envio' ? 'active' : ''}`} onClick={() => setTab('envio')}>
+                <button className={`config-tab ${tab === 'envio' ? 'active' : ''}`} onClick={() => handleTabChange('envio')}>
                     <i className="bi bi-truck"></i> Envío
                 </button>
             </div>
@@ -119,7 +130,7 @@ function SeccionBancos() {
             title: '¿Eliminar cuenta?',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#c9a84c',
+            confirmButtonColor: SWAL_COLOR,
             confirmButtonText: 'Eliminar',
         });
         if (!confirm.isConfirmed) return;
@@ -246,7 +257,7 @@ function BancoForm({ editId, cuentas, onClose, onSaved }) {
                 </div>
                 <div className="form-group-config">
                     <label>Alias</label>
-                    <input name="alias" value={form.alias} onChange={handleChange} className="form-input-config" placeholder="misoftpan.mp" />
+                    <input name="alias" value={form.alias} onChange={handleChange} className="form-input-config" placeholder="migastronomia.mp" />
                 </div>
             </div>
             <div className="banco-form-actions">
