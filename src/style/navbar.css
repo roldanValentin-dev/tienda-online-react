@@ -13,9 +13,7 @@
 }
 
 .at-header.is-scrolled {
-  background: rgba(253, 248, 243, 0.88);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: rgba(253, 248, 243, 0.95);
   box-shadow: 0 1px 0 var(--border-light);
 }
 
@@ -125,25 +123,28 @@
 }
 
 .at-auth-btn {
+  display: inline-flex;
+  align-items: center;
   padding: 8px 20px;
-  border: 1.5px solid var(--border-gold);
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--text-primary);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: var(--accent-gold);
+  color: var(--bg-deep);
   font-family: var(--font-body);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  cursor: pointer;
   text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(201, 168, 76, 0.2);
   transition: all var(--transition-fast);
 }
 
 .at-auth-btn:hover {
-  background: var(--accent-gold);
-  border-color: var(--accent-gold);
-  color: var(--bg-deep);
+  background: var(--accent-gold-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.3);
 }
 
 .at-user-menu {
@@ -288,11 +289,11 @@
   background: rgba(255,255,255,0.05);
 }
 
-.at-offcanvas-link i {
+.at-offcanvas-link .material-symbols-outlined {
   width: 20px;
   text-align: center;
   color: var(--accent-gold);
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
 .at-offcanvas-divider {
@@ -305,6 +306,20 @@
   margin-top: auto;
   padding-top: 24px;
   border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.at-offcanvas-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: var(--accent-gold);
+  color: var(--bg-deep);
+  font-size: 0.6rem;
+  font-weight: 700;
+  border-radius: 50%;
+  margin-left: 6px;
 }
 
 .at-offcanvas-footer-text {

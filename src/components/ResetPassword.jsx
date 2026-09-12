@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import { validatePasswordStrength } from '../security';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import '../style/auth.css';
 
 function ResetPassword() {
@@ -57,11 +58,11 @@ function ResetPassword() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (newPassword.length < 8) {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'La contraseña debe tener al menos 8 caracteres', confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: 'La contraseña debe tener al menos 8 caracteres', confirmButtonColor: SWAL_COLOR });
             return;
         }
         if (newPassword !== confirmPassword) {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'Las contraseñas no coinciden', confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Las contraseñas no coinciden', confirmButtonColor: SWAL_COLOR });
             return;
         }
         setLoading(true);
@@ -72,10 +73,10 @@ function ResetPassword() {
                 icon: 'success',
                 title: 'Contraseña actualizada',
                 text: 'Ya podés iniciar sesión con tu nueva contraseña',
-                confirmButtonColor: '#c9a84c'
+                confirmButtonColor: SWAL_COLOR
             }).then(() => navigate('/auth'));
         } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: SWAL_COLOR });
         }
     };
 

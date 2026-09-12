@@ -213,201 +213,207 @@ const ProductoForm = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="form-admin-card">
-                <div className="form-section">
-                    <h3 className="section-title">
-                        <i className="bi bi-info-circle"></i>
-                        Información Básica
-                    </h3>
-                    <div className="form-grid">
-                        <div className="form-group-admin full-width">
-                            <label htmlFor="nombre" className="form-label-admin">
-                                Nombre del Producto <span className="required">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                className={`form-input-admin ${errors.nombre ? 'error' : ''}`}
-                                id="nombre"
-                                name="nombre"
-                                value={formData.nombre}
-                                onChange={handleChange}
-                                placeholder="Ej: Laptop Dell Inspiron 15"
-                            />
-                            {errors.nombre && <span className="error-message">{errors.nombre}</span>}
-                        </div>
+                <div className="form-columns">
+                    <div className="form-column-left">
+                        <div className="form-section">
+                            <h3 className="section-title">
+                                <i className="bi bi-info-circle"></i>
+                                Información Básica
+                            </h3>
+                            <div className="form-grid">
+                                <div className="form-group-admin full-width">
+                                    <label htmlFor="nombre" className="form-label-admin">
+                                        Nombre del Producto <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className={`form-input-admin ${errors.nombre ? 'error' : ''}`}
+                                        id="nombre"
+                                        name="nombre"
+                                        value={formData.nombre}
+                                        onChange={handleChange}
+                                        placeholder="Ej: Laptop Dell Inspiron 15"
+                                    />
+                                    {errors.nombre && <span className="error-message">{errors.nombre}</span>}
+                                </div>
 
-                        <div className="form-group-admin full-width">
-                            <label htmlFor="descripcion" className="form-label-admin">
-                                Descripción <span className="required">*</span>
-                            </label>
-                            <textarea
-                                className={`form-textarea-admin ${errors.descripcion ? 'error' : ''}`}
-                                id="descripcion"
-                                name="descripcion"
-                                rows="4"
-                                value={formData.descripcion}
-                                onChange={handleChange}
-                                placeholder="Describe las características del producto..."
-                            />
-                            <div className="input-footer">
-                                {errors.descripcion && <span className="error-message">{errors.descripcion}</span>}
-                                <span className="char-count">{formData.descripcion.length}/500</span>
+                                <div className="form-group-admin full-width">
+                                    <label htmlFor="descripcion" className="form-label-admin">
+                                        Descripción <span className="required">*</span>
+                                    </label>
+                                    <textarea
+                                        className={`form-textarea-admin ${errors.descripcion ? 'error' : ''}`}
+                                        id="descripcion"
+                                        name="descripcion"
+                                        rows="4"
+                                        value={formData.descripcion}
+                                        onChange={handleChange}
+                                        placeholder="Describe las características del producto..."
+                                    />
+                                    <div className="input-footer">
+                                        {errors.descripcion && <span className="error-message">{errors.descripcion}</span>}
+                                        <span className="char-count">{formData.descripcion.length}/500</span>
+                                    </div>
+                                </div>
+
+                                <div className="form-group-admin">
+                                    <label htmlFor="categoria" className="form-label-admin">
+                                        Categoría <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        className={`form-input-admin ${errors.categoria ? 'error' : ''}`}
+                                        id="categoria"
+                                        name="categoria"
+                                        value={formData.categoria}
+                                        onChange={handleChange}
+                                        placeholder="Ej: Electrónica, Ropa, Hogar"
+                                    />
+                                    {errors.categoria && <span className="error-message">{errors.categoria}</span>}
+                                </div>
+
+                                <div className="form-group-admin">
+                                    <label htmlFor="precio" className="form-label-admin">
+                                        Precio <span className="required">*</span>
+                                    </label>
+                                    <div className="input-with-icon">
+                                        <span className="input-icon">$</span>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            className={`form-input-admin with-icon ${errors.precio ? 'error' : ''}`}
+                                            id="precio"
+                                            name="precio"
+                                            value={formData.precio}
+                                            onChange={handleChange}
+                                            placeholder="0.00"
+                                        />
+                                    </div>
+                                    {errors.precio && <span className="error-message">{errors.precio}</span>}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="form-column-right">
+                        <div className="form-section">
+                            <h3 className="section-title">
+                                <i className="bi bi-box-seam"></i>
+                                Inventario
+                            </h3>
+                            <div className="form-grid">
+                                <div className="form-group-admin">
+                                    <label htmlFor="stock" className="form-label-admin">
+                                        Stock Actual <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        className={`form-input-admin ${errors.stock ? 'error' : ''}`}
+                                        id="stock"
+                                        name="stock"
+                                        value={formData.stock}
+                                        onChange={handleChange}
+                                        placeholder="0"
+                                    />
+                                    {errors.stock && <span className="error-message">{errors.stock}</span>}
+                                </div>
+
+                                <div className="form-group-admin">
+                                    <label htmlFor="stockMinimo" className="form-label-admin">
+                                        Stock Mínimo <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        className={`form-input-admin ${errors.stockMinimo ? 'error' : ''}`}
+                                        id="stockMinimo"
+                                        name="stockMinimo"
+                                        value={formData.stockMinimo}
+                                        onChange={handleChange}
+                                        placeholder="0"
+                                    />
+                                    {errors.stockMinimo && <span className="error-message">{errors.stockMinimo}</span>}
+                                    <small className="input-help">Nivel de alerta para reposición</small>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="form-group-admin">
-                            <label htmlFor="categoria" className="form-label-admin">
-                                Categoría <span className="required">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                className={`form-input-admin ${errors.categoria ? 'error' : ''}`}
-                                id="categoria"
-                                name="categoria"
-                                value={formData.categoria}
-                                onChange={handleChange}
-                                placeholder="Ej: Electrónica, Ropa, Hogar"
-                            />
-                            {errors.categoria && <span className="error-message">{errors.categoria}</span>}
-                        </div>
-
-                        <div className="form-group-admin">
-                            <label htmlFor="precio" className="form-label-admin">
-                                Precio <span className="required">*</span>
-                            </label>
-                            <div className="input-with-icon">
-                                <span className="input-icon">$</span>
+                        <div className="form-section">
+                            <h3 className="section-title">
+                                <i className="bi bi-toggle-on"></i>
+                                Estado
+                            </h3>
+                            <div className="form-check-admin">
                                 <input
-                                    type="number"
-                                    step="0.01"
-                                    className={`form-input-admin with-icon ${errors.precio ? 'error' : ''}`}
-                                    id="precio"
-                                    name="precio"
-                                    value={formData.precio}
+                                    type="checkbox"
+                                    className="form-checkbox-admin"
+                                    id="activo"
+                                    name="activo"
+                                    checked={formData.activo}
                                     onChange={handleChange}
-                                    placeholder="0.00"
                                 />
+                                <label className="form-check-label-admin" htmlFor="activo">
+                                    <span className="check-title">Producto Activo</span>
+                                    <span className="check-description">El producto será visible para los clientes</span>
+                                </label>
                             </div>
-                            {errors.precio && <span className="error-message">{errors.precio}</span>}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-section">
-                    <h3 className="section-title">
-                        <i className="bi bi-box-seam"></i>
-                        Inventario
-                    </h3>
-                    <div className="form-grid">
-                        <div className="form-group-admin">
-                            <label htmlFor="stock" className="form-label-admin">
-                                Stock Actual <span className="required">*</span>
-                            </label>
-                            <input
-                                type="number"
-                                className={`form-input-admin ${errors.stock ? 'error' : ''}`}
-                                id="stock"
-                                name="stock"
-                                value={formData.stock}
-                                onChange={handleChange}
-                                placeholder="0"
-                            />
-                            {errors.stock && <span className="error-message">{errors.stock}</span>}
-                        </div>
-
-                        <div className="form-group-admin">
-                            <label htmlFor="stockMinimo" className="form-label-admin">
-                                Stock Mínimo <span className="required">*</span>
-                            </label>
-                            <input
-                                type="number"
-                                className={`form-input-admin ${errors.stockMinimo ? 'error' : ''}`}
-                                id="stockMinimo"
-                                name="stockMinimo"
-                                value={formData.stockMinimo}
-                                onChange={handleChange}
-                                placeholder="0"
-                            />
-                            {errors.stockMinimo && <span className="error-message">{errors.stockMinimo}</span>}
-                            <small className="input-help">Nivel de alerta para reposición</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="form-section">
-                    <h3 className="section-title">
-                        <i className="bi bi-toggle-on"></i>
-                        Estado
-                    </h3>
-                    <div className="form-check-admin">
-                        <input
-                            type="checkbox"
-                            className="form-checkbox-admin"
-                            id="activo"
-                            name="activo"
-                            checked={formData.activo}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label-admin" htmlFor="activo">
-                            <span className="check-title">Producto Activo</span>
-                            <span className="check-description">El producto será visible para los clientes</span>
-                        </label>
-                    </div>
-                    <div className="form-check-admin" style={{ marginTop: 8 }}>
-                        <input
-                            type="checkbox"
-                            className="form-checkbox-admin"
-                            id="stockInmediato"
-                            name="stockInmediato"
-                            checked={formData.stockInmediato}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label-admin" htmlFor="stockInmediato">
-                            <span className="check-title">Stock Inmediato</span>
-                            <span className="check-description">Disponible para retiro hoy</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div className="form-section">
-                    <h3 className="section-title">
-                        <i className="bi bi-tags"></i>
-                        Oferta
-                    </h3>
-                    <div className="form-check-admin">
-                        <input
-                            type="checkbox"
-                            className="form-checkbox-admin"
-                            id="enOferta"
-                            name="enOferta"
-                            checked={formData.enOferta}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label-admin" htmlFor="enOferta">
-                            <span className="check-title">Producto en Oferta</span>
-                            <span className="check-description">Aplicar precio rebajado</span>
-                        </label>
-                    </div>
-                    {formData.enOferta && (
-                        <div className="form-group-admin" style={{ marginTop: 12 }}>
-                            <label htmlFor="precioOferta" className="form-label-admin">
-                                Precio de Oferta <span className="required">*</span>
-                            </label>
-                            <div className="input-with-icon">
-                                <span className="input-icon">$</span>
+                            <div className="form-check-admin" style={{ marginTop: 8 }}>
                                 <input
-                                    type="number"
-                                    step="0.01"
-                                    className={`form-input-admin with-icon ${errors.precioOferta ? 'error' : ''}`}
-                                    id="precioOferta"
-                                    name="precioOferta"
-                                    value={formData.precioOferta}
+                                    type="checkbox"
+                                    className="form-checkbox-admin"
+                                    id="stockInmediato"
+                                    name="stockInmediato"
+                                    checked={formData.stockInmediato}
                                     onChange={handleChange}
-                                    placeholder="0.00"
                                 />
+                                <label className="form-check-label-admin" htmlFor="stockInmediato">
+                                    <span className="check-title">Stock Inmediato</span>
+                                    <span className="check-description">Disponible para retiro hoy</span>
+                                </label>
                             </div>
-                            {errors.precioOferta && <span className="error-message">{errors.precioOferta}</span>}
                         </div>
-                    )}
+
+                        <div className="form-section">
+                            <h3 className="section-title">
+                                <i className="bi bi-tags"></i>
+                                Oferta
+                            </h3>
+                            <div className="form-check-admin">
+                                <input
+                                    type="checkbox"
+                                    className="form-checkbox-admin"
+                                    id="enOferta"
+                                    name="enOferta"
+                                    checked={formData.enOferta}
+                                    onChange={handleChange}
+                                />
+                                <label className="form-check-label-admin" htmlFor="enOferta">
+                                    <span className="check-title">Producto en Oferta</span>
+                                    <span className="check-description">Aplicar precio rebajado</span>
+                                </label>
+                            </div>
+                            {formData.enOferta && (
+                                <div className="form-group-admin" style={{ marginTop: 12 }}>
+                                    <label htmlFor="precioOferta" className="form-label-admin">
+                                        Precio de Oferta <span className="required">*</span>
+                                    </label>
+                                    <div className="input-with-icon">
+                                        <span className="input-icon">$</span>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            className={`form-input-admin with-icon ${errors.precioOferta ? 'error' : ''}`}
+                                            id="precioOferta"
+                                            name="precioOferta"
+                                            value={formData.precioOferta}
+                                            onChange={handleChange}
+                                            placeholder="0.00"
+                                        />
+                                    </div>
+                                    {errors.precioOferta && <span className="error-message">{errors.precioOferta}</span>}
+                                </div>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="form-actions">

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import AuthService from '../services/AuthService';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import '../style/auth.css';
 
 function ForgotPassword() {
@@ -12,7 +13,7 @@ function ForgotPassword() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email.trim()) {
-            Swal.fire({ icon: 'error', title: 'Error', text: 'Ingresá tu email', confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: 'Ingresá tu email', confirmButtonColor: SWAL_COLOR });
             return;
         }
         setLoading(true);
@@ -21,7 +22,7 @@ function ForgotPassword() {
         if (result.success) {
             setSent(true);
         } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: SWAL_COLOR });
         }
     };
 

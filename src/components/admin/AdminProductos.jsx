@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ProductoService from '../../services/ProductoService';
 import API_BASE_URL from '../../config/api';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../../config/swal';
 import '../../style/admin/productos.css';
 
 const AdminProductos = () => {
@@ -25,8 +26,10 @@ const AdminProductos = () => {
     };
 
     useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        cargarProductos();
+        const load = async () => {
+            await cargarProductos();
+        };
+        load();
     }, []);
 
     const handleDelete = async (id, nombre) => {
@@ -35,7 +38,7 @@ const AdminProductos = () => {
             text: "Esta acción no se puede deshacer y eliminará también sus imágenes.",
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonColor: '#c9a84c',
+            confirmButtonColor: SWAL_COLOR,
             cancelButtonColor: '#6c757d',
             confirmButtonText: 'Sí, eliminar',
             cancelButtonText: 'Cancelar'
@@ -52,10 +55,8 @@ const AdminProductos = () => {
         }
     };
 
-    // Obtener categorías únicas para el filtro
     const categorias = ['todas', ...new Set(productos.map(p => p.categoria))];
 
-    // Lógica de filtrado
     const filteredProducts = productos.filter(p => {
         const matchesSearch = p.nombre.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = categoriaFilter === 'todas' || p.categoria === categoriaFilter;
@@ -66,28 +67,20 @@ const AdminProductos = () => {
     });
 
     const getProductImage = (p) => {
-        // 1️⃣ Primero: Verificar si tiene array imagenes
         if (p.imagenes && p.imagenes.length > 0) {
-            // Buscar imagen principal
             const imagenPrincipal = p.imagenes.find(img => img.esPrincipal);
             const imagen = imagenPrincipal || p.imagenes[0];
-
             if (imagen && imagen.url) {
-                // Si es URL completa, usarla; si no, agregar API_BASE_URL
                 return imagen.url.startsWith('http')
                     ? imagen.url
                     : `${API_BASE_URL}${imagen.url}`;
             }
         }
-
-        // 2️⃣ Segundo: Fallback a imagenUrl antiguo
         if (p.imagenUrl && p.imagenUrl.trim() !== '') {
             return p.imagenUrl.startsWith('http')
                 ? p.imagenUrl
                 : `${API_BASE_URL}${p.imagenUrl}`;
         }
-
-        // 3️⃣ Tercero: Fallback SVG
         return 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="50" height="50"%3E%3Crect width="50" height="50" fill="%23ddd"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="Arial" font-size="10" fill="%23999"%3ESin Imagen%3C/text%3E%3C/svg%3E';
     };
 
@@ -103,7 +96,6 @@ const AdminProductos = () => {
 
     return (
         <div className="admin-productos-page">
-            {/* Header con título y botón */}
             <div className="page-header-admin">
                 <div>
                     <h2 className="page-title-admin">Gestión de Productos</h2>
@@ -118,7 +110,6 @@ const AdminProductos = () => {
                 </button>
             </div>
 
-            {/* Card de filtros */}
             <div className="filtros-card">
                 <div className="filtros-grid">
                     <div className="filtro-item">
@@ -173,152 +164,90 @@ const AdminProductos = () => {
                 </div>
             </div>
 
-            {/* Tabla Desktop */}
-            <div className="tabla-productos-desktop">
-                <div className="table-card">
-                    <table className="table-admin">
-                        <thead>
-                            <tr>
-                                <th style={{ width: '80px' }}>Imagen</th>
-                                <th>Nombre</th>
-                                <th>Categoría</th>
-                                <th style={{ width: '120px' }}>Precio</th>
-                                <th style={{ width: '140px' }}>Etiquetas</th>
-                                <th style={{ width: '100px' }}>Stock</th>
-                                <th style={{ width: '100px' }}>Estado</th>
-                                <th style={{ width: '180px' }} className="text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredProducts.map(p => (
-                                <tr key={p.id}>
-                                    <td>
-                                        <img
-                                            src={getProductImage(p)}
-                                            alt={p.nombre}
-                                            className="table-img"
-                                        />
-                                    </td>
-                                    <td>
-                                        <span className="table-nombre">{p.nombre}</span>
-                                    </td>
-                                    <td>
-                                        <span className="table-categoria">{p.categoria}</span>
-                                    </td>
-                                    <td>
-                                        <span className="table-precio">${p.precioBase?.toLocaleString()}</span>
-                                    </td>
-                                    <td>
-                                        <div className="table-etiquetas">
-                                            {p.enOferta && <span className="table-tag table-tag-oferta"><i className="bi bi-tag"></i> Oferta</span>}
-                                            {p.stockInmediato && <span className="table-tag table-tag-inmediato"><i className="bi bi-clock"></i> Retiro</span>}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <span className={`table-stock ${p.stock <= p.stockMinimo ? 'bajo' : ''}`}>
-                                            {p.stock <= p.stockMinimo && <i className="bi bi-exclamation-triangle"></i>}
-                                            {p.stock}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span className={`table-badge ${p.activo ? 'activo' : 'inactivo'}`}>
-                                            {p.activo ? 'Activo' : 'Inactivo'}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <div className="table-acciones">
-                                            <button
-                                                className="btn-table editar"
-                                                onClick={() => navigate(`/admin/productos/editar/${p.id}`)}
-                                                title="Editar"
-                                            >
-                                                <i className="bi bi-pencil"></i>
-                                            </button>
-                                            <button
-                                                className="btn-table imagenes"
-                                                onClick={() => navigate(`/admin/productos/imagenes/${p.id}`)}
-                                                title="Imágenes"
-                                            >
-                                                <i className="bi bi-images"></i>
-                                            </button>
-                                            <button
-                                                className="btn-table eliminar"
-                                                onClick={() => handleDelete(p.id, p.nombre)}
-                                                title="Eliminar"
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            {/* Grid Mobile (2 columnas) */}
-            <div className="grid-productos-mobile">
-                {filteredProducts.map(p => (
-                    <div key={p.id} className="producto-card-mobile">
-                        <div className="mobile-imagen-wrapper">
-                            <img
-                                src={getProductImage(p)}
-                                alt={p.nombre}
-                                className="mobile-imagen"
-                            />
-                            <div className="mobile-badges">
-                                {p.stock <= p.stockMinimo && (
-                                    <span className="badge-mobile stock-bajo">
-                                        <i className="bi bi-exclamation-triangle"></i>
+            <div className="table-card">
+                <table className="table-admin">
+                    <thead>
+                        <tr>
+                            <th style={{ width: '80px' }}>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th style={{ width: '120px' }}>Precio</th>
+                            <th style={{ width: '140px' }}>Etiquetas</th>
+                            <th style={{ width: '100px' }}>Stock</th>
+                            <th style={{ width: '100px' }}>Estado</th>
+                            <th style={{ width: '180px' }} className="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredProducts.map(p => (
+                            <tr key={p.id}>
+                                <td data-label="Imagen">
+                                    <img
+                                        src={getProductImage(p)}
+                                        alt={p.nombre}
+                                        className="table-img"
+                                    />
+                                </td>
+                                <td data-label="Nombre">
+                                    <span className="table-nombre">{p.nombre}</span>
+                                </td>
+                                <td data-label="Categoría">
+                                    <span className="table-categoria">{p.categoria}</span>
+                                </td>
+                                <td data-label="Precio">
+                                    <span className="table-precio">${p.precioBase?.toLocaleString()}</span>
+                                </td>
+                                <td data-label="Etiquetas">
+                                    <div className="table-etiquetas">
+                                        {p.enOferta && <span className="table-tag table-tag-oferta"><i className="bi bi-tag"></i> Oferta</span>}
+                                        {p.stockInmediato && <span className="table-tag table-tag-inmediato"><i className="bi bi-clock"></i> Retiro</span>}
+                                    </div>
+                                </td>
+                                <td data-label="Stock">
+                                    <span className={`table-stock ${p.stock <= p.stockMinimo ? 'bajo' : ''}`}>
+                                        {p.stock <= p.stockMinimo && <i className="bi bi-exclamation-triangle"></i>}
+                                        {p.stock}
                                     </span>
-                                )}
-                                <span className={`badge-mobile estado ${p.activo ? 'activo' : 'inactivo'}`}>
-                                    {p.activo ? '✓' : '✕'}
-                                </span>
-                            </div>
-                        </div>
-                        <div className="mobile-info">
-                            <span className="mobile-categoria">{p.categoria}</span>
-                            <h3 className="mobile-nombre">{p.nombre}</h3>
-                            {(p.enOferta || p.stockInmediato) && (
-                                <div className="mobile-etiquetas">
-                                    {p.enOferta && <span className="mobile-tag mobile-tag-oferta"><i className="bi bi-tag"></i> Oferta</span>}
-                                    {p.stockInmediato && <span className="mobile-tag mobile-tag-inmediato"><i className="bi bi-clock"></i> Retiro hoy</span>}
-                                </div>
-                            )}
-                            <div className="mobile-detalles">
-                                <span className="mobile-precio">${p.precioBase?.toLocaleString()}</span>
-                                <span className={`mobile-stock ${p.stock <= p.stockMinimo ? 'bajo' : ''}`}>
-                                    Stock: {p.stock}
-                                </span>
-                            </div>
-                            <div className="mobile-acciones">
-                                <button
-                                    className="btn-mobile editar"
-                                    onClick={() => navigate(`/admin/productos/editar/${p.id}`)}
-                                >
-                                    <i className="bi bi-pencil"></i>
-                                </button>
-                                <button
-                                    className="btn-mobile imagenes"
-                                    onClick={() => navigate(`/admin/productos/imagenes/${p.id}`)}
-                                >
-                                    <i className="bi bi-images"></i>
-                                </button>
-                                <button
-                                    className="btn-mobile eliminar"
-                                    onClick={() => handleDelete(p.id, p.nombre)}
-                                >
-                                    <i className="bi bi-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                                </td>
+                                <td data-label="Estado">
+                                    <span className={`table-badge ${p.activo ? 'activo' : 'inactivo'}`}>
+                                        {p.activo ? 'Activo' : 'Inactivo'}
+                                    </span>
+                                </td>
+                                <td data-label="Acciones">
+                                    <div className="table-acciones">
+                                        <button
+                                            className="btn-table editar"
+                                            onClick={() => navigate(`/admin/productos/editar/${p.id}`)}
+                                            title="Editar producto"
+                                            aria-label={`Editar ${p.nombre}`}
+                                        >
+                                            <i className="bi bi-pencil"></i>
+                                        </button>
+                                        <button
+                                            className="btn-table imagenes"
+                                            onClick={() => navigate(`/admin/productos/imagenes/${p.id}`)}
+                                            title="Administrar imágenes"
+                                            aria-label={`Imágenes de ${p.nombre}`}
+                                        >
+                                            <i className="bi bi-images"></i>
+                                        </button>
+                                        <button
+                                            className="btn-table eliminar"
+                                            onClick={() => handleDelete(p.id, p.nombre)}
+                                            title="Eliminar producto"
+                                            aria-label={`Eliminar ${p.nombre}`}
+                                        >
+                                            <i className="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
 
-            {/* Empty state */}
             {filteredProducts.length === 0 && (
                 <div className="empty-state-admin">
                     <i className="bi bi-inbox empty-icon"></i>

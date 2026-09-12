@@ -2,7 +2,9 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import PagoService from '../services/PagoService';
+import PedidoService from '../services/PedidoService';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import '../style/pago.css';
 
 const TIPO_PAGO = { 1: 'Efectivo', 2: 'Transferencia', 3: 'MercadoPago' };
@@ -21,12 +23,18 @@ function PagoPage() {
 
     const cargarDatosPago = useCallback(async () => {
         setLoading(true); setError(null);
-        const result = await PagoService.getDatosPago(id);
-        if (result.success) {
-            setPagoData(result.data);
-            if (result.data.estadoPago === 'Pagado') setPagado(true);
+        const [pagoResult, pedidoResult] = await Promise.all([
+            PagoService.getDatosPago(id),
+            PedidoService.getPedidoById(id)
+        ]);
+        if (pagoResult.success) {
+            setPagoData({
+                ...pagoResult.data,
+                detalles: pedidoResult.success ? pedidoResult.data.detalles : []
+            });
+            if (pagoResult.data.estadoPago === 'Pagado') setPagado(true);
         } else {
-            setError(result.message);
+            setError(pagoResult.message);
         }
         setLoading(false);
     }, [id]);
@@ -41,7 +49,7 @@ function PagoPage() {
             title: '¿Ya transferiste?',
             text: 'Confirmá que ya transferiste el monto para que el admin verifique.',
             icon: 'question', showCancelButton: true,
-            confirmButtonColor: '#c9a84c', cancelButtonColor: '#666',
+            confirmButtonColor: SWAL_COLOR, cancelButtonColor: '#666',
             confirmButtonText: 'Sí, ya transferí', cancelButtonText: 'Cancelar',
         });
         if (!confirm.isConfirmed) return;
@@ -50,9 +58,9 @@ function PagoPage() {
         setProcesando(false);
         if (result.success) {
             setPagado(true);
-            Swal.fire({ icon: 'success', title: '¡Pago registrado!', text: 'El admin verificará la transferencia.', confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'success', title: '¡Pago registrado!', text: 'El admin verificará la transferencia.', confirmButtonColor: SWAL_COLOR });
         } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: SWAL_COLOR });
         }
     };
 
@@ -63,7 +71,7 @@ function PagoPage() {
         if (result.success) {
             window.location.href = result.data.initPoint;
         } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: SWAL_COLOR });
         }
     };
 
@@ -112,6 +120,43 @@ function PagoPage() {
                         <div className="at-pago-success-icon"><i className="bi bi-check-circle-fill"></i></div>
                         <h2>¡Pago registrado!</h2>
                         <p>Tu pago ya fue registrado. El admin confirmará tu pedido.</p>
+
+                        {pagoData.detalles && pagoData.detalles.length > 0 && (
+                            <div className="at-pago-productos" style={{ textAlign: 'left', marginTop: 16 }}>
+                                <table className="at-pago-productos-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Cant.</th>
+                                            <th>Precio</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {pagoData.detalles.map(d => (
+                                            <tr key={d.id}>
+                                                <td>
+                                                    <div className="at-pago-producto-item">
+                                                        {d.productoImagen && <img src={d.productoImagen} alt={d.productoNombre} />}
+                                                        <span>{d.productoNombre}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{d.cantidad}</td>
+                                                <td>{formatearMonto(d.precioUnitario)}</td>
+                                                <td><strong>{formatearMonto(d.subtotal)}</strong></td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colSpan="3"><strong>Total</strong></td>
+                                            <td><strong>{formatearMonto(pagoData.montoConDescuento || pagoData.total)}</strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        )}
+
                         <div className="at-pago-retiro">
                             <h3><i className="bi bi-geo-alt-fill"></i> Dirección de retiro</h3>
                             <p className="at-pago-direccion">{pagoData.direccionRetiro}</p>
@@ -128,6 +173,45 @@ function PagoPage() {
                                 <div className="at-pago-monto-row descuento"><span>Total con descuento</span><span className="at-pago-monto-descuento">{formatearMonto(pagoData.montoConDescuento)}</span></div>
                             )}
                         </div>
+
+                        {pagoData.detalles && pagoData.detalles.length > 0 && (
+                            <div className="at-pago-card">
+                                <h2>Productos</h2>
+                                <div className="at-pago-productos">
+                                    <table className="at-pago-productos-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Producto</th>
+                                                <th>Cant.</th>
+                                                <th>Precio</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {pagoData.detalles.map(d => (
+                                                <tr key={d.id}>
+                                                    <td>
+                                                        <div className="at-pago-producto-item">
+                                                            {d.productoImagen && <img src={d.productoImagen} alt={d.productoNombre} />}
+                                                            <span>{d.productoNombre}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>{d.cantidad}</td>
+                                                    <td>{formatearMonto(d.precioUnitario)}</td>
+                                                    <td><strong>{formatearMonto(d.subtotal)}</strong></td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colSpan="3"><strong>Total</strong></td>
+                                                <td><strong>{formatearMonto(pagoData.montoConDescuento || pagoData.total)}</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
 
                         {pagoData.tipoPago === 'Efectivo' && (
                             <div className="at-pago-card">

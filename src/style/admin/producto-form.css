@@ -1,5 +1,5 @@
 .producto-form-page {
-    max-width: 900px;
+    max-width: 1200px;
     margin: 0 auto;
     animation: fadeIn 0.4s ease-out;
 }
@@ -339,6 +339,47 @@
     .form-section .section-title {
         font-size: 1rem;
     }
+}
+
+@media (min-width: 1024px) {
+  .form-columns {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .form-column-left .form-section,
+  .form-column-right .form-section {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .form-column-right .form-section {
+    background: var(--light);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+
+  .form-column-right .form-section .section-title {
+    margin-bottom: 16px;
+  }
+
+  .form-column-right .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .form-actions {
+    justify-content: flex-end;
+  }
+
+  .btn-submit-admin {
+    flex: 0;
+    min-width: 200px;
+  }
 }
 
 @media (max-width: 360px) {

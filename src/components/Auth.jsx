@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import {
     sanitizeObject,
     validatePasswordStrength,
@@ -64,7 +65,7 @@ function Auth() {
 
     const handleLoginChange = (field, value) => {
         if (detectSuspiciousPattern(value)) {
-            Swal.fire({ icon: 'warning', title: 'Contenido no permitido', text: 'Se detectó contenido potencialmente peligroso', confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'warning', title: 'Contenido no permitido', text: 'Se detectó contenido potencialmente peligroso', confirmButtonColor: SWAL_COLOR });
             return;
         }
         setLoginData({ ...loginData, [field]: value });
@@ -72,7 +73,7 @@ function Auth() {
 
     const handleRegisterChange = (field, value) => {
         if (detectSuspiciousPattern(value)) {
-            Swal.fire({ icon: 'warning', title: 'Contenido no permitido', text: 'Se detectó contenido potencialmente peligroso', confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'warning', title: 'Contenido no permitido', text: 'Se detectó contenido potencialmente peligroso', confirmButtonColor: SWAL_COLOR });
             return;
         }
         const newData = { ...registerData, [field]: value };
@@ -99,12 +100,12 @@ function Auth() {
         e.preventDefault();
         const rateCheck = checkRateLimit(loginData.email);
         if (!rateCheck.allowed) {
-            Swal.fire({ icon: 'error', title: 'Demasiados intentos', text: `Intentá de nuevo en ${rateCheck.lockedMinutes} minutos.`, confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Demasiados intentos', text: `Intentá de nuevo en ${rateCheck.lockedMinutes} minutos.`, confirmButtonColor: SWAL_COLOR });
             return;
         }
         const validation = validateLoginForm(loginData);
         if (!validation.isValid) {
-            Swal.fire({ icon: 'error', title: 'Datos inválidos', text: Object.values(validation.errors).join('\n'), confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Datos inválidos', text: Object.values(validation.errors).join('\n'), confirmButtonColor: SWAL_COLOR });
             return;
         }
         const sanitizedData = sanitizeObject(loginData);
@@ -113,13 +114,13 @@ function Auth() {
         setLoading(false);
         if (result.success) {
             resetAttempts(loginData.email);
-            Swal.fire({ icon: 'success', title: '¡Bienvenido!', text: 'Iniciaste sesión correctamente', confirmButtonColor: '#c9a84c', timer: 2000, timerProgressBar: true });
+            Swal.fire({ icon: 'success', title: '¡Bienvenido!', text: 'Iniciaste sesión correctamente', confirmButtonColor: SWAL_COLOR, timer: 2000, timerProgressBar: true });
             const userRole = result.user?.role || result.user?.roles?.[0];
             navigate(userRole === 'Admin' ? '/admin/productos' : '/');
         } else {
             recordFailedAttempt(loginData.email);
             const remainingCheck = checkRateLimit(loginData.email);
-            Swal.fire({ icon: 'error', title: 'Error', text: result.message + (remainingCheck.remainingAttempts ? `\nIntentos restantes: ${remainingCheck.remainingAttempts}` : ''), confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: result.message + (remainingCheck.remainingAttempts ? `\nIntentos restantes: ${remainingCheck.remainingAttempts}` : ''), confirmButtonColor: SWAL_COLOR });
         }
     };
 
@@ -127,7 +128,7 @@ function Auth() {
         e.preventDefault();
         const validation = validateRegistrationForm(registerData);
         if (!validation.isValid) {
-            Swal.fire({ icon: 'error', title: 'Datos inválidos', html: Object.values(validation.errors).join('<br>'), confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Datos inválidos', html: Object.values(validation.errors).join('<br>'), confirmButtonColor: SWAL_COLOR });
             return;
         }
         const sanitizedData = sanitizeObject(registerData);
@@ -135,10 +136,10 @@ function Auth() {
         const result = await register(sanitizedData);
         setLoading(false);
         if (result.success) {
-            Swal.fire({ icon: 'success', title: '¡Registro exitoso!', text: 'Tu cuenta fue creada', confirmButtonColor: '#c9a84c', timer: 2000, timerProgressBar: true });
+            Swal.fire({ icon: 'success', title: '¡Registro exitoso!', text: 'Tu cuenta fue creada', confirmButtonColor: SWAL_COLOR, timer: 2000, timerProgressBar: true });
             navigate('/');
         } else {
-            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: '#c9a84c' });
+            Swal.fire({ icon: 'error', title: 'Error', text: result.message, confirmButtonColor: SWAL_COLOR });
         }
     };
 

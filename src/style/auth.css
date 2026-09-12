@@ -102,7 +102,7 @@
 }
 
 .at-auth-btn:hover:not(:disabled) {
-  background: #b89530;
+  background: var(--accent-gold-hover);
   box-shadow: var(--shadow-gold);
   transform: translateY(-2px);
 }

@@ -5,6 +5,7 @@
 
 .at-detail-breadcrumb {
   max-width: var(--container-max);
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px 24px;
 }
@@ -29,6 +30,7 @@
   grid-template-columns: 1.2fr 1fr;
   gap: 48px;
   max-width: var(--container-max);
+  width: 100%;
   margin: 0 auto;
   padding: 0 24px;
   align-items: start;
@@ -134,11 +136,10 @@
 }
 
 .at-detail-price {
-  font-family: var(--font-decorative);
+  font-family: var(--font-display);
   font-size: 2rem;
-  font-style: italic;
-  color: var(--accent-caramel);
   font-weight: 700;
+  color: var(--accent-gold);
   margin-bottom: 24px;
   display: block;
 }
@@ -155,15 +156,13 @@
   font-weight: 400;
   text-decoration: line-through;
   color: var(--text-muted);
-  font-style: italic;
   margin-bottom: 0;
 }
 
 .at-detail-price-oferta {
   font-size: 2rem;
   font-weight: 700;
-  color: #ef4444;
-  font-style: italic;
+  color: #ba1a1a;
   margin-bottom: 0;
 }
 
@@ -269,7 +268,7 @@
 }
 
 .at-detail-cart-btn:hover {
-  background: #b89530;
+  background: var(--accent-gold-hover);
   box-shadow: var(--shadow-gold);
   transform: translateY(-2px);
 }

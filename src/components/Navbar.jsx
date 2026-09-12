@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { CarritoContext } from '../context/CarritoContext';
 import { AuthContext } from '../context/AuthContext';
 import Swal from 'sweetalert2';
+import { SWAL_COLOR } from '../config/swal';
 import '../style/navbar.css';
 
 function Navbar() {
@@ -39,7 +40,7 @@ function Navbar() {
       text: '¿Estás seguro que deseas cerrar sesión?',
       icon: 'question',
       showCancelButton: true,
-      confirmButtonColor: '#c9a84c',
+      confirmButtonColor: SWAL_COLOR,
       cancelButtonColor: '#6c757d',
       confirmButtonText: 'Sí, cerrar sesión',
       cancelButtonText: 'Cancelar'
@@ -63,7 +64,7 @@ function Navbar() {
     <>
       <header className={`at-header ${scrolled ? 'is-scrolled' : ''}`}>
         <div className="at-header-inner">
-          <Link className="at-logo" to="/">softpan</Link>
+          <Link className="at-logo" to="/">Gastronomía</Link>
 
           <ul className="at-nav-links">
             <li><Link className="at-nav-link" to="/">Inicio</Link></li>
@@ -75,7 +76,7 @@ function Navbar() {
 
           <div className="at-nav-right">
             <button className="at-cart-btn" onClick={() => navigate('/cart')} aria-label="Carrito">
-              <i className="bi bi-bag"></i>
+              <span className="material-symbols-outlined">shopping_cart</span>
               {totalItems > 0 && (
                 <span className="at-cart-badge">{totalItems > 9 ? '9+' : totalItems}</span>
               )}
@@ -84,11 +85,11 @@ function Navbar() {
             {user ? (
               <>
                 <div className="at-user-menu" onClick={() => navigate('/perfil')}>
-                  <i className="bi bi-person"></i>
+                  <span className="material-symbols-outlined">person</span>
                   <span>{user.nombre || user.firstName || 'Perfil'}</span>
                 </div>
                 <button className="at-logout-btn" onClick={handleLogout} title="Cerrar sesión">
-                  <i className="bi bi-box-arrow-right"></i>
+                  <span className="material-symbols-outlined">logout</span>
                 </button>
               </>
             ) : (
@@ -112,26 +113,26 @@ function Navbar() {
       <div className={`at-offcanvas ${menuOpen ? 'is-open' : ''}`}>
         <button className="at-offcanvas-close" onClick={() => setMenuOpen(false)}>×</button>
         <ul className="at-offcanvas-links">
-          <li><Link className="at-offcanvas-link" to="/" onClick={() => setMenuOpen(false)}><i className="bi bi-house-door"></i>Inicio</Link></li>
-          <li><Link className="at-offcanvas-link" to="/products" onClick={() => setMenuOpen(false)}><i className="bi bi-bag"></i>Productos</Link></li>
-          <li><Link className="at-offcanvas-link" to="/cart" onClick={() => setMenuOpen(false)}><i className="bi bi-cart3"></i>Carrito{totalItems > 0 && <span className="at-offcanvas-badge">{totalItems}</span>}</Link></li>
+          <li><Link className="at-offcanvas-link" to="/" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">home</span>Inicio</Link></li>
+          <li><Link className="at-offcanvas-link" to="/products" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">shopping_bag</span>Productos</Link></li>
+          <li><Link className="at-offcanvas-link" to="/cart" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">shopping_cart</span>Carrito{totalItems > 0 && <span className="at-offcanvas-badge">{totalItems}</span>}</Link></li>
           <div className="at-offcanvas-divider" />
           {user ? (
             <>
-              <li><Link className="at-offcanvas-link" to="/mis-pedidos" onClick={() => setMenuOpen(false)}><i className="bi bi-box-seam"></i>Mis Pedidos</Link></li>
-              <li><Link className="at-offcanvas-link" to="/perfil" onClick={() => setMenuOpen(false)}><i className="bi bi-person-circle"></i>Mi Perfil</Link></li>
+              <li><Link className="at-offcanvas-link" to="/mis-pedidos" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">inventory_2</span>Mis Pedidos</Link></li>
+              <li><Link className="at-offcanvas-link" to="/perfil" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">account_circle</span>Mi Perfil</Link></li>
               {user.role === 'Admin' && (
-                <li><Link className="at-offcanvas-link" to="/admin/productos" onClick={() => setMenuOpen(false)}><i className="bi bi-gear"></i>Admin</Link></li>
+                <li><Link className="at-offcanvas-link" to="/admin/productos" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">settings</span>Admin</Link></li>
               )}
               <div className="at-offcanvas-divider" />
-              <li><button className="at-offcanvas-link" onClick={handleLogout} style={{ border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}><i className="bi bi-box-arrow-right"></i>Cerrar Sesión</button></li>
+              <li><button className="at-offcanvas-link" onClick={handleLogout} style={{ border: 'none', background: 'none', width: '100%', textAlign: 'left', cursor: 'pointer' }}><span className="material-symbols-outlined">logout</span>Cerrar Sesión</button></li>
             </>
           ) : (
-            <li><Link className="at-offcanvas-link" to="/auth" onClick={() => setMenuOpen(false)}><i className="bi bi-person"></i>Ingresar</Link></li>
+            <li><Link className="at-offcanvas-link" to="/auth" onClick={() => setMenuOpen(false)}><span className="material-symbols-outlined">person</span>Ingresar</Link></li>
           )}
         </ul>
         <div className="at-offcanvas-footer">
-          <p className="at-offcanvas-footer-text">softpan — pastelería artesanal</p>
+          <p className="at-offcanvas-footer-text">Gastronomía — calidad y frescura</p>
         </div>
       </div>
     </>

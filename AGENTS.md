@@ -26,8 +26,9 @@
 - **Services are singletons**: `export default new Service()` — all 8 services follow this pattern
 - **Return shape**: every service method returns `{ success: boolean, data?: any, message?: string }`
 - **Security module** (`src/security.js`) uses obfuscated field names like `'em' + 'ail'` — intentional, keep the pattern
-- **Artificial 2-second delay** in `useProducts.js:12` — intentional for skeleton visibility, do not remove
 - **`DEBUG = true`** hardcoded in CarritoService, CarritoContext, PagoService, AdminPedidoService, AdminPagoService — set to `false` before production
+- **Code splitting**: heavy routes (Checkout, PagoPage, admin panel, etc.) use `React.lazy()` via `<Suspense>` — don't eager-import them
+- **Skeleton shimmer**: uses `transform: translateX()` on `::before` pseudo-element (compositor-only, GPU-friendly)
 
 ## Routes (defined in `src/App.jsx`)
 | Path | Component |
@@ -57,7 +58,7 @@ Admin default redirect: `/admin/productos`
 - **CSS**: use `variables.css` custom properties (`--primary`, `--radius-md`, etc.), combine Bootstrap classes with custom CSS
 - **Notifications**: SweetAlert2 for confirmations/alerts; `react-toastify` is configured in App.jsx but barely used in components
 - **Image placeholders**: SVG-based from `src/config/placeholders.js`
-- **Loading states**: skeleton components in `Skeleton.jsx`
+- **Loading states**: skeleton components in `Skeleton.jsx`; shimmer uses `transform` on `::before` (GPU compositor, no repaints)
 
 ## Outdated docs
 - `docs/CONTEXTO_FRONTEND_ACTUAL_Y_FALTANTE.md` says quantity management is missing — it's actually implemented in Cart.jsx
